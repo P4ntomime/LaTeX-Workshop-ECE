@@ -1,0 +1,169 @@
+% =====================================================================
+%  CHECKPOINT 02 -- state after block 2 (text, lists and the preamble)
+%  Copy this over latex-workshop.tex if you need to catch up.
+%
+%  House style in these files: one sentence per line, \label on the
+%  same line as its \section, four spaces per indent.
+% =====================================================================
+
+\documentclass[a4paper,11pt]{article}
+
+% ---------------------------------------------------------------------
+%  Preamble
+% ---------------------------------------------------------------------
+\usepackage[T1]{fontenc}        % proper 8-bit output encoding
+\usepackage[english]{babel}     % hyphenation and language conventions
+\usepackage{newtxtext}          % Times for the text
+\usepackage{parskip}            % blank line between paragraphs, no indent
+
+% TODO 3.1  Add two lines here, in this order:
+%
+%             \usepackage{amsmath}
+%             \usepackage{newtxmath}
+%
+%           amsmath is where almost everything in block 3 comes from --
+%           align, cases, \text and sane spacing.
+%           newtxmath makes the MATHS use the same Times design as the
+%           text. Try compiling block 3 without it once: Times prose
+%           with Computer Modern formulas is a mismatch you cannot
+%           unsee afterwards.
+
+\title{How Fast Does Your Coffee Go Cold?}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+% =====================================================================
+\section{Introduction}\label{sec:introduction}
+
+A freshly poured coffee is too hot to drink, and a forgotten one is too cold.
+Somewhere in between there is a window of a few minutes in which the drink is actually pleasant,
+and this report sets out to find it.
+The underlying physics is \emph{Newton's law of cooling},
+which says that a body loses heat in proportion to how much hotter it is than its surroundings.
+Three \textbf{everyday vessels} are compared,
+referred to throughout by the short labels \texttt{mug}, \texttt{glass} and \texttt{flask}.
+
+The question is worth asking precisely because the model is so thin.
+It has exactly one free parameter per vessel,
+so a single afternoon is enough to test it properly.
+
+This report sets out to:
+
+\begin{itemize}
+    \item state the cooling model and what its one parameter means,
+    \item compare the cooling curves of the three vessels, and
+    \item work out how long each of them keeps a drink in the pleasant range.
+\end{itemize}
+
+% =====================================================================
+\section{Theory}\label{sec:theory}
+
+% TODO 3.2  Rewrite the description list below so that the symbols are
+%           typeset as maths: $T_0$, $T_\mathrm{env}$ and $\tau$ rather
+%           than upright T_0, T_env and tau. Note what changes about
+%           the shapes of the letters, and why that matters.
+
+\begin{description}
+    \item[T\_0] temperature of the drink at the start
+    \item[T\_env] temperature of the room
+    \item[tau] time constant of the vessel: the time it takes to close
+        roughly two thirds of the gap to room temperature
+\end{description}
+
+% TODO 3.3  Write Newton's law of cooling as a NUMBERED display
+%           equation (the equation environment), and give it
+%           \label{eq:cooling}:
+%
+%             T(t) = T_env + (T_0 - T_env) * e^(-t/tau)
+%
+%           Use \mathrm{} for the "env" subscript and for the e of the
+%           exponential, and \tau for the time constant.
+
+% TODO 3.4  Below it, rearrange that equation for the waiting time in
+%           an align environment: one line isolating the exponential, a
+%           second line with the result
+%
+%             t = -tau * ln( (T - T_env) / (T_0 - T_env) )
+%
+%           Align the two lines on their equals signs using &, and give
+%           the second line \label{eq:waiting}.
+
+% TODO 3.5  Write a sentence underneath that refers back to both
+%           equations by number, using \eqref{eq:cooling} and
+%           \eqref{eq:waiting}. Never type the number "1" yourself.
+
+% TODO 3.6  Finally, classify the drink as a case distinction, using the
+%           cases environment inside a display equation:
+%
+%             verdict(T) = too hot     if T > 65 degC
+%                          drinkable   if 50 degC <= T <= 65 degC
+%                          too cold    if T < 50 degC
+%
+%           Everything here that is a word -- "too hot", "if" -- is
+%           text, not maths: wrap it in \text{}. Use \quad to keep the
+%           "if" off the condition. For the temperatures, write
+%           $65\,^{\circ}\mathrm{C}$; there is a tidier way, and you
+%           will meet it at the end of block 4.
+
+% =====================================================================
+\section{Setup}\label{sec:setup}
+
+Each vessel starts with 300 ml of water at 85 degrees Celsius.
+A thermometer sits in the centre of the liquid, clear of the walls.
+The temperature is taken every 30 seconds for one hour.
+
+The room stays closed and unventilated throughout, at 21 degrees Celsius.
+
+The procedure is as follows:
+
+\begin{enumerate}
+    \item Heat 300 ml of water to 85 degrees Celsius.
+    \item Pour it into the vessel and start the clock.
+    \item Suspend the thermometer in the centre of the liquid.
+    \item Record the temperature every 30 seconds for one hour.
+\end{enumerate}
+
+% =====================================================================
+\section{Results}\label{sec:results}
+
+% =====================================================================
+\section{Conclusion}\label{sec:conclusion}
+
+\end{document}
+
+% =====================================================================
+%  BLOCK 3 -- MATHS
+% =====================================================================
+%
+%  TODO 3.1 is in the preamble; 3.2 to 3.6 are in the Theory section,
+%  in the order you meet them reading downwards.
+%
+%  THE TWO RULES WORTH REMEMBERING
+%    * Anything that is a quantity belongs in maths mode, even in the
+%      middle of a sentence: "the time constant $\tau$", not "tau".
+%    * Anything that is a word belongs in \text{} or \mathrm{}, even in
+%      the middle of a formula: $T_\mathrm{env}$, not $T_{env}$.
+%
+%  IF YOU FINISH EARLY -- typesetting drills
+%  These do not belong in the report; put them in a scratch file, or at
+%  the end of the document and delete them afterwards.
+%
+%    (a) The logistic map          x_{t+1} = k x_t (1 - x_t)
+%
+%    (b) Shannon entropy           H = - sum from i=0 to N of
+%                                      p(x_i) log p(x_i)
+%
+%    (c) Hard mode -- the inverse Laplace transform
+%                                  L^-1{F} = lim as T -> infinity of
+%                                      1/(2 pi i) * integral from
+%                                      gamma - iT to gamma + iT of
+%                                      e^(st) F(s) ds
+%
+%  Symbol you do not know? https://detexify.kirelabs.org/ -- draw it,
+%  and it tells you the command.
+% =====================================================================

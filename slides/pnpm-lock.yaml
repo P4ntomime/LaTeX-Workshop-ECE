@@ -12,14 +12,8 @@ importers:
         specifier: ^53.0.0
         version: 53.0.0(@nuxt/kit@3.21.11)(@oxc-project/types@0.152.0)(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vitejs/devtools-kit@0.4.12(@modelcontextprotocol/server@2.3.1)(cac@7.0.0)(srvx@1.0.5)(vite@8.3.2(@types/node@22.20.5)(jiti@2.7.0)(yaml@2.9.1)))(@vue/compiler-sfc@3.5.43)(cac@7.0.0)(lightningcss@1.33.0)(markdown-it@14.3.2)(oxc-parser@0.150.0)(postcss@8.5.29)(rolldown@1.2.12)(srvx@1.0.5)
       '@slidev/theme-default':
-        specifier: latest
+        specifier: ^0.25.0
         version: 0.25.0
-      '@slidev/theme-seriph':
-        specifier: latest
-        version: 0.25.0
-      vue:
-        specifier: ^3.5.33
-        version: 3.5.43(typescript@6.0.3)
 
 packages:
 
@@ -647,10 +641,6 @@ packages:
 
   '@slidev/theme-default@0.25.0':
     resolution: {integrity: sha512-iWvthH1Ny+i6gTwRnEeeU+EiqsHC56UdEO45bqLSNmymRAOWkKUJ/M0o7iahLzHSXsiPu71B7C715WxqjXk2hw==}
-    engines: {node: '>=14.0.0', slidev: '>=v0.47.0'}
-
-  '@slidev/theme-seriph@0.25.0':
-    resolution: {integrity: sha512-PnFQbn4I70+/cVie5iAr0Im6sYvnwjkO7Yj5KonTyJZFFJFytckLTrD3ijft/J4cRnz7OmSzTyQKNX1FN/x0YQ==}
     engines: {node: '>=14.0.0', slidev: '>=v0.47.0'}
 
   '@slidev/types@0.47.5':
@@ -3781,12 +3771,6 @@ snapshots:
       roughjs: 4.6.6
 
   '@slidev/theme-default@0.25.0':
-    dependencies:
-      '@slidev/types': 0.47.5
-      codemirror-theme-vars: 0.1.2
-      prism-theme-vars: 0.2.5
-
-  '@slidev/theme-seriph@0.25.0':
     dependencies:
       '@slidev/types': 0.47.5
       codemirror-theme-vars: 0.1.2

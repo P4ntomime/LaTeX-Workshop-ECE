@@ -1,0 +1,133 @@
+/* =====================================================================
+   Slide styling for the LaTeX workshop deck.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Background.
+   Pure white on a projector in a dim room is harsh for two hours, so
+   light mode uses a warm off-white. Scoped to :not(.dark) so the dark
+   theme is left alone.
+   --------------------------------------------------------------------- */
+:root {
+    --ws-paper: #fcf8ef;        /* warm off-white */
+    --ws-paper-sunk: #f3ece0;   /* for code blocks: the same hue, darker */
+    --ws-ink-faint: rgba(110, 90, 55, 0.14);
+}
+
+html:not(.dark),
+html:not(.dark) body,
+html:not(.dark) #slide-content,
+html:not(.dark) .slidev-layout {
+    background-color: var(--ws-paper);
+}
+
+/* Code blocks: Shiki's light theme sits on near-white, which reads as a
+   cold hole punched in the warm page. Re-tint it to match. */
+html:not(.dark) {
+    --slidev-code-background: var(--ws-paper-sunk);
+}
+
+html:not(.dark) .slidev-code,
+html:not(.dark) pre.shiki,
+html:not(.dark) .slidev-code-wrapper pre {
+    background-color: var(--ws-paper-sunk) !important;
+}
+
+/* ---------------------------------------------------------------------
+   Code sizing. Slides are read from the back of the room.
+   --------------------------------------------------------------------- */
+.slidev-layout {
+    --slidev-code-font-size: 0.95rem;
+    --slidev-code-line-height: 1.5;
+}
+
+/* Inline code in prose: visible as code, without shouting. */
+.slidev-layout :not(pre) > code {
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    background: var(--ws-ink-faint);
+    font-size: 0.95em;
+}
+
+html.dark .slidev-layout :not(pre) > code {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* ---------------------------------------------------------------------
+   Code in narrow columns.
+   A code block in a three-up grid gets roughly a third of the canvas,
+   and the default size overflows into a horizontal scrollbar. Scale it
+   down by how narrow the column actually is, so no per-slide markup is
+   needed.
+   --------------------------------------------------------------------- */
+.slidev-layout .grid-cols-2 .slidev-code,
+.slidev-layout.two-columns .slidev-code {
+    --slidev-code-font-size: 0.80rem;
+    font-size: 0.80rem;
+}
+
+.slidev-layout .grid-cols-3 .slidev-code {
+    --slidev-code-font-size: 0.66rem;
+    font-size: 0.66rem;
+    line-height: 1.45;
+}
+
+/* A horizontal scrollbar on a slide is always a mistake -- there is no
+   one there to scroll it. Make any remaining overflow visible to you
+   while authoring instead of silently clipping. */
+.slidev-code-wrapper pre {
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+/* ---------------------------------------------------------------------
+   two-cols gutter.
+   The built-in layout is `grid grid-cols-2` with no gap, so the columns
+   butt straight up against each other. Give them air, and a hairline
+   so the split is legible even when both sides are text.
+   --------------------------------------------------------------------- */
+.slidev-layout.two-columns {
+    gap: 2.5rem;
+}
+
+.slidev-layout.two-columns > .col-right {
+    padding-left: 2.5rem;
+    border-left: 1px solid var(--ws-ink-faint);
+}
+
+html.dark .slidev-layout.two-columns > .col-right {
+    border-left-color: rgba(255, 255, 255, 0.12);
+}
+
+/* two-cols-header has the same problem. */
+.slidev-layout.two-cols-header {
+    column-gap: 2.5rem;
+}
+
+/* ---------------------------------------------------------------------
+   Callouts used throughout the deck.
+   --------------------------------------------------------------------- */
+.aha,
+.nope {
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;      /* all four corners, like the HandsOn box */
+    border-left-width: 4px;
+    border-left-style: solid;
+}
+
+.aha {
+    border-left-color: #2563eb;
+    background: rgba(37, 99, 235, 0.09);
+}
+
+.nope {
+    border-left-color: #dc2626;
+    background: rgba(220, 38, 38, 0.09);
+}
+
+/* ---------------------------------------------------------------------
+   Tables: the theme's default rules are heavier than they need to be.
+   --------------------------------------------------------------------- */
+.slidev-layout table {
+    font-variant-numeric: tabular-nums;
+}

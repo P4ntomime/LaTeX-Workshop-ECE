@@ -1,0 +1,106 @@
+% =====================================================================
+%  CHECKPOINT 01 -- state after block 1 (the skeleton)
+%  Copy this over latex-workshop.tex if you need to catch up.
+%
+%  House style in these files: one sentence per line, \label on the
+%  same line as its \section, four spaces per indent.
+% =====================================================================
+
+\documentclass[a4paper,11pt]{article}
+
+% ---------------------------------------------------------------------
+%  The preamble: everything between \documentclass and \begin{document}.
+%  This is where the document is configured. More on it in block 2.
+% ---------------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{newtxtext}
+
+\title{How Fast Does Your Coffee Go Cold?}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+% =====================================================================
+\section{Introduction}\label{sec:introduction}
+
+A freshly poured coffee is too hot to drink, and a forgotten one is too cold.
+Somewhere in between there is a window of a few minutes in which the drink is actually pleasant,
+and this report sets out to find it.
+The underlying physics is \emph{Newton's law of cooling},
+which says that a body loses heat in proportion to how much hotter it is than its surroundings.
+Three \textbf{everyday vessels} are compared,
+referred to throughout by the short labels \texttt{mug}, \texttt{glass} and \texttt{flask}.
+
+% TODO 2.2  Add a second paragraph here. Do NOT use \\ to start it --
+%           leave an empty line instead and start typing. Say in two
+%           sentences why this is worth asking at all (hint: the model
+%           has exactly one free parameter per vessel).
+
+% TODO 2.4  After that paragraph, list what the report sets out to do,
+%           using an itemize environment. Three bullets is plenty, e.g.
+%           stating the cooling model, comparing three vessels, and
+%           working out how long each stays drinkable.
+
+% =====================================================================
+\section{Theory}\label{sec:theory}
+
+% TODO 2.6  The symbols used in this report need explaining. Build a
+%           description list for them:
+%             T_0    temperature of the drink at the start
+%             T_env  temperature of the room
+%             tau    time constant of the vessel
+%           Plain text for now -- the maths arrives in block 3.
+
+% =====================================================================
+\section{Setup}\label{sec:setup}
+
+% TODO 2.3  The paragraph below was written for you, and it contains
+%           three line-break habits that will get you scolded by anyone
+%           who reads LaTeX source. Find them and fix them.
+%           Reminder: what does \\ actually mean, and where does it
+%           legitimately belong?
+
+Each vessel starts with 300 ml of water at 85 degrees Celsius. \\
+A thermometer sits in the centre of the liquid, clear of the walls. \\
+The temperature is taken every 30 seconds for one hour.
+
+\noindent
+The room stays closed and unventilated throughout, at 21 degrees Celsius.
+
+% TODO 2.5  Below, describe the procedure as a numbered list, using an
+%           enumerate environment. Four steps, e.g. heat the water,
+%           pour it, place the thermometer, record the temperature.
+
+% =====================================================================
+\section{Results}\label{sec:results}
+
+% =====================================================================
+\section{Conclusion}\label{sec:conclusion}
+
+\end{document}
+
+% =====================================================================
+%  BLOCK 2 -- TEXT, LISTS AND THE PREAMBLE
+% =====================================================================
+%
+%  TODO 2.1  First, up in the preamble, add
+%
+%              \usepackage{parskip}
+%
+%            Compile before and after and compare the two PDFs. What
+%            changed, and why is this nicer than writing \noindent in
+%            front of every paragraph?
+%
+%  TODO 2.2 -- 2.6 are marked in place above, in the order you meet
+%            them when reading the document from top to bottom.
+%
+%  If you finish early
+%    * Add \usepackage{microtype} to the preamble. Compile, then look
+%      very closely at the right-hand margin.
+%    * Nest one list inside another and see what happens to the labels.
+% =====================================================================
