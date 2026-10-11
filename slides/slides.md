@@ -16,6 +16,10 @@ fonts:
   sans: 'Noto Serif'
   serif: 'Noto Serif'
   mono: 'Fira Code'
+  # Slidev does not import italic faces by default, so italic text was
+  # being faked by slanting the upright face. The environment diagram
+  # sets "Content" in italic, so the real face is worth the extra fetch.
+  italic: true
 
 lineNumbers: true
 aspectRatio: 16/9

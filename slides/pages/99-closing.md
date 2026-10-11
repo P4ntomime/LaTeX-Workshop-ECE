@@ -28,26 +28,26 @@ undercut it by talking over it.
 
 <div>
 
-**`siunitx`** &mdash; the tidy way to write numbers with units, as promised
+**`siunitx`** for numbers with units, as promised
 
 ```latex
 \qty{65}{\degreeCelsius}    \qty{300}{\milli\litre}    \qty{24}{\minute}
 ```
 
-Right thin space, right font, right minus sign, every time &mdash; and
-one line changes the convention document-wide.
+Right spacing, right font, every time. One line changes the whole
+document.
 
 </div>
 
 <div>
 
-**`microtype`** &mdash; quietly better justification. Load it, change nothing, look at the margin.
+**`microtype`** for quietly better justification. Load it and look at the margin.
 
 </div>
 
 <div>
 
-**`hyperref`** &mdash; every `\ref`, `\eqref`, `\cite` and contents entry becomes clickable.
+**`hyperref`** makes every `\ref`, `\eqref` and `\cite` clickable.
 
 <span class="opacity-70">Load it **last** of all your packages.</span>
 
@@ -105,8 +105,8 @@ thesis/
 ```
 
 <div class="mt-4 text-base opacity-80">
-One file per chapter. Your editor stays usable, and two people can work
-on different sections without fighting.
+One file per chapter. Your editor stays usable and two people can work
+without fighting.
 </div>
 
 </div>
@@ -131,16 +131,16 @@ layout: two-cols
 
 # Where to look things up
 
-**Detexify** &mdash; draw a symbol, get the command
+**Detexify**, draw a symbol and get the command
 <span class="opacity-60">detexify.kirelabs.org</span>
 
-**The Overleaf documentation** &mdash; the best beginner reference there is
+**Overleaf docs**, the best beginner reference there is
 <span class="opacity-60">overleaf.com/learn</span>
 
-**TeX StackExchange** &mdash; your exact error, already answered
+**TeX StackExchange**, your exact error already answered
 <span class="opacity-60">tex.stackexchange.com</span>
 
-**CTAN** &mdash; every package, with its manual
+**CTAN**, every package with its manual
 <span class="opacity-60">ctan.org</span>
 
 ::right::
@@ -149,7 +149,7 @@ layout: two-cols
 
 <div class="mt-7"></div>
 
-Everything this deck deliberately did **not** show you:
+Everything this deck left out:
 
 - all the sectioning levels
 - the rest of the text styling commands
@@ -158,8 +158,7 @@ Everything this deck deliberately did **not** show you:
 - the reserved characters, in full
 
 <div class="aha mt-5 text-base">
-Two pages. Written in LaTeX; the source is in the repo, so it is also
-an example to read.
+Two pages, written in LaTeX. The source is in the repo.
 </div>
 
 <!--
@@ -185,8 +184,8 @@ Nobody writes LaTeX from memory.
 <v-click>
 
 <div class="text-xl mt-6 opacity-70">
-Everyone looks things up, copies their last document's preamble,<br/>
-and has a folder of templates. That is the normal way to work.
+Everyone looks things up and copies their last preamble.<br/>
+That is the normal way to work.
 </div>
 
 </v-click>
@@ -211,7 +210,7 @@ The template, these slides and the cheat sheet are all in the repo.
 </div>
 
 <div class="mt-10 text-base opacity-60">
-Questions &mdash; and if something breaks in your next report, ask.
+Questions. And if something breaks in your next report, ask.
 </div>
 
 <!--
@@ -243,8 +242,8 @@ from is licensed **CC BY-SA 4.0**, which means this deck must:
 Fill in below, and put the same text in the repository's top-level
 `LICENSE`:
 
-- Original workshop: *&lt;author&gt;*, *&lt;link&gt;* &mdash; CC BY-SA 4.0
-- This revision: Laurin Heitzer, ECE &mdash; CC BY-SA 4.0
+- Original workshop: *&lt;author&gt;*, *&lt;link&gt;*, CC BY-SA 4.0
+- This revision: Laurin Heitzer, ECE, CC BY-SA 4.0
 - Example document and figures: written for this workshop; the cooling
   data is synthetic
 

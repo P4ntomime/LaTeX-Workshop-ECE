@@ -110,7 +110,7 @@ the rule stick. If you just state the rule they will nod and then write
 - A **single newline** in the source is just a space.
 - An **empty line** starts a new paragraph. This is how you break text.
 - `%` at the end of a line swallows even that space. Useful in tables and macros.
-- `~` is a space that LaTeX may **not** break across lines &mdash; `Fig.~\ref{...}`.
+- `~` is a space LaTeX may **not** break: `Fig.~\ref{...}`.
 
 </v-clicks>
 
@@ -118,20 +118,17 @@ the rule stick. If you just state the rule they will nod and then write
 
 <div v-click class="aha mt-7">
 
-Because a newline is only a space, you may put **one sentence per
-line** in the source. The PDF is identical &mdash; but `git diff` then
-shows you the sentence that changed instead of the whole paragraph.
-The template is written this way.
+So you can put **one sentence per line**. Same PDF, and `git diff` then
+shows the sentence that changed, not the paragraph. The template does this.
 
 </div>
 
 <div v-click class="nope mt-5">
 
-`\\` is **not** a paragraph break and **not** a blank line.
+`\\` is **not** a paragraph break.
 
-It means "end this line *here*", and it belongs in exactly two places:
-inside a table, and inside maths. Anywhere else it gives you underfull
-boxes and a document that quietly falls apart.
+It ends a line, and belongs in two places only: tables and maths.
+Anywhere else you get underfull boxes.
 
 </div>
 
@@ -182,8 +179,7 @@ Every paragraph, forever. Miss one and it looks broken.
 ```
 
 <div class="aha mt-3 text-base">
-Once, in the preamble. Every paragraph in the document, consistent,
-and reversible by deleting one line.
+Once, in the preamble. Undo it by deleting one line.
 </div>
 
 </div>
@@ -191,8 +187,7 @@ and reversible by deleting one line.
 </div>
 
 <div v-click class="mt-8 text-center text-xl">
-Whenever you catch yourself repeating a command, the answer is almost
-always a package or a macro.
+Repeating a command usually means there is a package for it.
 </div>
 
 <!--
@@ -264,8 +259,7 @@ naming things
 
 <div class="aha mt-8">
 Same shape every time: <code>\begin</code>, a pile of <code>\item</code>,
-<code>\end</code>. Nest them by putting one inside another &mdash; the
-labels and the indentation sort themselves out.
+<code>\end</code>. Nest one inside another and the labels sort themselves out.
 </div>
 
 </v-click>
@@ -301,14 +295,13 @@ block 3 for the symbol list.
 <v-clicks at="4">
 
 - Everything between `\documentclass` and `\begin{document}`
-- `\usepackage` loads an extension. There are about 6,000 of them on CTAN
-- Order rarely matters &mdash; until it does. `hyperref` goes last
+- `\usepackage` loads an extension. CTAN has about 6,000 of them
+- Order rarely matters, until it does. `hyperref` goes last
 
 </v-clicks>
 
 <div v-click class="aha mt-5">
-This is the answer to "can LaTeX do...?". Almost always: yes, there is
-a package, and it is one line.
+"Can LaTeX do...?" Almost always yes, and it is one line.
 </div>
 
 <!--
@@ -330,7 +323,7 @@ class: text-left
 
 <HandsOn block="2" todos="2.1 - 2.6" minutes="7" checkpoint="checkpoint-02.tex">
 
-Working down the file:
+Working down the file.
 
 <div class="mt-3 opacity-80">
 add <code>parskip</code> &rarr; write a second paragraph &rarr; fix the

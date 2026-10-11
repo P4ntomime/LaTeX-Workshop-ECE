@@ -31,9 +31,8 @@ And now a new paragraph.
 <v-click>
 
 <div class="nope mt-6">
-A trick question. There is no blank line before
-<code>And now</code>, so it is <strong>not</strong> a new paragraph
-&mdash; it carries straight on from the list.
+A trick question. No blank line before <code>And now</code>, so it is
+<strong>not</strong> a new paragraph.
 </div>
 
 </v-click>
@@ -58,7 +57,7 @@ before the break, now in a place where it is easy to forget.
 
 <div>
 
-### Inline &mdash; inside a sentence
+### Inline, inside a sentence
 
 ```latex
 The constant $\tau$ sets the pace,
@@ -75,7 +74,7 @@ The constant $\tau$ sets the pace, and $T_0$ is where we start.
 
 <div>
 
-### Display &mdash; on its own line
+### Display, on its own line
 
 ```latex
 \[
@@ -94,9 +93,8 @@ $$ T(t) = T_\mathrm{env} + \Delta T $$
 </div>
 
 <div v-click class="nope mt-6">
-You will see <code>$$...$$</code> for display maths all over the
-internet. It is a leftover from plain TeX, it breaks spacing above and
-below, and <code>amsmath</code> asks you not to. Use <code>\[...\]</code>.
+You will see <code>$$...$$</code> everywhere online. It is a plain-TeX
+leftover and it breaks the spacing. Use <code>\[...\]</code>.
 </div>
 
 <!--
@@ -141,8 +139,7 @@ As Equation~\eqref{eq:cooling} shows, ...
 
 <div v-click class="aha mt-4">
 Same move as <code>\tableofcontents</code>: you never type the number.
-Insert an equation above it and everything renumbers, including the
-sentence that refers to it.
+Add an equation above it and everything renumbers.
 </div>
 
 <!--
@@ -171,8 +168,7 @@ For equations you almost always want \eqref.
 <div class="grid grid-cols-2 gap-6 mt-5">
 <div v-click>
 
-`&` marks the alignment point &mdash; put it just before the `=` on
-every line, and the equals signs line up.
+`&` marks the alignment point. Put it before the `=` on every line.
 
 </div>
 <div v-click>
@@ -210,7 +206,7 @@ $V_{out}$        $T_{env}$
 
 <div class="nope mt-2 text-base">
 Reads as <em>V</em> times <em>o</em> times <em>u</em> times <em>t</em>.
-Italic, wrongly spaced, and it looks it.
+Italic and wrongly spaced.
 </div>
 
 </div>
@@ -233,7 +229,7 @@ Upright, because it is a <em>label</em>, not a product of variables.
 
 <v-click>
 
-Same for whole words in a formula &mdash; use `\text{}`:
+Same for whole words in a formula, with `\text{}`:
 
 ```latex
 \begin{cases}
@@ -244,17 +240,15 @@ Same for whole words in a formula &mdash; use `\text{}`:
 
 <div class="text-sm opacity-60 mt-1">
 
-The template's version has a third branch &mdash; same shape, one more
-line.
+The template's version has a third branch. Same shape, one more line.
 
 </div>
 
 </v-click>
 
 <div v-click class="mt-4 text-lg">
-Rule of thumb: <strong>a quantity goes in maths mode, a word goes in
-<code>\text</code> or <code>\mathrm</code></strong> &mdash; even when
-that means switching in the middle of a sentence.
+<strong>A quantity goes in maths mode, a word goes in <code>\text</code>
+or <code>\mathrm</code></strong>, even mid-sentence.
 </div>
 
 <!--
@@ -287,11 +281,8 @@ That IS the hook for siunitx.
 </div>
 
 <div v-click class="aha mt-6">
-Use <code>\cdot</code> for multiplying numbers, and
-<code>\times</code> for cross products, dimensions
-(<code>3\times3</code>) and scientific notation
-(<code>3\times10^{8}</code>). Both are correct; they mean different
-things.
+<code>\cdot</code> multiplies. <code>\times</code> is for cross products
+and dimensions. Both are right, they just mean different things.
 </div>
 
 <!--
@@ -324,7 +315,7 @@ Draw it with the mouse. It tells you the command.
 </div>
 
 <div class="mt-10 text-center text-lg opacity-70">
-This is how everyone does it. Nobody memorises the symbol tables.
+Nobody memorises the symbol tables.
 </div>
 
 <!--

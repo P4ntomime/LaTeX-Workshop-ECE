@@ -23,24 +23,23 @@ Second showing. Point at the arrow: "this one, in the next 20 minutes."
 
 # Everything is a command
 
-A LaTeX file is plain text. Anything that is not ordinary text is a
-command, and they all look the same:
+A LaTeX file is plain text. Anything that is not text is a command,
+and they all have the same shape:
 
-```latex
-\documentclass[a4paper]{article}
-```
+<CommandAnatomy
+  class="mt-8"
+  code="\documentclass[a4paper]{article}"
+  :parts="[
+    { from: 0,  to: 1,  label: 'Command delimiter', labelAt: 3 },
+    { from: 1,  to: 14, label: 'Command name', labelAt: 11, drop: 0.5 },
+    { from: 23, to: 32, label: 'Mandatory argument', labelAt: 28, drop: 0.5 },
+    { from: 14, to: 23, label: 'Optional argument', labelAt: 19, inserted: true },
+  ]"
+  :reveal="$clicks"
+/>
 
-<v-clicks>
-
-- `\` &mdash; a command starts here. Always. There is no other way in.
-- `documentclass` &mdash; its name. Letters only; a non-letter ends it.
-- `[a4paper]` &mdash; **optional** argument. Square brackets. Often omitted.
-- `{article}` &mdash; **mandatory** argument. Curly braces. Not optional.
-
-</v-clicks>
-
-<div v-click class="aha mt-6">
-That is the entire syntax. Every command you meet today is this shape.
+<div v-click="5" class="aha mt-4">
+Backslash, letters, arguments. Every command today looks like this.
 </div>
 
 <!--
@@ -59,26 +58,25 @@ That is why `\LaTeX2e` does not work and why they will one day need
 # ...and some commands wrap things
 
 When something applies to a *region* rather than a point, it is an
-**environment**:
+**environment**.
 
-```latex {all|1,4|2,3}
-\begin{itemize}
-  \item bread
-  \item milk
-\end{itemize}
-```
+<EnvironmentAnatomy
+  class="mt-10"
+  :lines="['\\begin{center}', '    Content', '\\end{center}']"
+  :placeholder-lines="[1]"
+  :join="{
+    targets: [
+      { line: 0, from: 7, to: 13 },
+      { line: 2, from: 5, to: 11 },
+    ],
+    label: 'Same name twice',
+  }"
+  :body="{ from: 1, to: 2, label: 'Everything in here is inside' }"
+  :reveal="$clicks"
+/>
 
-<v-clicks at="3">
-
-- `\begin{...}` and `\end{...}` always come as a pair
-- The name must match exactly &mdash; this is error number one, all afternoon
-- Anything between them is inside
-
-</v-clicks>
-
-<div v-click class="aha mt-5">
-Commands do something <em>here</em>. Environments do something
-<em>to all of this</em>.
+<div v-click="3" class="aha mt-8">
+A command acts <em>here</em>. An environment acts on <em>all of this</em>.
 </div>
 
 <!--
@@ -94,36 +92,54 @@ you", they trust the next prediction too.
 
 # The characters LaTeX keeps for itself
 
-```latex
-%  starts a comment -- everything after it on the line vanishes
-{  }  group things together
-$  switches maths on and off
-&  separates table columns
-#  argument placeholder
-_  ^  subscript and superscript (in maths)
-```
+<div class="chartable mt-4">
 
-<v-click>
+| **Symbol** | **Description** | **Substitute** |
+|---|---|---|
+| `%` | starts a comment, killing the rest of the line | `\%` |
+| `{ }` | group things together | `\{ \}` |
+| `$` | switches maths on and off | `\$` |
+| `&` | separates table columns | `\&` |
+| `#` | stands in for an argument | `\#` |
+| `_ ^` | subscript and superscript, in maths | `\_` `\^{}` |
+| `~` | a space that will not break | `\textasciitilde` |
+| `\` | starts every command | `\textbackslash` |
 
-Need one as an actual character? Put a backslash in front:
-
-```latex
-50\% of the budget      \$20      Smith \& Sons      file\_name.txt
-```
-
-</v-click>
-
-<div v-click class="nope mt-6">
-<code>%</code> is the one that bites. A stray percent sign silently eats
-the rest of the line, and your text just... disappears.
 </div>
 
-<!--
-Keep this short -- it is reference material, not a lesson. They need to
-have *seen* it so that when the percent sign eats their line in block 4
-(the table has "1 %" in it) something rings a bell.
+<style>
+.chartable table {
+    width: 100%;
+    font-size: 0.9rem;
+}
+/* Eight rows do not fit at the theme's default row padding. */
+.chartable th,
+.chartable td {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+}
+.chartable th:first-child,
+.chartable td:first-child {
+    text-align: right;
+    white-space: nowrap;
+}
+.chartable td:last-child,
+.chartable th:last-child {
+    white-space: nowrap;
+}
+</style>
 
-Do not drill it. The cheat sheet has the full list.
+<!--
+Same job as variant A, but the third column answers the question people
+actually ask -- "how do I type a percent sign?" -- in the same row.
+
+Two rows here are not in the list variant:
+  \  because they have just met it, and \\ is NOT how you escape it
+  (that is a line break; \textbackslash is the character).
+  ~   is left out on purpose; it arrives in block 2 as a non-breaking
+  space, where it has a reason to exist.
+
+Do not read the table out. Point at %, say the warning, move on.
 -->
 
 ---
@@ -257,16 +273,14 @@ Introduction?" Let someone say it.
 
 Nobody typed that list.
 
-It was built from the `\section` commands, and it will **stay** correct
-when you rename a section, reorder them, or add ten more.
+It comes from your `\section` commands, and it stays right when you
+rename or reorder them.
 
 </div>
 </div>
 
 <div v-click class="aha mt-5">
-This is the deal: you describe the structure once, and the document
-maintains itself. It is the single biggest reason to put up with the
-syntax.
+Describe the structure once, and the document maintains itself.
 </div>
 
 <!--
@@ -315,10 +329,9 @@ Three \textbf{vessels} are compared: \texttt{mug}, \texttt{glass}, \texttt{flask
 </div>
 
 <div v-click class="aha mt-8">
-<code>\emph</code> says what you <em>mean</em>; <code>\textbf</code> says
-what you <em>want</em>. Prefer the first &mdash; then italics inside
-italics comes out upright, and you can change your mind document-wide
-later.
+<code>\emph</code> says what you <em>mean</em>, <code>\textbf</code> what
+you <em>want</em>. Prefer the first: italics inside italics then comes
+out upright.
 </div>
 
 <!--
@@ -357,7 +370,7 @@ layout: center
 ```
 
 <div class="mt-6 text-center text-lg opacity-70">
-Everything above is in <code>checkpoints/checkpoint-01.tex</code>.
+All of it is in <code>checkpoints/checkpoint-01.tex</code>.
 </div>
 
 <!--
@@ -374,7 +387,7 @@ class: text-left
 
 <HandsOn block="1" todos="1.1 - 1.5" minutes="7" checkpoint="checkpoint-01.tex">
 
-Open <code>latex-workshop.tex</code> and work down the TODOs:
+Open <code>latex-workshop.tex</code> and work down the TODOs.
 
 <div class="mt-3 opacity-80">
 a document that compiles &rarr; a title block &rarr; five sections

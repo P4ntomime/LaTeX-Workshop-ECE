@@ -106,9 +106,7 @@ You say what things **are**.
 </div>
 
 <div v-click class="aha mt-8">
-Everything else today follows from this one trade: you give up direct
-control of the appearance, and you get consistency, structure and
-automation back.
+You give up control of the look. You get structure and consistency back.
 </div>
 
 <!--
@@ -127,9 +125,9 @@ table of contents in block 1 makes the case far better than you can.
 
 # When it is worth the trouble
 
-<div class="flex justify-center mt-4">
+<div class="flex justify-center mt-2">
 
-```mermaid {scale: 0.78}
+```mermaid {scale: 0.68}
 xychart-beta
   title "Effort to produce the document"
   x-axis "Complexity of the document" ["note", "essay", "report", "thesis", "book"]
@@ -144,11 +142,10 @@ xychart-beta
 
 <div class="grid grid-cols-2 gap-6 mt-2 text-lg">
 <div class="nope">
-For a one-page note, LaTeX is the slower tool. Say so.
+For a one-page note, a word processor wins.
 </div>
 <div class="aha">
-The lines cross around "long enough to have a structure" -- which is
-exactly where your coursework lives.
+They cross about where your coursework starts.
 </div>
 </div>
 
@@ -177,8 +174,7 @@ Nothing to install. It compiles in the browser.
 4. Open `latex-workshop.tex`, hit **Recompile**
 
 <div class="aha mt-6">
-Everyone on the same thing for two hours means every problem in this
-room is a LaTeX problem, not an installation problem.
+Same setup for everyone, so every problem today is a LaTeX problem.
 </div>
 
 ::right::
@@ -195,7 +191,7 @@ room is a LaTeX problem, not an installation problem.
 
 <div class="mt-6 text-base opacity-80">
 
-Then one command does everything:
+Then one command:
 
 ```sh
 latexmk -pdf latex-workshop.tex
@@ -223,8 +219,7 @@ layout: center
 <GoalTracker />
 
 <div class="mt-10 text-lg opacity-70">
-Five things, four blocks &mdash; the last block brings two of them.
-Every block ends with you typing.
+Five things, four blocks. Each one ends with you typing.
 </div>
 
 <!--

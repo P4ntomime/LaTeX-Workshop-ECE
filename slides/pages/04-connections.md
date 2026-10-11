@@ -5,7 +5,7 @@ layout: section
 # Block 4
 ## Connections
 
-<div class="mt-6 opacity-70">Tables, figures and citations &mdash; and the one idea behind all three</div>
+<div class="mt-6 opacity-70">Tables, figures and citations</div>
 
 ---
 layout: center
@@ -64,16 +64,15 @@ introducing a new one. Point that out; it is why it will stick.
 
 <v-clicks at="4">
 
-- `{lllr}` &mdash; one letter per column: **l**eft, **c**entre, **r**ight
+- `{lllr}` is one letter per column: **l**eft, **c**entre, **r**ight
 - `&` separates columns
-- `\\` ends a row &mdash; the *first* of its two legitimate homes
+- `\\` ends a row. The *first* of its two legitimate homes
 
 </v-clicks>
 
 <div v-click class="nope mt-5">
-Paste this straight into your text and it lands wherever it happens to
-fall &mdash; mid-sentence, split across a page break. A bare
-<code>tabular</code> is not a table yet.
+On its own it lands wherever it falls, mid-sentence or across a page
+break. A bare <code>tabular</code> is not a table yet.
 </div>
 
 <!--
@@ -102,17 +101,17 @@ when someone's text runs off the page, not before.
 
 <v-clicks at="5">
 
-- `[htbp]` &mdash; **h**ere, **t**op, **b**ottom, **p**age of its own.
+- `[htbp]` is **h**ere, **t**op, **b**ottom, **p**age of its own.
   A wish list, tried in order
 - `\caption` numbers it for you
 - `\label` **must come after** `\caption`, or it labels the wrong thing
-- `\usepackage{caption}` &mdash; without it the gap above the table is far too tight
+- `\usepackage{caption}`, or the gap above the table is far too tight
 
 </v-clicks>
 
 <div v-click class="aha mt-4">
-LaTeX moves floats to where they look good. That is a feature. Fighting
-it is the single biggest time sink for new users.
+LaTeX moves floats where they look good. Fighting that is the biggest
+time sink there is.
 </div>
 
 <!--
@@ -171,8 +170,8 @@ Mug & no \\
 </div>
 
 <div v-click class="mt-5 text-center text-lg">
-No vertical rules. No double lines. This is not a style opinion &mdash;
-it is what typographers have done for a century.
+No vertical rules, no double lines. That is a century of typesetting
+practice, not a preference.
 </div>
 
 <!--
@@ -200,15 +199,15 @@ slide.
 
 <v-clicks at="2">
 
-- Identical structure to `table` &mdash; float, centre, caption, label
+- Same structure as `table`: float, centre, caption, label
 - `0.8\textwidth` scales to the page, so it survives a margin change
 - **No file extension.** LaTeX picks the best format it can find
 
 </v-clicks>
 
 <div v-click class="nope mt-5">
-PDF or PNG, not SVG &mdash; <code>pdflatex</code> cannot read SVG.
-Export vector graphics as PDF and they stay sharp at any zoom.
+PDF or PNG, not SVG: <code>pdflatex</code> cannot read it. Export
+vector graphics as PDF and they stay sharp.
 </div>
 
 <!--
@@ -236,7 +235,7 @@ and Table~\ref{tab:vessels} lists the time constants.
 
 ### The tilde
 
-`Figure~\ref{...}` &mdash; a space LaTeX may **not** break.
+`Figure~\ref{...}` is a space LaTeX may **not** break.
 
 Without it, "Figure" can end one line and "3" start the next.
 
@@ -246,7 +245,7 @@ Without it, "Figure" can end one line and "3" start the next.
 
 ### Naming things
 
-`fig:`, `tab:`, `eq:`, `sec:` &mdash; a useful convention.
+`fig:`, `tab:`, `eq:`, `sec:` is a useful convention.
 
 Your sections have had `\label`s since block 1:
 
@@ -315,9 +314,8 @@ doing. Cheap to teach, permanent once learned.
 </div>
 
 <div v-click class="aha mt-5">
-Change <code>style=numeric</code> to <code>style=authoryear</code> and
-every citation and the whole bibliography reformat. You never touch the
-sources.
+Swap <code>style=numeric</code> for <code>style=authoryear</code> and
+everything reformats. You never touch the sources.
 </div>
 
 <!--
@@ -367,10 +365,9 @@ Package biblatex Warning:
 </div>
 
 <div v-click class="aha mt-6">
-A <code>??</code> or a <code>[key?]</code> almost always means the
-<strong>name is wrong</strong> &mdash; a typo in the key, or a
-<code>\label</code> you never actually wrote. Search your source for
-the name in the warning.
+<code>??</code> or <code>[key?]</code> means the <strong>name is
+wrong</strong>: a typo, or a <code>\label</code> you never wrote.
+Search for the name in the warning.
 </div>
 
 <!--
@@ -394,7 +391,7 @@ class: text-left
 
 <HandsOn block="4" todos="4.1 - 4.6" minutes="7" checkpoint="checkpoint-04.tex">
 
-The last stretch:
+The last stretch.
 
 <div class="mt-3 opacity-80">
 a bare <code>tabular</code> &rarr; wrap it in a float with

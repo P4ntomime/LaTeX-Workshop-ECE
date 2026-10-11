@@ -72,13 +72,37 @@ html.dark .slidev-layout :not(pre) > code {
     line-height: 1.45;
 }
 
-/* A horizontal scrollbar on a slide is always a mistake -- there is no
-   one there to scroll it. Make any remaining overflow visible to you
-   while authoring instead of silently clipping. */
-.slidev-code-wrapper pre {
+/* Backstop: if a line is still too wide, wrap it rather than hide it
+   behind a scrollbar nobody can scroll from the back of a lecture hall.
+   The hanging indent makes a wrapped line read as a continuation and
+   not as a second line of source -- which matters in this deck, where
+   block 2 is all about newlines being meaningful.
+
+   `shiki-magic-move-container` is excluded on purpose: it is explicitly
+   overflow-visible, and setting overflow-x on a <pre> promotes
+   overflow-y from visible to auto, which makes a scrollbar flash on and
+   off while the block animates its height. */
+.slidev-code-wrapper pre:not(.shiki-magic-move-container) {
     overflow-x: auto;
     scrollbar-width: thin;
 }
+
+.slidev-code code .line {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+/* No hanging indent on the wrap. Two attempts were worse than the
+   problem: `.line` is display:inline, so padding applies there but
+   text-indent is ignored (every block just shifts right); and on
+   `code` the indent only affects the block's FIRST line, so line 1
+   hangs while 2..n stay indented. Doing it properly means making each
+   .line a block and neutralising the newline text nodes between them,
+   which is a rewrite of how Slidev renders code and would put line
+   highlighting and magic-move at risk.
+   A wrapped continuation therefore starts under the line number. That
+   is acceptable: this rule is a backstop, and no slide in the deck
+   currently overflows. */
 
 /* ---------------------------------------------------------------------
    two-cols gutter.
