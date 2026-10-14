@@ -1,0 +1,62 @@
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}            % font encoding: T1
+\usepackage{textcomp}
+\usepackage{times}
+\usepackage{inconsolata}
+\usepackage[main=english]{babel}
+
+\usepackage{geometry}
+
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{tabu}
+\usepackage{hhline}
+\usepackage{booktabs}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{txfonts}
+\usepackage{siunitx}
+\usepackage{bm}
+
+\usepackage{graphicx}
+\usepackage{scalerel}
+\usepackage{anyfontsize}
+\usepackage[table]{xcolor}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\usepackage{listings}
+
+\usepackage{hyperref}
+
+\hypersetup{%
+    hidelinks
+}
+
+\urlstyle{same}
+
+% Titlepage
+\makeatletter
+\renewcommand{\maketitle}{%
+    \begin{titlepage}
+        \centering
+        \vspace*{0.2\textheight}
+        {\fontsize{50}{48}\selectfont\bfseries\@title\par}
+        \vspace{1em}
+        \ifx\@subtitle\@empty\else
+            {\LARGE\@subtitle\par}
+        \fi
+        \vfill
+        {\large\@author\par}
+        \vspace{2em}
+        {\large\@date\par}
+    \end{titlepage}%
+}
+% Optional extra field, used like \title
+\newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
+\let\@subtitle\@empty
+\makeatother
