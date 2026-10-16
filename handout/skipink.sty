@@ -1,0 +1,496 @@
+%% skipink.sty
+%% Ink-skipping underlines for pdfLaTeX via PDF soft masks.
+%%
+%% The text is typeset exactly once.
+%% The underline of each word is drawn through a luminosity soft mask whose
+%% content is the same word, grown by the clearance, so the underline gets
+%% real (transparent) gaps around descenders.
+%% Line breaking and inter-word glue are handled by ulem's word-by-word engine.
+\NeedsTeXFormat{LaTeX2e}[2022-11-01]
+\ProvidesPackage{skipink}[2026/10/16 v0.3 Ink-skipping underlines for pdfLaTeX]
+
+\RequirePackage[normalem]{ulem}
+
+% ---------------------------------------------------------------------------
+% Options / keys
+% ---------------------------------------------------------------------------
+\def\skipink@offset{.09em}     % baseline to top edge of the line
+\def\skipink@thickness{.05em}  % line thickness
+\def\skipink@clearance{.06em}  % gap between ink and line
+\def\skipink@reach{.12em}      % how far a word's mask may reach into a space
+\def\skipink@minlength{.06em}  % shorter line fragments between glyphs vanish
+
+\DeclareKeys[skipink]{
+    offset.store    = \skipink@offset,
+    thickness.store = \skipink@thickness,
+    clearance.store = \skipink@clearance,
+    reach.store     = \skipink@reach,
+    minlength.store = \skipink@minlength,
+}
+\ProcessKeyOptions[skipink]
+\NewDocumentCommand\skipinkset{m}{\SetKeys[skipink]{#1}}
+
+% ---------------------------------------------------------------------------
+% Engine check: soft masks need direct PDF output from pdfTeX
+% ---------------------------------------------------------------------------
+\newif\ifskipink@pdf
+\ifdefined\pdfxform
+    \ifnum\pdfoutput>\z@
+        \skipink@pdftrue
+    \fi
+\fi
+\ifskipink@pdf\else
+    \PackageWarningNoLine{skipink}{%
+        pdfTeX in PDF mode not detected.\MessageBreak
+        \string\skipul\space falls back to a plain underline without gaps%
+    }
+\fi
+
+% ---------------------------------------------------------------------------
+% Registers
+% ---------------------------------------------------------------------------
+\newdimen\skipink@top    % offset as a dimension
+\newdimen\skipink@thick  % thickness as a dimension
+\newdimen\skipink@clear  % clearance as a dimension
+\newdimen\skipink@ext    % reach as a dimension
+\newdimen\skipink@D      % depth of the mask and piece forms
+\newdimen\skipink@E      % left margin of the mask form (reach + overlap)
+\newdimen\skipink@W      % width of the current word
+\newdimen\skipink@smear  % horizontal shift of the extra mask copies
+\newdimen\skipink@P      % padding of the mask form on all sides
+\newbox\skipink@maskbox
+\newbox\skipink@piecebox
+\newbox\skipink@viewbox
+\newif\ifskipink@active
+\newif\ifskipink@afterspace
+\newif\ifskipink@unsafe
+\gdef\skipink@right{}
+
+% Transfer function for the soft mask: a steep ramp from luminosity 0.5
+% (line fully knocked out) to 0.8 (line fully visible).
+% The lower end makes coloured text inside \skipul (red, blue, green, ...)
+% knock the line out completely instead of leaving a faint ghost in the gaps.
+% The upper end ignores the faint grey that antialiasing of nearby glyphs
+% leaves in the line's pixel row at low zoom; a hard threshold would turn
+% that grey into visible cuts under letters without descenders.
+% Created on first use as one shared object.
+\let\skipink@tr\relax
+\def\skipink@maketr{%
+    \immediate\pdfobj{%
+        <</FunctionType 3 /Domain [0 1] /Bounds [0.5 0.8]
+          /Encode [0 1 0 1 0 1]
+          /Functions [
+            <</FunctionType 2 /Domain [0 1] /C0 [0] /C1 [0] /N 1>>
+            <</FunctionType 2 /Domain [0 1] /C0 [0] /C1 [1] /N 1>>
+            <</FunctionType 2 /Domain [0 1] /C0 [1] /C1 [1] /N 1>>
+          ]
+        >>%
+    }%
+    \xdef\skipink@tr{\the\pdflastobj}%
+}
+
+% Things that must not be copied into the mask form: link annotations and
+% destinations (pdfTeX refuses them inside forms) and \write nodes from
+% \label, \index etc. (they would be executed once per copy).
+% While \skipul runs, these commands raise a flag.
+% The word that contains them is then typeset a second time without them
+% for the mask (see \skipink@retype); if that fails, it gets a plain
+% underline instead.
+\def\skipink@wrap#1{%
+    \ifdefined#1%
+        \expandafter\let\csname skipink@prim@\string#1\endcsname#1%
+        \expandafter\def\csname skipink@wrapped@\string#1\endcsname{%
+            \global\skipink@unsafetrue
+            \csname skipink@prim@\string#1\endcsname
+        }%
+        \expandafter\g@addto@macro\expandafter\skipink@wrapall\expandafter{%
+            \expandafter\let\expandafter#1%
+            \csname skipink@wrapped@\string#1\endcsname
+        }%
+    \fi
+}
+\def\skipink@wrapall{}
+\AtBeginDocument{%
+    \skipink@wrap\pdfstartlink
+    \skipink@wrap\pdfdest
+    \skipink@wrap\pdfannot
+    \skipink@wrap\protected@write
+    \expandafter\skipink@wrap\csname tex_pdfstartlink:D\endcsname
+    \expandafter\skipink@wrap\csname tex_pdfdest:D\endcsname
+    \expandafter\skipink@wrap\csname tex_pdfannot:D\endcsname
+}
+
+% Dimension expression -> number in bp, for use inside \pdfliteral.
+\def\skipink@bp#1{\strip@pt\dimexpr(#1)*7200/7227\relax}
+
+% ulem redefines \hss, \hskip and \penalty while it is running.
+\def\skipink@hss{\LA@hskip\z@\@plus1fil\@minus1fil\relax}
+
+\def\skipink@setdimens{%
+    \skipink@top=\dimexpr\skipink@offset\relax
+    \skipink@thick=\dimexpr\skipink@thickness\relax
+    \skipink@clear=\dimexpr\skipink@clearance\relax
+    \skipink@ext=\dimexpr\skipink@reach\relax
+    \skipink@smear=\dimexpr(\skipink@minlength)/2\relax
+    \skipink@D=\dimexpr\skipink@top+\skipink@thick+\skipink@clear\relax
+    \skipink@E=\dimexpr\skipink@ext+\skipink@smear+\UL@pixel\relax
+    \skipink@P=.5em
+    \edef\UL@leadtype{%
+        \leaders\hrule\@height\the\dimexpr-\skipink@top\relax
+        \@depth\the\dimexpr\skipink@top+\skipink@thick\relax
+    }%
+}
+
+% ---------------------------------------------------------------------------
+% User command
+% ---------------------------------------------------------------------------
+\protected\def\skipul{%
+    \relax
+    \ifmmode
+        \expandafter\underline
+    \else
+        \bgroup\expandafter\skipink@start
+    \fi
+}
+\def\skipink@start{%
+    \skipink@setdimens
+    \ifskipink@pdf
+        \skipink@activetrue
+        \global\skipink@afterspacefalse
+        \gdef\skipink@right{}%
+        \global\skipink@unsafefalse
+        \let\UL@leaders\skipink@leaders
+        \skipink@wrapall
+        \ifx\skipink@tr\relax
+            \skipink@maketr
+        \fi
+    \fi
+    \ULon
+}
+
+% A nested ulem command must not inherit the skipink behaviour.
+\let\skipink@orig@ULset\ULset
+\let\skipink@orig@leaders\UL@leaders
+\def\ULset{%
+    \skipink@activefalse
+    \let\UL@leaders\skipink@orig@leaders
+    \skipink@orig@ULset
+}
+
+% ---------------------------------------------------------------------------
+% Second typesetting of a word, for words that contain links etc.
+% ---------------------------------------------------------------------------
+% ulem reads its argument one space-delimited chunk at a time; remember the
+% tokens of the current chunk.
+% A token register (not a macro) so that # in the text is harmless.
+\newtoks\skipink@chunk
+\let\skipink@orig@ULword\UL@word
+\long\def\UL@word#1 {%
+    \skipink@chunk{#1}%
+    \skipink@orig@ULword#1 %
+}
+
+% Snapshot of all LaTeX counters, so typesetting a chunk twice does not step
+% a counter twice (e.g. a \footnote inside \skipul).
+\def\skipink@savecounters{%
+    \begingroup
+        \def\@elt##1{%
+            \global\csname c@##1\endcsname
+            \the\csname c@##1\endcsname\relax
+        }%
+        \xdef\skipink@restorecounters{\cl@@ckpt}%
+    \endgroup
+}
+
+% \skipink@retype: typeset the current chunk again into \skipink@retypebox,
+% with hyperref's links and anchors switched off (\NoHyper) and \label,
+% \index etc. writing nothing.
+% The result is only used if nothing unsafe happened and its width matches
+% the visible word exactly, which also guards against chunks that ulem has
+% split further (\-, \\, nested boxes) or that depend on state the second
+% run does not reproduce.
+\newbox\skipink@retypebox
+\newif\ifskipink@retyped
+\def\skipink@retype{%
+    \global\skipink@unsafefalse
+    \skipink@savecounters
+    \setbox\skipink@retypebox\hbox{%
+        \UL@hrest
+        \let\hskip\LA@hskip
+        \let\protected@write\@gobblethree
+        \ifdefined\NoHyper\NoHyper\fi
+        \the\skipink@chunk
+        \ifdefined\endNoHyper\endNoHyper\fi
+    }%
+    \skipink@restorecounters
+    \skipink@retypedfalse
+    \ifskipink@unsafe
+        \global\skipink@unsafefalse
+    \else\ifdim\wd\skipink@retypebox=\wd\UL@box
+        \skipink@retypedtrue
+    \fi\fi
+}
+
+% ---------------------------------------------------------------------------
+% Per-word drawing
+% ---------------------------------------------------------------------------
+\let\skipink@orig@putbox\UL@putbox
+\def\UL@putbox{%
+    \ifskipink@active
+        \expandafter\skipink@putbox
+    \else
+        \expandafter\skipink@orig@putbox
+    \fi
+}
+
+\def\skipink@putbox{%
+    \ifx\UL@start\@empty\else % not inner
+        % \skipink@src is the box the mask is built from: the word itself,
+        % or its second typesetting if the word contains links etc.
+        \let\skipink@src\UL@box
+        \ifskipink@unsafe
+            \skipink@retype
+            \ifskipink@retyped
+                \let\skipink@src\skipink@retypebox
+            \fi
+        \else
+            \skipink@retypedtrue
+        \fi
+        \ifskipink@retyped
+            \ifdim\dp\UL@box>\dimexpr\skipink@top-\skipink@clear\relax
+                \skipink@masked
+            \else
+                \skipink@plain
+            \fi
+        \else
+            \skipink@plain
+        \fi
+    \fi
+}
+
+% Plain rule glue of the given width (used for words without descenders).
+\def\skipink@ruleglue#1{\UL@leadtype\LA@hskip#1\relax}
+
+% Word whose ink cannot reach the line: ordinary rule, as in ulem.
+\def\skipink@plain{%
+    \ifskipink@afterspace
+        \skipink@ruleglue\skipink@ext
+    \fi
+    \global\skipink@afterspacefalse
+    \vrule\@width\z@\LA@penalty\@M
+    {%
+        \UL@skip\wd\UL@box
+        \LA@hskip-\UL@pixel
+        \advance\UL@skip\tw@\UL@pixel
+        \UL@leadtype\LA@hskip\UL@skip
+        \LA@hskip-\UL@pixel
+        \kern-\wd\UL@box
+    }%
+    \box\UL@box
+    \xdef\skipink@right{\noexpand\skipink@ruleglue{\the\skipink@ext}}%
+}
+
+% Shifted copies of the inner form for the mask (see \skipink@masked).
+% \skipink@copy{<dx>}{<dy>} places one copy of the word, moved by <dx> to
+% the right and <dy> upwards, without advancing the current position.
+\def\skipink@copy#1#2{%
+    \hbox to\z@{%
+        \kern\dimexpr#1\relax
+        \raise\dimexpr#2\relax\hbox{\pdfrefxform\skipink@inner}%
+        \skipink@hss
+    }%
+}
+% \skipink@row{<dy>}{<half width>}{<step>}: copies at dy, evenly spaced from
+% -<half width> to +<half width> with at most <step> between them.
+\newcount\skipink@n
+\newcount\skipink@k
+\def\skipink@row#1#2#3{%
+    \skipink@n=\numexpr(\dimexpr#2\relax+\dimexpr#3\relax/2)/\dimexpr#3\relax\relax
+    \ifnum\skipink@n<\@ne \skipink@n=\@ne \fi
+    \skipink@k=-\skipink@n
+    \loop
+        \skipink@copy{(#2)*\skipink@k/\skipink@n}{#1}%
+    \ifnum\skipink@k<\skipink@n
+        \advance\skipink@k\@ne
+    \repeat
+}
+% The ellipse: a dense row through the middle (it carries the horizontal
+% clearance, so its spacing must stay below the thinnest descender stroke),
+% two sparser rows at half the clearance, and single copies at the top and
+% bottom.
+% The inner form carries its own left padding P, so placing it at E puts the
+% word at E+P in the mask, where the line form expects it.
+\def\skipink@copies{%
+    \skipink@row{\z@}{\skipink@clear+\skipink@smear}{.02em}%
+    \skipink@row{\skipink@clear/2}{(\skipink@clear+\skipink@smear)*7/8}{.04em}%
+    \skipink@row{-\skipink@clear/2}{(\skipink@clear+\skipink@smear)*7/8}{.04em}%
+    \skipink@copy\z@\skipink@clear
+    \skipink@copy\z@{-\skipink@clear}%
+}
+
+% Word with descenders.
+% One form draws the whole line from -reach to W+reach through the mask, and
+% three clipped views of it make up the visible line:
+%   left piece:  [-reach, 0]    only after an inter-word space, discardable
+%   middle:      [0, W]         glued to the word
+%   right piece: [W, W+reach]   emitted by the following space, discardable
+% The pieces must be separate items so TeX can discard the outer two at a
+% line break, which keeps the line from sticking out into the margins.
+\def\skipink@masked{%
+    \skipink@W=\wd\UL@box
+    % The word itself, filled, as a form of its own.
+    % It is padded by P, so glyphs overhanging the box are not clipped by
+    % the form's bounding box.
+    % Its text is marked with an empty ActualText, so text extraction
+    % (copy & paste, search) ignores it.
+    \setbox\skipink@piecebox\hbox{%
+        \pdfliteral{/Span <</ActualText ()>> BDC}%
+        \kern\skipink@P
+        \copy\skipink@src
+        \kern\skipink@P
+        \pdfliteral{EMC}%
+    }%
+    \ht\skipink@piecebox\dimexpr\ht\skipink@src+\skipink@P\relax
+    \dp\skipink@piecebox\dimexpr\dp\skipink@src+\skipink@P\relax
+    \immediate\pdfxform\skipink@piecebox
+    \edef\skipink@inner{\the\pdflastxform}%
+    % The mask group: white (= line visible) everywhere, and black (= line
+    % knocked out) wherever a shifted copy of the word covers it.
+    % The copies form a filled ellipse of radius clearance (+ minlength/2
+    % horizontally), which grows the glyphs by the clearance.
+    % (Stroking the text with a fat line would do the same with one copy,
+    % but some viewers draw text strokes far too thick at low zoom.)
+    % The copies are clipped to the band from the line's top edge downwards,
+    % so only ink that actually reaches the line ends up in the mask.
+    % Glyphs sitting on the baseline are cut away completely.
+    % The clip needs no q/Q: it lasts until the end of this form.
+    % The mask is padded by P on all sides, and its backdrop is white
+    % (/BC [1]), so the line never comes near the mask's edge.
+    % Otherwise a viewer rasterising at low zoom gets pixels that are only
+    % partly inside the mask, and the threshold turns them into cuts.
+    \setbox\skipink@maskbox
+        \hbox to\dimexpr\skipink@W+2\skipink@E+2\skipink@P\relax{%
+        \pdfliteral{%
+            q 1 g 0 \skipink@bp{-\skipink@D-\skipink@P}
+            \skipink@bp{\skipink@W+2\skipink@E+2\skipink@P}
+            \skipink@bp{\skipink@D+2\skipink@P} re f Q
+            0 \skipink@bp{-\skipink@D-\skipink@P}
+            \skipink@bp{\skipink@W+2\skipink@E+2\skipink@P}
+            \skipink@bp{\skipink@D+\skipink@P-\skipink@top} re W n
+            0 g 0 G 0 Tr%
+        }%
+        \kern\skipink@E
+        \skipink@copies
+        \skipink@hss
+    }%
+    \ht\skipink@maskbox\skipink@P
+    \dp\skipink@maskbox\dimexpr\skipink@D+\skipink@P\relax
+    \immediate\pdfxform
+        attr{/Group <</S /Transparency /CS /DeviceGray /I true>>}%
+        \skipink@maskbox
+    \edef\skipink@mask{\the\pdflastxform}%
+    % The mask form's lower-left corner lies P to the left of and P below
+    % the line form's lower-left corner; the gs is set in that coordinate
+    % system, and the line is drawn after shifting back.
+    % The line is stroked, like the rules pdfTeX writes for the parts without
+    % gaps: viewers widen thin strokes to at least one pixel at low zoom,
+    % and a filled rectangle would fade instead, so the masked parts would
+    % look lighter than the rest of the underline.
+    % The two lone movetos at the line's top and bottom edge paint nothing,
+    % but they give the path the line's full height: pdf.js applies a soft
+    % mask only within the path's bounding box without the stroke width, so
+    % a bare horizontal line would be masked in a single pixel row.
+    \setbox\skipink@piecebox\hbox to\dimexpr\skipink@W+2\skipink@E\relax{%
+        \pdfliteral{%
+            q 1 0 0 1 \skipink@bp{-\skipink@P}
+            \skipink@bp{-\skipink@D-\skipink@P} cm /SkInk gs
+            1 0 0 1 \skipink@bp{\skipink@P} \skipink@bp{\skipink@P} cm
+            [] 0 d 0 J \skipink@bp{\skipink@thick} w
+            \skipink@bp{\skipink@E-\skipink@ext-\UL@pixel}
+            \skipink@bp{\skipink@D-\skipink@top} m
+            \skipink@bp{\skipink@E-\skipink@ext-\UL@pixel}
+            \skipink@bp{\skipink@D-\skipink@top-\skipink@thick} m
+            \skipink@bp{\skipink@E-\skipink@ext-\UL@pixel}
+            \skipink@bp{\skipink@D-\skipink@top-\skipink@thick/2} m
+            \skipink@bp{\skipink@E+\skipink@W+\skipink@ext+\UL@pixel}
+            \skipink@bp{\skipink@D-\skipink@top-\skipink@thick/2} l S Q%
+        }%
+        \skipink@hss
+    }%
+    \ht\skipink@piecebox\z@
+    \dp\skipink@piecebox\skipink@D
+    \immediate\pdfxform
+        resources{%
+            /ExtGState <</SkInk <</Type /ExtGState
+                /SMask <</Type /Mask /S /Luminosity /BC [1]
+                    /G \skipink@mask\space 0 R
+                    /TR \skipink@tr\space 0 R>>
+            >>>>%
+        }%
+        \skipink@piecebox
+    \edef\skipink@line{\the\pdflastxform}%
+    % Left extension into the preceding space.
+    \ifskipink@afterspace
+        \skipink@view\skipink@line{-\skipink@ext}\skipink@ext\UL@pixel\skipink@W
+        \cleaders\box\skipink@viewbox\LA@hskip\skipink@ext\relax
+    \fi
+    \global\skipink@afterspacefalse
+    % Middle piece under the word itself.
+    % No overlap here: the extension pieces already cover both seams, and an
+    % overlap would stick out past the word at line ends.
+    \vrule\@width\z@\LA@penalty\@M
+    \skipink@view\skipink@line\z@\skipink@W\z@\skipink@W
+    \box\skipink@viewbox
+    \kern-\skipink@W
+    \box\UL@box
+    % Right extension, used by the next inter-word space.
+    \xdef\skipink@right{%
+        \noexpand\skipink@rightglue{\skipink@line}{\the\skipink@W}%
+    }%
+}
+
+% \skipink@view{<form>}{<start>}{<width>}{<overlap>}{<word width>}
+% Puts into \skipink@viewbox a box of <width> that shows the part of the
+% line form between <start>-<overlap> and <start>+<width>+<overlap>,
+% measured from the word's origin.
+\def\skipink@view#1#2#3#4#5{%
+    \setbox\skipink@viewbox\hbox to#3{%
+        \pdfsave
+        \pdfliteral{%
+            \skipink@bp{-#4} \skipink@bp{-\skipink@D}
+            \skipink@bp{#3+2#4} \skipink@bp{\skipink@D} re W n%
+        }%
+        \kern\dimexpr-\skipink@E-(#2)\relax
+        \pdfrefxform#1\relax
+        \kern-\dimexpr#5+\skipink@E-(#2)\relax
+        \pdfrestore
+        \skipink@hss
+    }%
+}
+
+% Discardable right extension of a previous word.
+\def\skipink@rightglue#1#2{%
+    \skipink@view{#1}{#2}\skipink@ext\UL@pixel{#2}%
+    \cleaders\box\skipink@viewbox\LA@hskip\skipink@ext\relax
+}
+
+% ---------------------------------------------------------------------------
+% Inter-word spaces
+% ---------------------------------------------------------------------------
+% Replaces \UL@leaders while \skipul is active.
+% The space is split into: right piece of the previous word, plain rule,
+% and room for the left piece of the next word (emitted by that word).
+\def\skipink@leaders{%
+    {%
+        \ifx\skipink@right\@empty\else
+            \skipink@right
+            \advance\UL@skip-\skipink@ext
+        \fi
+        \advance\UL@skip-\skipink@ext
+        \UL@leadtype\LA@hskip\UL@skip
+    }%
+    \global\skipink@afterspacetrue
+    \gdef\skipink@right{}%
+}
+
+\endinput
