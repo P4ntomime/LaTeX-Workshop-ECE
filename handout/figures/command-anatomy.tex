@@ -1,0 +1,36 @@
+\begin{center}
+    \LARGE
+    \tn{bslash}{\texttt{\bslash}}\tn{cmdname}{\textcolor{keywordcolour}{\texttt{\textbf{section}}}}\tn{cmdmand}{\texttt{\bropen A Section Heading\brclose}}
+    
+    \large
+    \begin{tikzpicture}[%
+        remember picture,
+        overlay,
+        thick,
+        every node/.style={%
+            text height=0.9em,
+            text width=7em,
+            align=center,
+        }]
+        \coordinate[below=0.5mm of bslash.south] (brackbase);
+        \coordinate[below=2mm of bslash.south] (bracklow);
+        % \coordinate[above=0.5mm of cmdopt.north] (brackbasebot);
+        % \coordinate[above=2mm of cmdopt.north] (bracklowbot);
+        \node[text width=4.2em, below left=4.5mm and 0mm of bslash]  (bslashtxt) {Command\\ delimiter};
+        \draw (brackbase-|{$(bslash.south west)+(0.5mm,0)$}) |- (bracklow-|bslash.south) -| (brackbase-|{$(bslash.south east)+(-0.5mm,0)$});
+        \draw (bracklow-|bslash.south)  |- ($(bslash.south)!0.8!(bslashtxt.north)$) -|  (bslashtxt.north);
+        \node at (bslashtxt-|cmdname) (cmdnametxt) {Command\\ name};
+        \draw (brackbase-|{$(cmdname.south west)+(0.5mm,0)$}) |- (bracklow-|cmdname.south) -| (brackbase-|{$(cmdname.south east)+(-0.5mm,0)$});
+        \draw (bracklow-|cmdname.south) |- ($(cmdname.south)!0.8!(cmdnametxt.north)$) -| (cmdnametxt.north);
+        % \node[right=0mm of cmdnametxt]  (cmdopttxtphant) {\phantom{Optional}\\ \phantom{argument}};
+        \node at (bslashtxt-|cmdmand)  (cmdmandtxt) {Mandatory\\ argument};
+        \draw (brackbase-|{$(cmdmand.south west)+(0.5mm,0)$}) |- (bracklow-|cmdmand.south) -| (brackbase-|{$(cmdmand.south east)+(-0.5mm,0)$});
+        \draw (bracklow-|cmdmand.south) |- ($(cmdmand.south)!0.8!(cmdmandtxt.north)$) -| (cmdmandtxt.north);
+        % \node[below=-2mm of cmdopttxtphant] (cmdopttxt) {Optional\\ argument};
+        % \draw (brackbasebot-|{$(cmdopt.north west)+(0.5mm,0)$}) |- (bracklowbot-|cmdopt.north) -| (brackbasebot-|{$(cmdopt.north east)+(-0.5mm,0)$});
+        % \draw (bracklowbot-|cmdopt.north) |- ($(cmdopt.north)!0.5!(cmdopttxt.south)$) -| (cmdopttxt.south);
+    \end{tikzpicture}
+    \vspace{6em}
+    
+    % \tn{bslash1}{\texttt{\bslash}}\tn{cmdname1}{\textcolor{keywordcolour}{\texttt{\textbf{section}}}}\tn{cmdopt}{\texttt{[A Heading]}}\tn{cmdmand1}{\texttt{\bropen A Section Heading\brclose}}
+\end{center}

@@ -1,0 +1,45 @@
+\begin{tikzpicture}[%
+    every node/.style = {%
+        rounded corners,
+        draw,
+        text width = 9em,
+        align=center
+    },
+    >={Latex}
+]
+    \definecolor{latexfill}{HTML}{208080}
+    \definecolor{contextfill}{HTML}{5b5a9b} % actual color: 040266
+    \definecolor{contexttext}{HTML}{bdbcd3}
+    \definecolor{luatexfill}{HTML}{00037e}
+    \definecolor{xetexfill}{HTML}{a5ceff} % actual color: 76b4ff
+    \definecolor{xetextext}{HTML}{d7e5f6}
+
+    \node at (0,0) (texnode) {\textbf{\TeX}\\\scriptsize1978 -- Donald Knuth};
+    % \node[draw=none,right=1cm of texnode]{\includegraphics[width=1.8cm]{figs/knuth.jpg}};
+
+    
+    \node[below=1cm of texnode, fill=latexfill, text=white!97!black, draw=white!80!black] (latexnode) {\textbf{\LaTeX}\\\scriptsize1984 -- Leslie Lamport};
+    % \node[draw=none,right=1cm of latexnode]{\includegraphics[width=1.8cm]{figs/lamport.jpg}};
+
+    
+    \node[left=1cm of latexnode, fill=contextfill, text=contexttext, draw=white!60!black] (contextnode) {\textbf{\hologo{ConTeXt}}\\\scriptsize1996 -- Hans Hagen};
+    
+    \begin{scope}[%
+        every node/.style = {%
+            rounded corners,
+            draw,
+            text width = 6em,
+            align=center
+        }
+    ]
+        \node[below=1cm of contextnode, fill=xetexfill, text=xetextext, draw=white!60!black] (xetexnode) {\textbf{\hologo{XeTeX}}};
+        \node[below=2cm of latexnode] (pdftexnode) {\textbf{\hologo{pdfTeX}}};
+        \node[below right=2cm and 1cm of latexnode, fill=luatexfill, text=white!97!black, draw=white!80!black] (luatexnode) {\textbf{\hologo{LuaTeX}}};
+    \end{scope}
+
+    \draw[draw=lightgray, thick, ->] (texnode) to[out=-90, in=90] (contextnode);
+    \draw[thick, ->] (texnode) -- (latexnode);
+    \draw[draw=lightgray, thick, ->] (latexnode) to[out=-90, in=90] (xetexnode);
+    \draw[thick, ->] (latexnode) -- (pdftexnode);
+    \draw[thick, ->] (latexnode) to[out=-90, in=90] (luatexnode);
+\end{tikzpicture}

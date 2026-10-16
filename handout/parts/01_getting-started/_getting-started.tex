@@ -1,6 +1,6 @@
 \part{Getting Started}
 %   Why LaTeX?
-\section{Why \LaTeX?}
+\section{Why \LaTeX?}\label{sec:why-latex}
 % NOTE: Maybe start with something like: "If you ever had to deal with a large Word document, you know it can be a pain to update all its references, replace an image, or just navigate it in general."
 % NOTE: LaTeX is one of many tools usable for writing text. 
 %       Contrary to other tools such as Word, Google Docs and similar, it is similar to programming.
@@ -18,25 +18,150 @@
 %       - No instant preview -> need to run LaTeX compiler to see result
 %       TODO: find more Cons...
 %       - Graphical customization can be a pain to do yourself
+If you've ever had to deal with a large Word document, you know it can be a pain to do simple tasks such as update all its references, replace or move an image, or just navigate through the document in general. 
+\gls{wysiwyg} programs such as Word provide an instant visual preview of the document, but they tend to reach their limits once the structure of a document becomes more important as its size grows.
+Especially when wanting to change the formatting of a document later on, it tends to rely more on the user checking that e.g. all the image captions look the same, or the new heading formatting has been applied to all the headings and not just the one you happened to have selected.
+This is exactly where \LaTeX\ comes into play.
+Instead of providing a direct visual feedback to the user, it relies on a syntax that describes how a document should be formatted.
+The user then writes plain-text files with some special annotations such as \texttt{\textbackslash section\{\}}.
+\LaTeX\ then uses these annotations to treat the text marked by them differently and apply a specific formatting.
+
+% TODO: write some more text here...
+
+\begin{center}
+    \begin{minipage}[t]{.48\linewidth}
+        \textbf{Pros}
+        \begin{itemize}
+            \item Less hassle keeping references up to date.
+            \item Automatic recomputation of table of contents, list of figures etc.
+            \item Simpler structuring for large documents.
+            \item Uniform layout throughout the document.
+            \item Better references \& bibliography management.
+            \item Mathematical syntax for complicated math formulas.
+        \end{itemize}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{.48\linewidth}
+        \textbf{Cons}
+        \begin{itemize}
+            \item No instant preview.
+            \item Steep learning curve.
+            \item Format customizations can be a pain to do yourself.
+        \end{itemize}
+    \end{minipage}
+\end{center}
+
 
 %   Short history of LaTeX
 \section{A Short History of \LaTeX}
+\begin{center}
+    \input{figures/latex-history.tex}
+\end{center}
 
 %   Setup
 \section{Setup}
+% TODO: Mention that LaTeX is obtainable through several places.
+
+
 \subsection{Online -- Overleaf}
+Overleaf is an online platform providing a cloud-based \LaTeX\ compiler that works directly in the browser. 
+In order to use it, a free account must be created.
 
-\subsection{Windows -- \TeX\ Live}
-\subsection{Windows -- MiK\TeX}
+This is recommended if you just want to try out \LaTeX\ without the hassle of installing it first.
 
-\subsection{Linux -- \TeX\ Live}
+\subsubsection{Setup Instructions}
+\begin{enumerate}
+    \item Open the \myhref{https://www.overleaf.com/}{Overleaf website}.
+    \item Create an account with your email or sign up directly using a Google or ORCID account.
+    \item The website will ask you to \textit{Upgrade to get more from Overleaf}. Press \textbf{Skip}.
+    \item Next a prompt requesting your name will appear. Entering your details is not required. Press \textbf{Continue} until you arrive at the \textit{Welcome to Overleaf} page.
+\end{enumerate}
 
-\subsection{MacOS -- Mac\TeX}
+
+\subsection{Windows -- \hologo{TeXLive}}
+Contrary to \hologo{MiKTeX}, \hologo{TeXLive} installs most packages\footnote{The list of packages installed is curated and limited to ones complying with \hologo{TeXLive}'s licensing rules.} found on \myhref{https://www.ctan.org/}{CTAN}.
+
+
+\subsubsection{Installation Instructions}
+\begin{enumerate}
+    \item Download \myhref{https://mirror.ctan.org/systems/texlive/tlnet/install-tl-windows.exe}{\texttt{install-tl-windows.exe}} from \myhref{https://tug.org/texlive/windows.html}{tug.org}.
+    \item Run the installer.
+    \item Keep the default settings and press \textbf{Install}.
+
+        \textit{\textbf{NOTE}: This will take a while to complete.
+            Depending on your computer and internet it can take several hours to finish installing.}
+\end{enumerate}
+
+
+\subsection{Windows -- \hologo{MiKTeX}}
+\hologo{MiKTeX} is faster to install than \hologo{TeXLive}, as by default it downloads only a minimal amount of packages at install-time. 
+Any further packages that are required later on, will be automatically installed on-the-fly.
+However, speaking from personal experience, \hologo{MiKTeX} tends to have issues later on once updates start rolling in, often requiring a fresh install to work again.
+
+
+\subsubsection{Installation Instructions}
+\begin{enumerate}
+    \item Download the \myhref{https://miktex.org/download}{\hologo{MiKTeX} installer}.
+    \item Run the installer and follow its installation steps.
+\end{enumerate}
+
+
+\subsection{Linux -- \hologo{TeXLive}}
+Linux sometimes comes with a \LaTeX\ compiler already pre-installed.
+However, if it is not yet installed, it is recommended to install it using \hologo{TeXLive}.
+
+
+\subsubsection{Installation Instructions} % TODO: add installation instructions for Linux TeXLive
+\begin{enumerate}
+    \item 
+\end{enumerate}
+
+
+
+\subsection{MacOS -- Mac\TeX} % TODO: add installation instructions for MacTeX
+\subsubsection{Installation Instructions}
+
 
 %   Syntax basics
 \section{Syntax Basics}
 % NOTE: Reserved characters (\, &, #, %, _, ^, {, }, @ etc.)
 %       Command dissection (mandatory args, optional args)
+\subsection{Commands and Environments}
+\LaTeX\ is built on the concept of commands and environments.
+Commands are a kind of macro that tell the compiler what to do with the text group that follows it.
+% Commands are always started using a backslash (\texttt{\bslash}).
+% TODO: add anatomy of a command here.
+
+
+\input{figures/command-anatomy.tex}
+
+
+
+\subsection{Reserved Characters}
+As briefly mentioned in the \hyperref[sec:why-latex]{\nameref*{sec:why-latex} Section}, \LaTeX\ has its own syntax for describing its markup rules. 
+This also includes some reserved characters, that are not automatically typed out into the produced PDF when typing them in the plain-text source file.
+Each of these reserved characters is listed in~\autoref{tab:reserved-chars}, as well as the appropriate workaround to print them out if necessary.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{>{\ttfamily}c p{.5\linewidth} >{\ttfamily}l}
+        \toprule
+        \textnormal{\textbf{Symbol}} & \textbf{Description}& \textnormal{\textbf{Substitute}}\\
+        \midrule
+        \bslash         & Starts a command. & \bslash textbackslash\\
+        \bropen         & Group delimiter for command arguments. & \bslash\bropen\\
+        \brclose        & Group delimiter for command arguments. & \bslash\brclose\\
+        \char`\_        & In math mode, text after this (in a group) will be typeset as subscript. & \bslash textunderscore\\
+        \char`\^        & In math mode, text after this (in a group) will be typeset as superscript. & \bslash textasciicircum\\
+        \$              & Inline math mode delimiter. & \bslash\$\\
+        \%              & Starts a line-comment. & \bslash\%\\
+        \textasciitilde & Non-breaking space character.& \bslash textasciitilde\\
+        \&              & Table column delimiter. & \bslash\&\\
+        \#              & Argument placeholder in command definitions. & \bslash\#\\
+        \bottomrule
+    \end{tabular}
+    \caption{List of reserved characters in \LaTeX.}\label{tab:reserved-chars}
+\end{table}
+
 
 %   Minimal Document
 \section{Minimal Document}
