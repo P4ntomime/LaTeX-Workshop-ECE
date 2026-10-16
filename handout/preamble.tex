@@ -8,6 +8,7 @@
 \usepackage{geometry}
 
 \usepackage{enumitem}
+\setlist[itemize]{itemsep=0ex, leftmargin=1em}
 \usepackage{tabularx}
 \usepackage{tabu}
 \usepackage{hhline}
@@ -20,14 +21,59 @@
 \usepackage{siunitx}
 \usepackage{bm}
 
+\usepackage{parskip}
+\usepackage{multicol}
+
 \usepackage{graphicx}
 \usepackage{scalerel}
 \usepackage{anyfontsize}
 \usepackage[table]{xcolor}
+\definecolor{backcolour}{HTML}{f5f5f0} % background color for highlighted text
+\definecolor{commentcolour}{HTML}{6a9955}
+\definecolor{keywordcolour}{HTML}{7f0055}
+\definecolor{stringcolour}{HTML}{9e22bd}
+\definecolor{numbercolour}{HTML}{808080}
 
+\usepackage{hologo}
+
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{%
+    labelfont=bf,
+    labelsep=quad
+}
+
+\usepackage{skipink}
+
+% ----------------------------------- TIKZ & PGF-PLOTS SETTINGS -----------------------------------
 \usepackage{tikz}
 \usepackage{pgfplots}
+\usetikzlibrary{arrows}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{bending}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{angles}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{petri}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes}
+\usetikzlibrary{calc}
+
 \pgfplotsset{compat=1.18}
+
+% inline tikz node for later referencing
+\newcommand{\tn}[2]{% from https://tex.stackexchange.com/a/402466/121799
+    \ifmmode%
+    \tikz[remember picture,baseline= (#1.base),inner sep=0pt]{%
+        \node(#1){$#2$};
+    }%
+    \else%
+    \tikz[remember picture,baseline= (#1.base),inner sep=0pt]{%
+        \node(#1){#2};%
+        % \draw (#1.south west) to ++(0,-2mm) -| (#1.south east) -- (#1.south east);
+    }%
+    \fi%
+}
 
 \usepackage{listings}
 
@@ -38,6 +84,23 @@
 }
 
 \urlstyle{same}
+
+\newcommand{\myhref}[2]{%
+    \textcolor{blue}{\skipul{\href{#1}{#2}}}
+}
+
+% ------------------------------------------------------- acronyms/glossary --
+% \printunsrtglossary needs no makeindex/bib2gls run — entries appear in
+% definition order. One less moving part in the build.
+\IfFileExists{tracklang.sty}{%
+\usepackage[abbreviations]{glossaries-extra}
+    \setabbreviationstyle[acronym]{long-short}
+    \makenoidxglossaries%
+    \loadglsentries{appendix/glossary_entries.tex}
+    \newcommand{\reportglossary}{\printnoidxglossary[nonumberlist, type=abbreviations, sort=word, title={Glossary}]}
+}{%
+  \newcommand{\reportglossary}{}
+}
 
 % Titlepage
 \makeatletter
@@ -60,3 +123,7 @@
 \newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
 \let\@subtitle\@empty
 \makeatother
+
+\newcommand{\bslash}{\char`\\}
+\newcommand{\bropen}{\char`\{}
+\newcommand{\brclose}{\char`\}}
