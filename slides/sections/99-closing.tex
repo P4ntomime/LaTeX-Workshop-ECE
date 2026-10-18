@@ -1,0 +1,172 @@
+\section[Wrap-up]{Wrap-up}
+
+\begin{frame}
+    \frametitle{You wrote all of this}
+    \vfill
+    \begin{roadmap}{5}
+        \roadmapresults
+    \end{roadmap}
+    \note{%
+        Two hours ago, most of them had never compiled a document.
+        The whole line is done.
+        Click through the four lists slowly, one block at a time.
+        \begin{itemize}
+            \item This is the slide the advance organiser was built for:
+                four small things are now visibly one finished thing.
+                Do not talk over the last click.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Three packages to add next}
+    \begin{itemize}
+        \item<1-> \textbf{\texttt{siunitx}}: numbers with units
+            \tcbinputlst[linenos=false][left=2mm, overlay={}]{listings/99-siunitx.tex}
+            \begin{outputbox}[width=.6\textwidth]
+                \input{listings/99-siunitx.tex}
+            \end{outputbox}
+        \item<2-> \textbf{\texttt{microtype}}: better justification
+        \item<3-> \textbf{\texttt{hyperref}}: clickable references, load it \textbf{last}
+    \end{itemize}
+    \note{%
+        \begin{itemize}
+            \item Three lines in the preamble, no change to anything they have written.
+            \item \texttt{siunitx}: right spacing, right font, every time.
+            \item \texttt{microtype}: load it and look closely at the right margin.
+            \item \texttt{hyperref} makes every \texttt{\textbackslash ref}, \texttt{\textbackslash eqref} and \texttt{\textbackslash cite} clickable.
+            \item \texttt{siunitx} comes first because you owed it to them since block 3,
+                where they typed \texttt{\textbackslash,\^{}\{\textbackslash circ\}\textbackslash mathrm\{C\}} by hand.
+                Close the loop: ``remember that mess? This.''
+            \item Deliberately only three.
+                A list of twenty useful packages is a list nobody acts on.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{When your document gets bigger}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.4\textwidth}
+            \tcbinputlst[linenos=false][minted language=text, left=2mm, overlay={}]{listings/99-tree.txt}
+        \end{column}
+        \begin{column}{.52\textwidth}
+            \tcbinputlst{listings/99-input.tex}
+            One file per chapter
+        \end{column}
+    \end{columns}
+    \note{%
+        Thirty seconds.
+        Not worth it for three pages, essential at thirty:
+        the editor stays usable, and two people can work without fighting.
+        They do not need this today and will need it for their thesis.
+        \begin{itemize}
+            \item The point is that they have seen it once
+                and recognise it when a supervisor's template does it.
+            \item Same for a separate \texttt{preamble.tex}: mention it, do not demo it.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Where to look things up}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.52\textwidth}
+            \begin{itemize}
+                \item \textbf{Detexify}: symbol to command\\
+                    {\small\color{black!60}detexify.kirelabs.org}
+                \item \textbf{Overleaf docs}: beginner reference\\
+                    {\small\color{black!60}overleaf.com/learn}
+                \item \textbf{TeX StackExchange}: errors, answered\\
+                    {\small\color{black!60}tex.stackexchange.com}
+                \item \textbf{CTAN}: packages and their manuals\\
+                    {\small\color{black!60}ctan.org}
+            \end{itemize}
+        \end{column}
+        \begin{column}{.44\textwidth}
+            \begin{block}{Also in the handout}
+                \begin{itemize}
+                    \item all the sectioning levels
+                    \item the rest of the text styling commands
+                    \item matrix environments
+                    \item column types and float specifiers
+                    \item the reserved characters, in full
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+    \note{%
+        The handout is written in \LaTeX{}; its source is in the repository.
+        Hand the handout out at the \emph{start} of the session, not here.
+        It is a reference they should have in front of them all afternoon.
+        This slide is just the reminder that it exists, and why the deck left things out.
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{One last thing}
+    \vfill
+    \begin{center}
+        {\LARGE Nobody writes \LaTeX{} from memory\par}
+        \vspace{1cm}
+        \uncover<2->{%
+            {\Large\color{black!60}
+            Look it up, copy your last preamble\par}
+        }
+    \end{center}
+    \vfill
+    \note{%
+        The honest closing note, worth ten seconds.
+        The beginner's failure mode is believing that fluent users have memorised it all
+        and that they are uniquely slow.
+        They have not, and the student is not.
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Thank you}
+    \begin{columns}[c, onlytextwidth]
+        \begin{column}{.55\textwidth}
+            {\Large Template, slides and handout\par}
+            \medskip
+            {\small\url{\repourl}\par}
+            \vspace{1cm}
+            {\Large Questions?\par}
+        \end{column}
+        \begin{column}{.35\textwidth}
+            \centering
+            \qrcode[level=L, version=0, height=4cm]{\repourl}
+        \end{column}
+    \end{columns}
+    \note{%
+        If something breaks in their next report, they can ask.
+        Stay at the front for a few minutes if you can.
+        The best questions come one-to-one after the room empties.
+    }
+\end{frame}
+
+% TODO before publishing: fill in the original author and link (also in the
+% repository's top-level LICENSE), or move this text to the README and delete
+% the frame.
+\begin{frame}
+    \frametitle{Attribution and licence}
+    \begin{center}
+        \begin{minipage}{.8\textwidth}
+            \textbf{Based on}:
+            \textcolor{psecbg}{TODO: original author}, \textcolor{psecbg}{TODO: link}, CC~BY-SA~4.0
+
+            \bigskip
+            \textbf{This revision}: Laurin Heitzer, ECE, \the\year, CC~BY-SA~4.0
+
+            \bigskip
+            {\small\color{black!60}
+            Example document and figure: written for this workshop, synthetic data\par}
+        \end{minipage}
+    \end{center}
+    \note{%
+        For you, not the students.
+        Either fill it in and keep it as a visible credit slide,
+        or move the text to the README and delete the slide.
+        Share-alike is not optional: a CC~BY-SA original makes this deck CC~BY-SA too.
+    }
+\end{frame}

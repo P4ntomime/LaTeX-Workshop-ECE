@@ -1,0 +1,238 @@
+\section[Text]{Text that behaves}
+
+\blockframe{2}{Text that behaves}{Paragraphs, line breaks and lists}
+
+\begin{frame}
+    \frametitle{Where we are going}
+    \vfill
+    \begin{roadmap}{2}
+        \roadmapresults
+    \end{roadmap}
+    \vfill
+    \note{%
+        The first block is done.
+        It took 26 minutes.
+        Say that out loud: it makes the remaining three blocks feel cheap.
+    }
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Warm-up: three things are wrong here}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.55\textwidth}
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-warmup.tex}
+        \end{column}
+        \begin{column}{.4\textwidth}
+            \begin{alertblock}<2->{Line 6}
+                \code|\emph{| never closes
+            \end{alertblock}
+            \begin{alertblock}<2->{Line 9}
+                A bare \code|%| eats the rest of the line
+            \end{alertblock}
+            \begin{alertblock}<2->{Line 10}
+                \texttt{itemized} $\neq$ \texttt{itemize}
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    \note{%
+        \textbf{Two minutes, laptops shut.}
+        In pairs, out loud.
+        \begin{itemize}
+            \item Retrieval practice: pulling block 1 back out after a break
+                is worth far more than you re-explaining it.
+                It also wakes the room up.
+            \item Do not reveal until at least two pairs have found all three.
+                If the room is quiet, give them the first one.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Where do line breaks come from?}
+    You type this:
+    \tcbinputlst[][width=.6\textwidth]{listings/02-linebreaks.tex}
+
+    \uncover<2->{%
+        You get this:
+        \begin{outputbox}[width=.9\textwidth]
+            \input{listings/02-linebreaks.tex}
+        \end{outputbox}
+    }
+    \vfill
+    \begin{alertblock}<3->{}
+        Three lines in, one line out
+    \end{alertblock}
+    \note{%
+        \textbf{Predict first.}
+        Ask the room what will come out before you click.
+        Show of hands: three lines or one line?
+        \begin{itemize}
+            \item The wrong prediction is the point.
+                Being surprised is what makes the rule stick.
+                If you just state it, they nod and then write \texttt{\textbackslash\textbackslash} everywhere anyway.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{The rules, all of them}
+    \begin{itemize}
+        \item<1-> \textbf{Single newline}: a space
+        \item<2-> \textbf{Empty line}: a new paragraph
+        \item<3-> \code|%| at the end of a line: no space at all
+        \item<4-> \code|~|: a space that never breaks, \code|Fig.~\ref{...}|
+    \end{itemize}
+    \vfill
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.47\textwidth}
+            \begin{exampleblock}<5->{One sentence per line}
+                Same PDF, cleaner \texttt{git diff}
+            \end{exampleblock}
+        \end{column}
+        \begin{column}{.47\textwidth}
+            \begin{alertblock}<6->{\texttt{\textbackslash\textbackslash} is \textbf{not} a paragraph break}
+                Only in tables and maths
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    \note{%
+        The \texttt{\textbackslash\textbackslash} warning is the most valuable thing in block 2.
+        \begin{itemize}
+            \item \texttt{\%} at the end of a line is useful in tables and macros.
+            \item One sentence per line: \texttt{git diff} then shows the sentence that changed, not the paragraph.
+                The template is written this way.
+            \item \texttt{\textbackslash\textbackslash} ends a line; anywhere but tables and maths it gives underfull boxes.
+            \item Every beginner reaches for it because it feels like Word's Enter key.
+                It is wrong in a way that only shows once the document is long enough to reflow.
+            \item Name the symptom, so they recognise it later:
+                \texttt{Underfull \textbackslash hbox (badness 10000)} in the log,
+                and a paragraph whose last line is stretched across the full width.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Paragraph spacing: do it once}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.47\textwidth}
+            {\large\bfseries What beginners do\par}
+            \medskip
+            \tcbinputlst{listings/02-noindent.tex}
+            \begin{alertblock}{}
+                Every paragraph, every time
+            \end{alertblock}
+        \end{column}
+        \begin{column}{.47\textwidth}
+            {\large\bfseries What you do\par}
+            \medskip
+            \tcbinputlst{listings/02-parskip.tex}
+            \begin{exampleblock}{}
+                Once, in the preamble
+            \end{exampleblock}
+        \end{column}
+    \end{columns}
+    \note{%
+        \begin{itemize}
+            \item Miss one \texttt{\textbackslash noindent} and it looks broken;
+                undo \texttt{parskip} by deleting one line.
+            \item If you find yourself repeating a command, look for a package.
+            \item Structure before appearance, for the third time.
+                By now they should feel the pattern rather than need it explained.
+            \item A blank line between paragraphs is the normal convention in German-language typesetting anyway,
+                so for a lot of their coursework \texttt{parskip} is simply correct.
+        \end{itemize}
+    }
+\end{frame}
+
+% Each list is typeset twice from the same file: once as code, once for real.
+\begin{frame}
+    \frametitle{Three kinds of list}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.31\textwidth}
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-itemize.tex}
+            \begin{outputbox}[height=1.6cm]
+                \input{listings/02-itemize.tex}
+            \end{outputbox}
+            \textbf{itemize}: order does not matter
+        \end{column}
+        \begin{column}{.31\textwidth}
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-enumerate.tex}
+            \begin{outputbox}[height=1.6cm]
+                \input{listings/02-enumerate.tex}
+            \end{outputbox}
+            \textbf{enumerate}: order \emph{does} matter
+        \end{column}
+        \begin{column}{.31\textwidth}
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-description.tex}
+            \begin{outputbox}[height=1.6cm]
+                \input{listings/02-description.tex}
+            \end{outputbox}
+            \textbf{description}: naming things
+        \end{column}
+    \end{columns}
+    \vfill
+    \begin{exampleblock}<2->{}
+        Same shape: \texttt{\textbackslash begin}, \texttt{\textbackslash item}s, \texttt{\textbackslash end}
+    \end{exampleblock}
+    \note{%
+        Fast, three minutes.
+        They already know what a list is; they need the three names and the shared shape.
+        \begin{itemize}
+            \item Lists nest, and the labels sort themselves out.
+                Worth demoing live.
+                The automatic change of label (bullet to dash, 1 to a) is another small
+                ``it did that for me'' moment.
+            \item \texttt{description} is the one they have never seen.
+                The bracket argument is the term being defined.
+                TODO 2.6 uses it for the symbol list, which becomes maths in block 3.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{The preamble: where the settings live}
+    \only<1>{\tcbinputlst[highlightlines={1}]{listings/02-preamble.tex}}%
+    \only<2>{\tcbinputlst[highlightlines={3-6}]{listings/02-preamble.tex}}%
+    \only<3->{\tcbinputlst[highlightlines={8}]{listings/02-preamble.tex}}%
+    \begin{itemize}
+        \item<4-> Between \texttt{\textbackslash documentclass} and \texttt{\textbackslash begin\{document\}}
+        \item<5-> \texttt{\textbackslash usepackage}: load an extension (CTAN: about 6\,000)
+        \item<6-> \texttt{hyperref} goes last
+    \end{itemize}
+    \note{%
+        \begin{itemize}
+            \item ``Can \LaTeX{} do\ldots?'' Almost always, with one line in the preamble.
+            \item Package order rarely matters; \texttt{hyperref} is the one to remember.
+            \item Held back until now on purpose.
+                In block 1 the preamble was ``the settings area, we come back to it'',
+                which was enough because they had nothing to put in it yet.
+                Now \texttt{amsmath} is waiting for the next block.
+            \item 6\,000 always gets a reaction.
+                The follow-up: you will personally use about eight of them.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Your turn}
+    \handson{2}{2.1--2.6}{5--10}{checkpoint-02.tex}{%
+        Work down the file.\par
+        \medskip
+        {\normalsize\color{black!60}
+        add \texttt{parskip} $\rightarrow$ write a second paragraph
+        $\rightarrow$ fix the three line-break crimes in Setup
+        $\rightarrow$ an \texttt{itemize}, an \texttt{enumerate} and a \texttt{description}}
+    }
+    \note{%
+        \textbf{5 to 10 minutes.}
+        \begin{itemize}
+            \item TODO 2.3 is the interesting one: the paragraph has the \texttt{\textbackslash\textbackslash} habits baked in,
+                and it compiles perfectly happily.
+                \LaTeX{} will not tell you; you have to look at the page.
+            \item Watch for a blank line \emph{inside} a list and strange spacing.
+                Common, harmless, worth a word from the front if you see it twice.
+            \item \textbf{Break after this}, 5 minutes.
+                Again: name the restart time.
+        \end{itemize}
+    }
+\end{frame}

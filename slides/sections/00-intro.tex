@@ -1,0 +1,237 @@
+\section{Introduction}
+
+\begin{frame}
+    \titlepage
+    \note{%
+        \textbf{Before you start}
+        \begin{itemize}
+            \item Have \texttt{checkpoint-04.pdf} open in another window.
+            \item Check that everyone got the template link.
+                Anyone without it pairs up with a neighbour.
+            \item Say the one thing that matters most: nobody has to keep up.
+                Every block ends with a checkpoint file that puts them back on the rails.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{In two hours, you will have written this}
+    \begin{center}
+        \includegraphics[page=1, height=.7\textheight, frame]{renders/checkpoint-04.pdf}
+        \hfill
+        \includegraphics[page=2, height=.7\textheight, frame]{renders/checkpoint-04.pdf}
+        \hfill
+        \includegraphics[page=3, height=.7\textheight, frame]{renders/checkpoint-04.pdf}
+
+        \medskip
+        {\small\color{black!60} Title, table of contents, equations, a table, a figure, a bibliography.}
+    \end{center}
+    \note{%
+        \begin{itemize}
+            \item 10 seconds, not 2 minutes.
+                Show it, say ``this is the destination'', move on.
+            \item The point is to make the next two hours feel finite:
+                everything they are about to see is a piece of \emph{this}.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{First, who is in the room?}
+    \vfill
+    \begin{tcbraster}[%
+        raster columns=2,
+        raster equal height,
+        raster column skip=8mm,
+        raster row skip=5mm,
+        deckbox,
+        thinframe,
+        colback=white,
+        fontupper=\large,
+    ]
+        \begin{tcolorbox}
+            {\Huge 1}\par I have never heard of \LaTeX{}
+        \end{tcolorbox}
+        \begin{tcolorbox}
+            {\Huge 2}\par I have heard of it, never used it
+        \end{tcolorbox}
+        \begin{tcolorbox}
+            {\Huge 3}\par I have compiled something once
+        \end{tcolorbox}
+        \begin{tcolorbox}
+            {\Huge 4}\par I use it already
+        \end{tcolorbox}
+    \end{tcbraster}
+    \vfill
+    \note{%
+        Hands up, 30 seconds.
+        Last year roughly 95\,\% were in groups 1 and 2, so the deck is built for them.
+        \begin{itemize}
+            \item It tells \emph{you} whether to slow down on block 1 or speed through it.
+            \item It tells \emph{them} that almost nobody knows this yet.
+                That is worth a lot at 4\,pm.
+            \item Many hands for 4: give them the ``if you finish early'' tasks
+                and ask them to help their neighbours.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{What \LaTeX{} actually is}
+    \begin{columns}[t, onlytextwidth]
+        \begin{column}{.45\textwidth}
+            {\Large\bfseries A word processor\par}
+            \smallskip
+            You make it \textbf{look} right.
+            \begin{itemize}
+                \item<2-> Select the heading, set 16\,pt bold
+                \item<3-> Do it again on the next heading
+                \item<4-> Hope they match
+                \item<5-> The document is what you see
+            \end{itemize}
+        \end{column}
+        \begin{column}{.45\textwidth}
+            {\Large\bfseries \LaTeX{}\par}
+            \smallskip
+            You say what things \textbf{are}.
+            \begin{itemize}
+                \item<2-> Mark the heading as a heading
+                \item<3-> Mark the next one as a heading
+                \item<4-> They match, because nobody chose
+                \item<5-> The document is what you \emph{meant}
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \note{%
+        \begin{itemize}
+            \item The point: you give up control of the look, and get structure and consistency back.
+            \item The whole philosophy of the workshop, in 90 seconds.
+                Resist the urge to expand it.
+            \item ``So it's like Markdown?'' Yes, same idea, much older and much more powerful.
+            \item Do not get drawn into Word vs.\ \LaTeX{}.
+                ``We'll see what it buys you in about ten minutes.''
+                The table of contents in block 1 makes the case better than you can.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{When it is worth the trouble}
+    \begin{center}
+        \begin{tikzpicture}
+            \begin{axis}[
+                smooth, samples=100,
+                axis lines=left,
+                axis line style={thick},
+                width=.85\textwidth,
+                height=4.6cm,
+                xlabel=Complexity of the document,
+                ylabel=Effort,
+                x label style={at={(axis description cs:1,.1)}, anchor=east},
+                ytick=\empty,
+                xtick={2, 4, 6, 11, 13, 16, 20, 22},
+                xticklabels={Text, Figures, Tables, Maths, Plots, {Technical\\ Report}, Thesis, Book},
+                xticklabel style={align=center},
+                x tick label style={rotate=70, anchor=east, font=\footnotesize},
+                legend style={legend pos=north west},
+                no markers, domain=0:25,
+            ]
+                \addplot[densely dashed, very thick, palette quaternary.bg, domain=0:14]{exp(x/3 - 2.5)};
+                \addlegendentry{Word processor}
+                \addplot[very thick, palette primary.bg]{3/(1 + exp(-2*(x-2.5))) + x/50*exp((x-4)/12)};
+                \addlegendentry{\textrm{\LaTeX}}
+            \end{axis}
+        \end{tikzpicture}
+    \end{center}
+    \begin{columns}[t, onlytextwidth]
+        \begin{column}{.47\textwidth}
+            \begin{alertblock}<2->{}
+                One-page note: word processor
+            \end{alertblock}
+        \end{column}
+        \begin{column}{.47\textwidth}
+            \begin{exampleblock}<2->{}
+                Report, thesis: \LaTeX{}
+            \end{exampleblock}
+        \end{column}
+    \end{columns}
+    \note{%
+        \begin{itemize}
+            \item Being honest about the left-hand side buys you credibility for the right-hand side.
+                Tell them \LaTeX{} is always better and they will (correctly) stop believing you.
+            \item The flat \LaTeX{} curve is the real claim:
+                the effort barely grows with the document.
+            \item The curves cross about where their coursework starts.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Getting started}
+    \begin{columns}[t, onlytextwidth]
+        \begin{column}{.45\textwidth}
+            {\Large\bfseries Today: Overleaf\par}
+            \smallskip
+            In the browser, nothing to install
+            \begin{enumerate}
+                \item Account at \textbf{overleaf.com}
+                \item New Project, then Upload Project
+                \item Drop in the template zip
+                \item Open \texttt{workshop.tex}, hit \textbf{Recompile}
+            \end{enumerate}
+        \end{column}
+        \begin{column}{.5\textwidth}
+            {\Large\bfseries Later: on your own machine\par}
+            \medskip
+            \begin{tabular}{@{}lll@{}}
+                \toprule
+                & \textbf{Install} & \textbf{Edit in} \\
+                \midrule
+                Windows & \hologo{MiKTeX} & VS Code, TeXstudio \\
+                macOS   & Mac\TeX{}       & TeXShop, VS Code \\
+                Linux   & \TeX{} Live     & VS Code, TeXstudio \\
+                \bottomrule
+            \end{tabular}
+
+            \bigskip
+            Compile with:
+            \begin{tcolorbox}[codebg]
+                \mintinline{bash}{latexmk -pdf workshop.tex}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+    \note{%
+        Two minutes, hard limit.
+        Do not demo an installation.
+        \begin{itemize}
+            \item Overleaf today means the same setup for everyone,
+                so every problem today is a \LaTeX{} problem.
+            \item This slide exists so that nobody spends the workshop installing software,
+                and so that people who want a local setup have the names written down.
+            \item \texttt{latexmk} matters more than it looks:
+                it is why they never have to count compilation passes.
+        \end{itemize}
+    }
+\end{frame}
+
+% The roadmap, revealed one block per click (state 0, see preamble.tex).
+\begin{frame}
+    \frametitle{Where we are going}
+    \vfill
+    \begin{roadmap}{0}
+        \roadmapresults     % comment out to reveal the block names only
+    \end{roadmap}
+    \vfill
+    \note{%
+        \textbf{The advance organiser.}
+        It comes back at the start of every block, with the line filled up to there,
+        and at the end with everything done.
+        \begin{itemize}
+            \item Walk along the line: four blocks, a break between each.
+                The short mark in each block is where they start typing.
+            \item Say it: ``you will see this slide five more times.''
+                It turns one long session into four short ones.
+            \item Timing from here: block 1 ends at about 26 minutes on the clock.
+        \end{itemize}
+    }
+\end{frame}

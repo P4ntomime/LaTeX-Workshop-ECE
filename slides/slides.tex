@@ -1,0 +1,29 @@
+\documentclass[aspectratio=169]{beamer}
+% \documentclass[aspectratio=169,handout]{beamer}  % one page per frame, overlays collapsed
+
+\usetheme{own}
+\input{preamble.tex}
+
+% Presenter notes on a second screen: every page becomes twice as wide,
+% slide on the left, notes on the right.
+% Comment out the next two lines for a plain PDF without notes.
+\usepackage{pgfpages}
+\setbeameroption{show notes on second screen}
+
+\title{\LaTeX{} from Scratch}
+\subtitle{Two hours, one document, no prior knowledge assumed}
+\author{Laurin Heitzer}
+\institute[OST]{ECE \textperiodcentered{} Ostschweizer Fachhochschule}
+\date{\the\year}
+
+% TODO: the public repository, shown as a link and QR code on the last slide.
+\newcommand{\repourl}{https://github.com/TODO/TODO}
+
+\begin{document}
+    \input{sections/00-intro.tex}
+    \input{sections/01-skeleton.tex}
+    \input{sections/02-text.tex}
+    \input{sections/03-math.tex}
+    \input{sections/04-references.tex}
+    \input{sections/99-closing.tex}
+\end{document}

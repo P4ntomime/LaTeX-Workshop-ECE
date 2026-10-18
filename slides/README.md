@@ -1,109 +1,70 @@
-# LaTeX from Scratch — workshop slides
+# LaTeX from Scratch: workshop slides
 
-A two-hour hands-on introduction to LaTeX for students of any
-discipline, built with [Slidev](https://sli.dev).
+A two-hour hands-on introduction to LaTeX, built with Beamer and the
+`own` theme from the 2025 deck. The deck follows the four-block
+structure (Skeleton, Text, Maths, Illustrations & References); each block ends with a
+hands-on slide pointing at the matching TODOs and checkpoint in the
+student template.
 
-The slides are one half of the workshop; the other half is the student
-template (`latex-workshop-template`), which the deck refers to
-throughout by TODO number.
-
-## Running it
+## Building
 
 ```sh
-npm install
-npm run dev        # http://localhost:3030, hot-reloads as you edit
-npm run build      # static site in dist/
-npm run export     # slides.pdf
+latexmk slides.tex      # or: make
 ```
 
-Press `p` in the browser for presenter mode — notes, timer, next-slide
-preview. Every slide in this deck has notes.
+The code on the slides is highlighted by `minted`, which calls Pygments
+(Python), so pdflatex needs `-shell-escape`. `latexmkrc` passes it for
+you. Overleaf enables it by default.
 
-## Shape of the session
+Built and checked with TeX Live 2023 (minted 2.9, beamer tcolorbox theme
+0.6) and with the 2026 tcolorbox theme (1.6). Your 2026 build uses minted 3
+and also compiled correctly.
 
-| | Block | Ends with |
-|---|---|---|
-| 26 min | 1 — Skeleton | `TODO 1.1–1.5`, checkpoint-01 |
-| 5 | break | |
-| 26 min | 2 — Text | `TODO 2.1–2.6`, checkpoint-02 |
-| 5 | break | |
-| 26 min | 3 — Maths | `TODO 3.1–3.6`, checkpoint-03 |
-| 5 | break | |
-| 26 min | 4 — Connections | `TODO 4.1–4.6`, checkpoint-04 |
-
-119 minutes. Each block is roughly 2 min recall, 17 min teaching,
-7 min hands-on.
+`slides.pdf` has the presenter notes on a second screen (every page is
+twice as wide). For a plain PDF, comment out the two lines under
+"Presenter notes" in `slides.tex`.
 
 ## Layout
 
 ```
-slides.md              headmatter + imports; edit content in pages/
-tools/                 figure generator; NOT shipped to students
-pages/
-  00-intro.md          hook, poll, why, setup, goal slide
-  01-skeleton.md       syntax, minimal doc, sections, TOC, styling
-  02-text.md           line breaks, parskip, lists, preamble
-  03-math.md           inline/display, equation, align, cases
-  04-connections.md    tables, floats, figures, citations
-  99-closing.md        wrap-up, packages, resources, licence
-components/
-  GoalTracker.vue      the advance organiser; returns each block
-  HandsOn.vue          the practice slide at the end of each block
-  Placeholder.vue      a marked gap where a screenshot still has to go
-public/renders/        put the compiled-PDF screenshots here
+slides.tex                 title data and the list of sections
+preamble.tex               packages and helpers, each with a usage comment
+beamerthemeown.sty         2025 theme; only the headline is new
+beamercolorthemeown.sty    2025 colours, plus the progress bar colour
+sections/                  one file per block, plus intro and closing
+listings/                  every piece of code shown on a slide
+renders/                   compiled PDFs the slides include
+Makefile                   `make renders` rebuilds renders/
 ```
 
-## Before you present: the screenshots
+## How the slides are put together
 
-The deck deliberately shows **real compiled output** next to the source
-rather than a web-rendered approximation, so students see exactly what
-their own compiler will produce. Those images do not exist yet — every
-one is marked with a pink `<Placeholder>` box.
+- **Code lives in `listings/`.** Slides show it with `\tcbinputlst{file}`
+  (or `\tcbexinputlst{file}[title]` for a titled box). Where the slide
+  also shows the result, the same file is `\input` inside an
+  `outputbox`, so code and output cannot drift apart.
+- **Build-ups cut between states.** Highlighted lines change with
+  `\only<n>{\tcbinputlst[highlightlines={...}]{file}}`.
+- **Annotated code** (the two anatomy slides): `\tikzmark`s sit between
+  the tokens via `escapeinside=||`, and `\annotatebelow` /
+  `\annotateabove` draw a bracket and label between two marks.
+  Explained at the top of section 3 of `preamble.tex`.
+- **Recurring slides** have one helper each: `\blockframe`,
+  `\begin{roadmap}{state}` (the timeline), `\handson{...}`.
+- **Colours of code** come from the Pygments style in `\setminted`
+  (`xcode`). `pygmentize -L styles` lists the alternatives.
 
-Compile the checkpoints, screenshot the relevant part, drop the files
-in `public/renders/`, and swap each placeholder for:
+## Changes from the 2025 deck
 
-```html
-<img src="/renders/checkpoint-01-p1.png" class="rounded shadow" />
-```
+- The headline shows the section names and a thin progress bar instead
+  of one dot per frame.
+- `listings` is replaced by `minted`: every LaTeX command is
+  highlighted without a hand-kept keyword list.
+- Long-unused code (C++ and VHDL listing styles, commented-out
+  experiments) is gone from the preamble.
 
-Search for `<Placeholder` to find them all. There are six.
+## Before publishing
 
-## Two toolchain notes
-
-**`vite.config.ts` disables CSS minification.** With `lineNumbers: true`
-in the headmatter, Slidev emits a rule that the lightningcss minifier
-refuses to parse and `npm run build` dies. Unminified CSS costs nothing
-here. Try deleting the file after a Slidev upgrade.
-
-**Keep comments out of the headmatter.** A `#` comment as the first line
-inside the opening `---` makes Slidev parse the block as content rather
-than YAML, and every key — theme, `lineNumbers`, `title` — is silently
-ignored. Symptom: the deck's browser-tab title is your comment text.
-
-**Want the in-deck PDF download button?** Add `download: true` to the
-headmatter and `npm i -D playwright-chromium`. Without the browser
-installed the build still succeeds but logs an export error.
-
-## House style in the LaTeX examples
-
-The code on the slides matches the template: one sentence per line,
-`\label` on the same line as its `\section`, four-space indents. Block 2
-explains the first of these as a consequence of "a newline is just a
-space"; block 4 explains the second when it introduces `\label`.
-
-## Licence
-
-**TODO before publishing.** This deck descends from a workshop licensed
-CC BY-SA 4.0, so share-alike applies: the repository must credit the
-original author with a link, and must itself be released under
-CC BY-SA 4.0.
-
-There is deliberately no `LICENSE` file in this directory — the
-repository's top-level one covers it. Two things still need filling in:
-
-- the original author and link, in the top-level `LICENSE`
-- the same, on the attribution slide at the end of `99-closing.md`
-
-The example document, its figure and the synthetic data in `tools/`
-were written for this workshop and fall under the same licence.
+- `\repourl` in `slides.tex` (link and QR code on the last slide)
+- Original author and link on the attribution slide in
+  `sections/99-closing.tex`, and in the repository's top-level `LICENSE`

@@ -1,0 +1,9 @@
+thesis/
+|-- main.tex
+|-- references.bib
+|-- figures/
+|   `-- ...
+`-- sections/
+    |-- introduction.tex
+    |-- theory.tex
+    `-- results.tex

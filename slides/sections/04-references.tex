@@ -1,0 +1,347 @@
+\section[Illustrations \& References]{Illustrations \& References}
+
+\blockframe{4}{Illustrations \& References}{Tables, figures and citations}
+
+\begin{frame}
+    \frametitle{Where we are going}
+    \vfill
+    \begin{roadmap}{4}
+        \roadmapresults
+    \end{roadmap}
+    \vfill
+\end{frame}
+
+\begin{frame}
+    \frametitle{Block 4 in one line}
+    \vfill
+    \begin{center}
+        {\LARGE No number is typed by hand\par}
+        \vspace{1cm}
+        \uncover<2->{%
+            {\large\color{black!60}
+            Sections \textperiodcentered{} equations \textperiodcentered{} tables
+            \textperiodcentered{} figures \textperiodcentered{} citations\par}
+        }
+        \bigskip
+        \uncover<3->{%
+            {\large\texttt{\textbackslash label\{name\}} \quad then \quad \texttt{\textbackslash ref\{name\}}\par}
+        }
+    \end{center}
+    \vfill
+    \note{%
+        Say it: ``you never type a number that \LaTeX{} can work out for you.''
+        Then stop talking for a beat.
+        You give the thing a label, and you ask for it by name.
+        \begin{itemize}
+            \item The next twenty minutes are one idea wearing four hats.
+                If they leave with only this, block 4 worked.
+            \item They have seen it twice already: the table of contents in block 1 and \texttt{\textbackslash eqref} in block 3.
+                This names a pattern they have felt.
+                Point that out; it is why it will stick.
+        \end{itemize}
+    }
+\end{frame}
+
+% The highlighted lines follow the bullet points.
+\begin{frame}
+    \frametitle{A table, the hard way first}
+    \only<1,5->{\tcbinputlst{listings/04-tabular.tex}}%
+    \only<2>{\tcbinputlst[highlightlines={1}]{listings/04-tabular.tex}}%
+    \only<3-4>{\tcbinputlst[highlightlines={2-4}]{listings/04-tabular.tex}}%
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.52\textwidth}
+            \begin{outputbox}
+                \footnotesize
+                \input{listings/04-tabular.tex}
+            \end{outputbox}
+        \end{column}
+        \begin{column}{.44\textwidth}
+            \begin{itemize}
+                \item<2-> \texttt{\{lllr\}}: one letter per column
+                    (\textbf{l}eft, \textbf{c}entre, \textbf{r}ight)
+                \item<3-> \texttt{\&}: next column
+                \item<4-> \texttt{\textbackslash\textbackslash}: end of row
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \vfill
+    \begin{alertblock}<5->{}
+        Not a table yet: no caption, no number, no placement
+    \end{alertblock}
+    \note{%
+        \begin{itemize}
+            \item \texttt{\textbackslash\textbackslash} here is its other legitimate home (block 2 promised two).
+            \item A bare \texttt{tabular} lands wherever it falls, mid-sentence or across a page break.
+            \item Let them see the bare \texttt{tabular} misbehave.
+                The TODO has them type it unwrapped on purpose,
+                so the float on the next slide solves a problem they actually just had.
+            \item \texttt{p\{3cm\}} for wrapping columns is in the handout.
+                Mention it when someone's text runs off the page, not before.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Make it float}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.52\textwidth}
+            \only<1,5->{\tcbinputlst[fontsize=\footnotesize]{listings/04-table-float.tex}}%
+            \only<2>{\tcbinputlst[fontsize=\footnotesize, highlightlines={1,8}]{listings/04-table-float.tex}}%
+            \only<3>{\tcbinputlst[fontsize=\footnotesize, highlightlines={3}]{listings/04-table-float.tex}}%
+            \only<4>{\tcbinputlst[fontsize=\footnotesize, highlightlines={4}]{listings/04-table-float.tex}}%
+        \end{column}
+        \begin{column}{.44\textwidth}
+            \begin{itemize}
+                \item<2-> \texttt{[htbp]}: \textbf{h}ere, \textbf{t}op, \textbf{b}ottom, own \textbf{p}age
+                \item<3-> \texttt{\textbackslash caption}: numbered for you
+                \item<4-> \texttt{\textbackslash label} \textbf{after} \texttt{\textbackslash caption}
+                \item<5-> \texttt{\textbackslash usepackage\{caption\}}: proper spacing
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \vfill
+    \begin{exampleblock}<6->{}
+        Let \LaTeX{} decide where floats go
+    \end{exampleblock}
+    \note{%
+        \begin{itemize}
+            \item \texttt{[htbp]} is a wish list, tried in order.
+            \item Fighting float placement is a huge time sink; do not start.
+            \item Without the \texttt{caption} package the gap above a table is far too tight.
+            \item \texttt{\textbackslash label} before \texttt{\textbackslash caption} labels the wrong thing.
+                It is the rule that will bite,
+                because it fails silently: a reference to the wrong number, no error.
+                Say it twice.
+            \item \texttt{[H]} from the \texttt{float} package: say it exists, say it is a last resort, move on.
+                Taught as normal, it gives documents full of half-empty pages.
+            \item The 2025 deck said \texttt{!} ``forces'' placement.
+                It does not, it only relaxes \LaTeX{}'s internal limits.
+                \texttt{[H]} is the one that forces.
+        \end{itemize}
+    }
+\end{frame}
+
+% Both tables are typeset for real from the same files as the code.
+\begin{frame}
+    \frametitle{Lines in tables}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.5\textwidth}
+            \tcbinputlst[fontsize=\footnotesize]{listings/04-grid.tex}
+        \end{column}
+        \begin{column}{.45\textwidth}
+            \begin{center}
+                \input{listings/04-grid.tex}
+            \end{center}
+            \begin{itemize}
+                \item<2-> \texttt{|} in the column spec: vertical line
+                \item<3-> \texttt{\textbackslash hline}: horizontal line
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \note{%
+        Show how lines are drawn first, because someone will ask.
+        The next slide is why they should mostly not draw them.
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Fewer lines, easier to read}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.47\textwidth}
+            {\large\bfseries\nope{} Grid\par}
+            \smallskip
+            \tcbinputlst[fontsize=\footnotesize]{listings/04-grid.tex}
+            \begin{center}
+                \input{listings/04-grid.tex}
+            \end{center}
+        \end{column}
+        \begin{column}{.47\textwidth}
+            {\large\bfseries\yep{} \texttt{booktabs}\par}
+            \smallskip
+            \tcbinputlst[fontsize=\footnotesize]{listings/04-booktabs.tex}
+            \begin{center}
+                \input{listings/04-booktabs.tex}
+            \end{center}
+        \end{column}
+    \end{columns}
+    \note{%
+        \begin{itemize}
+            \item Point at the two tables and say nothing for three seconds.
+                The difference does the teaching.
+            \item No vertical lines, no double lines, three horizontal rules of different weight.
+                This is how tables in books and journals are set.
+            \item Why no vertical lines?
+                White space separates columns well enough, and the extra lines make the table harder to scan.
+                The \texttt{booktabs} manual explains it in more detail.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{A figure is the same shape}
+    \only<1-2,5->{\tcbinputlst[fontsize=\footnotesize]{listings/04-figure.tex}}%
+    \only<3-4>{\tcbinputlst[fontsize=\footnotesize, highlightlines={3}]{listings/04-figure.tex}}%
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.68\textwidth}
+            \begin{itemize}
+                \item<2-> Same structure as \texttt{table}
+                \item<3-> \texttt{0.8\textbackslash textwidth}: scales with the page
+                \item<4-> No file extension
+            \end{itemize}
+        \end{column}
+        \begin{column}{.26\textwidth}
+            \includegraphics[width=\textwidth]{renders/cooling-curves.pdf}
+        \end{column}
+    \end{columns}
+    \vfill
+    \begin{alertblock}<5->{}
+        PDF or PNG, not SVG
+    \end{alertblock}
+    \note{%
+        \begin{itemize}
+            \item \texttt{pdflatex} cannot read SVG. Export vector graphics as PDF and they stay sharp.
+            \item Without an extension, \LaTeX{} picks the best format it can find.
+            \item \texttt{0.8\textbackslash textwidth} survives a change of margins.
+            \item ``Same shape as a table'' is the point.
+                They learned floats once and get figures nearly free,
+                which is why tables come before figures here.
+            \item Insist on the no-extension habit:
+                it lets the same source build with \texttt{pdflatex} and \texttt{lualatex},
+                and it is one less thing to get wrong.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Pointing at things}
+    \tcbinputlst[fontsize=\footnotesize]{listings/04-ref.tex}
+    \begin{itemize}
+        \item<2-> \texttt{\textasciitilde}: ``Figure'' and its number stay on one line
+    \end{itemize}
+    \vfill
+    \begin{exampleblock}<3->{}
+        Move the figure: every number and reference follows
+    \end{exampleblock}
+    \note{%
+        \begin{itemize}
+            \item Without the tilde, ``Figure'' can end one line and ``3'' start the next.
+                A small thing that marks out people who know what they are doing.
+            \item The last line is the payoff of the whole block.
+                Pause on it.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Naming labels}
+    \begin{itemize}
+        \item Prefixes: \texttt{fig:}, \texttt{tab:}, \texttt{eq:}, \texttt{sec:}
+        \item<2-> Sections have labels too:
+    \end{itemize}
+    \uncover<2->{%
+        \tcbinputlst[fontsize=\footnotesize][width=.6\textwidth]{listings/04-section-label.tex}
+    }
+    \vfill
+    \begin{alertblock}<3->{}
+        Same line as \texttt{\textbackslash section}
+    \end{alertblock}
+    \note{%
+        \begin{itemize}
+            \item Prefixes are only a convention, but they make a long list of labels readable.
+            \item A paragraph break between \texttt{\textbackslash section} and \texttt{\textbackslash label}
+                can make \texttt{\textbackslash pageref} point at the wrong page.
+                Their template has done this since block 1.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Citations: write the source down once}
+    \begin{center}
+        \tcbexinputlst[][minted language=bibtex, width=.75\textwidth]{listings/04-bib-entry.bib}[\texttt{references.bib}]
+    \end{center}
+    \note{%
+        \begin{itemize}
+            \item Where entries come from matters more than the syntax:
+                DOI, Google Scholar, the library's export button, Zotero.
+                Nobody types these; say so, half the room assumes they have to.
+            \item The key after \texttt{@book\{} is theirs to choose.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{\ldots{} and cite it by name}
+    \begin{center}
+        \tcbexinputlst[][width=.75\textwidth]{listings/04-bib-use.tex}[In the document]
+    \end{center}
+    \vfill
+    \begin{exampleblock}<2->{}
+        \texttt{style=authoryear}: every citation reformats
+    \end{exampleblock}
+    \note{%
+        \begin{itemize}
+            \item The style switch is the moment this lands for anyone who ever reformatted a reference list by hand.
+            \item \texttt{biblatex} with \texttt{biber}, not legacy Bib\TeX{}.
+                A 2008 tutorial will tell them otherwise.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{The one error that still bites}
+    \tcbinputlst{listings/04-cite-typo.tex}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.47\textwidth}
+            \uncover<2->{%
+                In the PDF:
+                \begin{outputbox}
+                    \ldots as shown by \textbf{[halliday2019?]}.
+                \end{outputbox}
+            }
+        \end{column}
+        \begin{column}{.47\textwidth}
+            \uncover<3->{%
+                In the log:
+                \tcbinputlst[linenos=false][minted language=text, left=2mm, overlay={}]{listings/04-cite-warning.txt}
+            }
+        \end{column}
+    \end{columns}
+    \vfill
+    \begin{exampleblock}<4->{}
+        \texttt{??} or \texttt{[key?]}: the \textbf{name} is wrong
+    \end{exampleblock}
+    \note{%
+        \begin{itemize}
+            \item A typo, or a \texttt{\textbackslash label} they never wrote.
+                Search for the name in the warning.
+            \item TODO 4.5 has them misspell the key deliberately,
+                so they meet this in a controlled setting with the log message next to it.
+            \item The reflex you are building: read the warning, take the name out of it, search for that name.
+                Not ``compile again and hope''.
+            \item The other classic cause, too few compilation passes, is handled by Overleaf and \texttt{latexmk}.
+                Mention it in one clause if someone asks.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Your turn}
+    \handson{4}{4.1--4.6}{5--10}{checkpoint-04.tex}{%
+        The last stretch.\par
+        \medskip
+        {\normalsize\color{black!60}
+        a bare \texttt{tabular} $\rightarrow$ wrap it in a float with \texttt{booktabs}
+        $\rightarrow$ place the figure $\rightarrow$ refer to both
+        $\rightarrow$ break a citation on purpose, then fix it}
+    }
+    \note{%
+        \textbf{5 to 10 minutes}, and this one genuinely has more in it than that.
+        Deliberate: 4.1 to 4.4 is the core, 4.5 and 4.6 are for whoever gets there.
+        \begin{itemize}
+            \item Say it: ``if you only do the table and the figure, you have got what you came for.''
+                It removes the end-of-day panic.
+            \item checkpoint-04 is the finished document; anyone who wants the whole thing can take it.
+        \end{itemize}
+    }
+\end{frame}

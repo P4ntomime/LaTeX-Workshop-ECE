@@ -1,0 +1,312 @@
+\section[Skeleton]{The skeleton}
+
+\blockframe{1}{The skeleton}{From an empty file to a structured PDF}
+
+\begin{frame}
+    \frametitle{Where we are going}
+    \vfill
+    \begin{roadmap}{1}
+        \roadmapresults
+    \end{roadmap}
+    \vfill
+    \note{%
+        Second showing.
+        Point at the thick part of the line: ``this one, in the next 20 minutes.''
+    }
+\end{frame}
+
+% ---------------------------------------------------------------------
+%  Anatomy of a command
+% ---------------------------------------------------------------------
+% The \tikzmark's sit between the parts of the command (c0 to c4).
+% \annotatebelow/\annotateabove then draw a bracket between two marks.
+% Overlays 1-4 show the command without, overlay 5 on with the optional
+% argument; the marks have the same names in both, so the brackets follow.
+\begin{frame}[fragile]
+    \frametitle{Everything is a command}
+    Anything that is not text is a command:
+
+    \vspace{1.2cm}
+    \begin{center}
+        \LARGE
+        \begin{onlyenv}<1-4>
+            \mintinline[escapeinside=||]{latex}{|\tikzmark{c0}|\|\tikzmark{c1}|documentclass|\tikzmark{c2}|{article}|\tikzmark{c4}|}
+        \end{onlyenv}
+        \begin{onlyenv}<5->
+            \mintinline[escapeinside=||]{latex}{|\tikzmark{c0}|\|\tikzmark{c1}|documentclass|\tikzmark{c2}|[a4paper]|\tikzmark{c3}|{article}|\tikzmark{c4}|}
+        \end{onlyenv}
+    \end{center}
+    \begin{tikzpicture}[remember picture, overlay]
+        \only<2->{\annotatebelow[-1.2cm]{c0}{c1}{3mm}{Command\\delimiter}}
+        \only<3->{\annotatebelow{c1}{c2}{3mm}{Command\\name}}
+        \only<4>{\annotatebelow{c2}{c4}{3mm}{Mandatory\\argument}}
+        \only<5->{\annotatebelow{c3}{c4}{3mm}{Mandatory\\argument}}
+        \only<5->{\annotateabove{c2}{c3}{3mm}{Optional argument}}
+    \end{tikzpicture}
+    \note{%
+        Every command today has this shape: backslash, letters, arguments.
+        Go slowly here and do not apologise for it.
+        Three minutes here saves twenty minutes of confusion later:
+        from now on they can \emph{parse} what they see, even when they do not know what it does.
+        \begin{itemize}
+            \item Say out loud: a non-letter ends a command name.
+                That is why \texttt{\textbackslash LaTeX2e} does not work,
+                and why they will one day need \texttt{\textbackslash LaTeX\{\} is nice}.
+                Plant it, do not dwell.
+        \end{itemize}
+    }
+\end{frame}
+
+% ---------------------------------------------------------------------
+%  Anatomy of an environment
+% ---------------------------------------------------------------------
+% Marks: n1l/n1r and n2l/n2r around the two environment names,
+% b0 and e0 at the start of the \begin and \end lines.
+\begin{frame}[fragile]
+    \frametitle{\ldots and some commands wrap things}
+    Commands that apply to a whole region: \textbf{environments}
+
+    \vspace{1cm}
+    \begin{center}
+        \begin{minipage}{4.6cm}
+            \begin{minted}[fontsize=\LARGE, escapeinside=||]{latex}
+                |\tikzmark{b0}|\begin{|\tikzmark{n1l}|center|\tikzmark{n1r}|}
+                    |\textrm{\textit{Content}}|
+                |\tikzmark{e0}|\end{|\tikzmark{n2l}|center|\tikzmark{n2r}|}
+            \end{minted}
+        \end{minipage}
+    \end{center}
+    \begin{tikzpicture}[remember picture, overlay]
+        % Overlay 2: a dashed box around each name, both joined to one label.
+        \only<2->{%
+            \node[annotation, draw, dashed, inner sep=1pt,
+                fit={([yshift=-1.2mm]pic cs:n1l) ([yshift=4.2mm]pic cs:n1r)}] (name1) {};
+            \node[annotation, draw, dashed, inner sep=1pt,
+                fit={([yshift=-1.2mm]pic cs:n2l) ([yshift=4.2mm]pic cs:n2r)}] (name2) {};
+            \node[annotation, anchor=west, font=\normalsize] (namelabel)
+                at ($(name1.east)!.5!(name2.east) + (3cm,0)$) {Same name twice};
+            \draw[annotation] (name1.north) -- ++(0,2mm) -| (namelabel.north);
+            \draw[annotation] (name2.south) -- ++(0,-2mm) -| (namelabel.south);
+        }
+        % Overlay 3: a bracket on the left, from below \begin to above \end.
+        \only<3->{%
+            \coordinate (top) at ([xshift=-4mm, yshift=-2.2mm]pic cs:b0);
+            \coordinate (bottom) at ([xshift=-4mm, yshift=5mm]pic cs:e0);
+            \draw[annotation] ([xshift=\annoarm]top) -- (top) -- (bottom) -- ([xshift=\annoarm]bottom);
+            \node[annotation, anchor=east, align=right, font=\normalsize]
+                at ($(top)!.5!(bottom) + (-2mm,0)$) {Everything in here\\is inside};
+        }
+    \end{tikzpicture}
+    \note{%
+        \begin{itemize}
+            \item A command acts \emph{here}; an environment acts on \emph{all of this}.
+            \item First the shape, then the names, then the contents.
+                It makes the ``wrapping'' idea visual.
+            \item Promise them now: a mismatched \texttt{\textbackslash begin}/\texttt{\textbackslash end}
+                is the error they will hit most often today.
+                When it happens in block 2 and you can say ``told you'',
+                they trust the next prediction too.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{The characters \LaTeX{} keeps for itself}
+    \begin{center}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{@{}>{\ttfamily}r l l@{}}
+            \toprule
+            \textnormal{\textbf{Symbol}} & \textbf{Description} & \textbf{Substitute} \\
+            \midrule
+            \%                  & comment                    & \code|\%| \\
+            \{ \}               & grouping                   & \code|\{ \}| \\
+            \$                  & maths on and off           & \code|\$| \\
+            \&                  & table column separator     & \code|\&| \\
+            \#                  & argument placeholder       & \code|\#| \\
+            \_ \^{}             & subscript, superscript     & \code|\_| \code|\^{}| \\
+            \textasciitilde     & non-breaking space         & \code|\textasciitilde| \\
+            \textbackslash      & start of a command         & \code|\textbackslash| \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \note{%
+        \begin{itemize}
+            \item Do not read the table out.
+                Point at \texttt{\%}, say the warning (it kills the rest of the line), move on.
+            \item The third column answers the question people actually ask:
+                ``how do I type a percent sign?''
+            \item The backslash: \texttt{\textbackslash\textbackslash} is \emph{not} how you escape it.
+                That is a line break; \texttt{\textbackslash textbackslash} is the character.
+            \item The tilde comes back in block 2 and 4, as the space in \texttt{Fig.\textasciitilde\textbackslash ref}.
+        \end{itemize}
+    }
+\end{frame}
+
+% Three states of the same document. The lines that are new in each state
+% get a coloured background (highlightlines).
+\begin{frame}
+    \frametitle{The smallest document that compiles}
+    \begin{center}
+        \only<1>{\tcbinputlst[][width=.8\textwidth]{listings/01-minimal-1.tex}}%
+        \only<2>{\tcbinputlst[highlightlines={3-5,8}][width=.8\textwidth]{listings/01-minimal-2.tex}}%
+        \only<3>{\tcbinputlst[fontsize=\footnotesize, highlightlines={10-14}][width=.8\textwidth]{listings/01-minimal-3.tex}}%
+    \end{center}
+    \note{%
+        Three clicks: it compiles, it has a title, it has a shape.
+        Nothing else.
+        \begin{itemize}
+            \item \texttt{\textbackslash documentclass} is \emph{outside} \texttt{\textbackslash begin\{document\}}.
+                Someone always asks.
+                That region is the preamble, and it comes back in block 2.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{What you typed, and what came out}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.56\textwidth}
+            \only<1>{\tcbinputlst[fontsize=\footnotesize]{listings/01-sections.tex}}%
+            \only<2->{\tcbinputlst[fontsize=\footnotesize, highlightlines={5,8,10}]{listings/01-sections.tex}}%
+        \end{column}
+        \begin{column}{.38\textwidth}
+            % trim = left bottom right top, in bp: the heading area of page 1
+            \includegraphics[width=\dimexpr\textwidth-0.8pt\relax, frame, trim=110 606 265 118, clip]{renders/01-sections.pdf}
+
+            \bigskip
+            \uncover<3->{\Large You never typed \textbf{1}, \textbf{2} or \textbf{3}.}
+        \end{column}
+    \end{columns}
+    \note{%
+        \begin{itemize}
+            \item Hold on that last line.
+                The numbering is the first thing all afternoon that \LaTeX{} did \emph{for} them,
+                not \emph{to} them.
+                It sets up the table of contents on the next slide.
+            \item Ask the room: ``what happens to those numbers if I move Theory above Introduction?''
+                Let someone say it.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{One line, and the document indexes itself}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.56\textwidth}
+            \tcbinputlst[fontsize=\footnotesize, highlightlines={4}]{listings/01-toc.tex}
+        \end{column}
+        \begin{column}{.4\textwidth}
+            % trim = left bottom right top, in bp: the Contents block of page 1
+            \includegraphics[width=\dimexpr\textwidth-0.8pt\relax, frame, trim=110 607 110 118, clip]{renders/01-toc.pdf}
+
+            \medskip
+            \uncover<2->{%
+                Built from your \texttt{\textbackslash section} commands
+            }
+        \end{column}
+    \end{columns}
+    \note{%
+        \textbf{The key slide of block 1.}
+        Nobody typed that list, and it stays right when they rename or reorder sections.
+        Describe the structure once, and \LaTeX{} keeps the rest up to date.
+        If they remember one thing from the first half hour, make it this one.
+        \begin{itemize}
+            \item Ask what else could be generated from structure they already wrote.
+                Someone will guess page numbers, cross-references, the bibliography.
+                ``Yes, all of that, before half past five.''
+            \item Deliberately \emph{not} teaching two compilation passes here.
+                Overleaf and \texttt{latexmk} handle it.
+                The one case that still bites (a misspelled citation key) comes in block 4.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Marking up text}
+    \tcbinputlst[fontsize=\footnotesize]{listings/01-styling.tex}
+    \begin{outputbox}
+        \input{listings/01-styling.tex}
+    \end{outputbox}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}<2->{.31\textwidth}
+            \begin{outputbox}[height=1.9cm]
+                \code|\emph{...}|\par
+                ``this matters''\par
+                {\small\color{black!60} usually italic}
+            \end{outputbox}
+        \end{column}
+        \begin{column}<3->{.31\textwidth}
+            \begin{outputbox}[height=1.9cm]
+                \code|\textbf{...}|\par
+                ``make this bold''\par
+                {\small\color{black!60} always bold}
+            \end{outputbox}
+        \end{column}
+        \begin{column}<4->{.31\textwidth}
+            \begin{outputbox}[height=1.9cm]
+                \code|\texttt{...}|\par
+                ``this is code''\par
+                {\small\color{black!60} monospace}
+            \end{outputbox}
+        \end{column}
+    \end{columns}
+    \vfill
+    \begin{exampleblock}<5->{}
+        Prefer \code|\emph|
+    \end{exampleblock}
+    \note{%
+        \begin{itemize}
+            \item \texttt{\textbackslash emph} says what you \emph{mean}, \texttt{\textbackslash textbf} what you \emph{want}.
+                Italics inside italics then comes out upright.
+            \item The \texttt{\textbackslash emph} vs.\ \texttt{\textbackslash textbf} distinction
+                is the structure-vs-appearance idea from the opening, in miniature.
+                That is why it is here, and not a table of nine font commands.
+            \item 20 seconds spare?
+                \texttt{\textbackslash emph} inside \texttt{\textbackslash emph} flips back to upright,
+                \texttt{\textbackslash textit} inside \texttt{\textbackslash textit} does not.
+            \item The other styling commands are in the handout.
+                Do not read them out.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Block 1, in one screen}
+    \tcbinputlst[fontsize=\footnotesize]{listings/01-summary.tex}
+    \vfill
+    \begin{center}
+        \color{black!60}
+        Also in \texttt{checkpoints/checkpoint-01.tex}
+    \end{center}
+    \note{%
+        A reference slide, not a teaching one.
+        Leave it up while they work if you like.
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Your turn}
+    \handson{1}{1.1--1.5}{5--10}{checkpoint-01.tex}{%
+        Open \texttt{workshop.tex} and work down the TODOs.\par
+        \medskip
+        {\normalsize\color{black!60}
+        a document that compiles $\rightarrow$ a title block $\rightarrow$ five sections
+        $\rightarrow$ a table of contents $\rightarrow$ three styled words}
+    }
+    \note{%
+        \textbf{5 to 10 minutes.}
+        Set a timer and show it.
+        \begin{itemize}
+            \item Walk the room.
+                Only answer from the front if three people have the same problem;
+                then stop everyone and fix it once, out loud.
+            \item The two failures you will see:
+                \texttt{\textbackslash begin\{document\}} without \texttt{\textbackslash end\{document\}},
+                and a smart quote or long dash pasted in from somewhere.
+            \item Two minutes before you stop: ``if you are behind, grab checkpoint-01.''
+                Say it loudly and without judgement.
+            \item \textbf{Break after this slide}, 5 minutes.
+                Say the actual restart time, and start then.
+        \end{itemize}
+    }
+\end{frame}

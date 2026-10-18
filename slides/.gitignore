@@ -1,4 +1,13 @@
-node_modules/
-dist/
-.slidev/
-*.local
+# LaTeX build files
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+_minted-*/
+renders/build/
