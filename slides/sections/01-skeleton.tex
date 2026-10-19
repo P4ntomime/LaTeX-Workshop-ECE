@@ -29,19 +29,19 @@
     \vspace{1.2cm}
     \begin{center}
         \LARGE
-        \begin{onlyenv}<1-4>
+        \begin{onlyenv}<1-4| handout:1>
             \mintinline[escapeinside=||]{latex}{|\tikzmark{c0}|\|\tikzmark{c1}|documentclass|\tikzmark{c2}|{article}|\tikzmark{c4}|}
         \end{onlyenv}
-        \begin{onlyenv}<5->
+        \begin{onlyenv}<5-| handout:2>
             \mintinline[escapeinside=||]{latex}{|\tikzmark{c0}|\|\tikzmark{c1}|documentclass|\tikzmark{c2}|[a4paper]|\tikzmark{c3}|{article}|\tikzmark{c4}|}
         \end{onlyenv}
     \end{center}
     \begin{tikzpicture}[remember picture, overlay]
-        \only<2->{\annotatebelow[-1.2cm]{c0}{c1}{3mm}{Command\\delimiter}}
-        \only<3->{\annotatebelow{c1}{c2}{3mm}{Command\\name}}
-        \only<4>{\annotatebelow{c2}{c4}{3mm}{Mandatory\\argument}}
-        \only<5->{\annotatebelow{c3}{c4}{3mm}{Mandatory\\argument}}
-        \only<5->{\annotateabove{c2}{c3}{3mm}{Optional argument}}
+        \only<2-| handout:1,2>{\annotatebelow[-1.2cm]{c0}{c1}{3mm}{Command\\delimiter}}
+        \only<3-| handout:1,2>{\annotatebelow{c1}{c2}{3mm}{Command\\name}}
+        \only<4| handout:1>{\annotatebelow{c2}{c4}{3mm}{Mandatory\\argument}}
+        \only<5-| handout:2>{\annotatebelow{c3}{c4}{3mm}{Mandatory\\argument}}
+        \only<5-| handout:2>{\annotateabove{c2}{c3}{3mm}{Optional argument}}
     \end{tikzpicture}
     \note{%
         Every command today has this shape: backslash, letters, arguments.
@@ -147,9 +147,9 @@
 \begin{frame}
     \frametitle{The smallest document that compiles}
     \begin{center}
-        \only<1>{\tcbinputlst[][width=.8\textwidth]{listings/01-minimal-1.tex}}%
-        \only<2>{\tcbinputlst[highlightlines={3-5,8}][width=.8\textwidth]{listings/01-minimal-2.tex}}%
-        \only<3>{\tcbinputlst[fontsize=\footnotesize, highlightlines={10-14}][width=.8\textwidth]{listings/01-minimal-3.tex}}%
+        \only<1| handout:1>{\tcbinputlst[][width=.8\textwidth]{listings/01-minimal-1.tex}}%
+        \only<2| handout:2>{\tcbinputlst[highlightlines={3-5,8}][width=.8\textwidth]{listings/01-minimal-2.tex}}%
+        \only<3| handout:3>{\tcbinputlst[fontsize=\footnotesize, highlightlines={10-14}][width=.8\textwidth]{listings/01-minimal-3.tex}}%
     \end{center}
     \note{%
         Three clicks: it compiles, it has a title, it has a shape.
@@ -166,15 +166,15 @@
     \frametitle{What you typed, and what came out}
     \begin{columns}[T, onlytextwidth]
         \begin{column}{.56\textwidth}
-            \only<1>{\tcbinputlst[fontsize=\footnotesize]{listings/01-sections.tex}}%
-            \only<2->{\tcbinputlst[fontsize=\footnotesize, highlightlines={5,8,10}]{listings/01-sections.tex}}%
+            \only<1| handout:1>{\tcbinputlst[fontsize=\footnotesize]{listings/01-sections.tex}}%
+            \only<2-| handout:2>{\tcbinputlst[fontsize=\footnotesize, highlightlines={5,8,10}]{listings/01-sections.tex}}%
         \end{column}
         \begin{column}{.38\textwidth}
             % trim = left bottom right top, in bp: the heading area of page 1
             \includegraphics[width=\dimexpr\textwidth-0.8pt\relax, frame, trim=110 606 265 118, clip]{renders/01-sections.pdf}
 
             \bigskip
-            \uncover<3->{\Large You never typed \textbf{1}, \textbf{2} or \textbf{3}.}
+            \uncover<3-| handout:2>{\Large You never typed \textbf{1}, \textbf{2} or \textbf{3}.}
         \end{column}
     \end{columns}
     \note{%

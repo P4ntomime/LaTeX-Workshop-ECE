@@ -1,6 +1,6 @@
 \section{Introduction}
 
-\begin{frame}
+\begin{frame}%[label=wip]
     \titlepage
     \note{%
         \textbf{Before you start}
@@ -15,7 +15,7 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{In two hours, you will have written this}
+    \frametitle{In two hours, you will have (hopefully) written this}
     \begin{center}
         \includegraphics[page=1, height=.7\textheight, frame]{renders/checkpoint-04.pdf}
         \hfill
@@ -37,7 +37,7 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{First, who is in the room?}
+    \frametitle{Who is in the room?}
     \vfill
     \begin{tcbraster}[%
         raster columns=2,
@@ -76,72 +76,85 @@
     }
 \end{frame}
 
+% ---------------------------------------------------------------------
+%  Hook
+% ---------------------------------------------------------------------
 \begin{frame}
-    \frametitle{What \LaTeX{} actually is}
-    \begin{columns}[t, onlytextwidth]
-        \begin{column}{.45\textwidth}
-            {\Large\bfseries A word processor\par}
-            \smallskip
-            You make it \textbf{look} right.
-            \begin{itemize}
-                \item<2-> Select the heading, set 16\,pt bold
-                \item<3-> Do it again on the next heading
-                \item<4-> Hope they match
-                \item<5-> The document is what you see
-            \end{itemize}
-        \end{column}
-        \begin{column}{.45\textwidth}
-            {\Large\bfseries \LaTeX{}\par}
-            \smallskip
-            You say what things \textbf{are}.
-            \begin{itemize}
-                \item<2-> Mark the heading as a heading
-                \item<3-> Mark the next one as a heading
-                \item<4-> They match, because nobody chose
-                \item<5-> The document is what you \emph{meant}
-            \end{itemize}
-        \end{column}
-    \end{columns}
+    \frametitle{Sound familiar?}
+    \vfill
+    \large
+    \begin{itemize}
+        \item<1-> New heading style, but only on the heading you selected
+        \item<2-> One image moved, the next three pages look different
+        \item<3-> Captions that all look a bit different
+    \end{itemize}
+    \vfill
     \note{%
         \begin{itemize}
-            \item The point: you give up control of the look, and get structure and consistency back.
-            \item The whole philosophy of the workshop, in 90 seconds.
-                Resist the urge to expand it.
-            \item ``So it's like Markdown?'' Yes, same idea, much older and much more powerful.
-            \item Do not get drawn into Word vs.\ \LaTeX{}.
-                ``We'll see what it buys you in about ten minutes.''
-                The table of contents in block 1 makes the case better than you can.
+            \item Ask: who has written a long document in Word or Google Docs?
+                Who had one of these problems?
+            \item None of this is Word's fault alone.
+                Word has styles, but it also lets you format text directly,
+                so a consistent result depends on your discipline.
+            \item No solution yet, only the problem.
         \end{itemize}
     }
 \end{frame}
 
+% ---------------------------------------------------------------------
+%  Comparison
+% ---------------------------------------------------------------------
+% + and - in front of the items, coloured like the rest of the deck.
+\newcommand{\pro}{\textcolor{structure.fg}{\textbf{+}}}
+\newcommand{\con}{\textcolor{structure.fg}{\textbf{--}}}
+
+\begin{frame}
+    \frametitle{Two ways to write a document}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.47\textwidth}
+            \begin{block}{WYSIWYG}
+                {\small\color{black!60} Word, Google Docs, \ldots\par}
+                \smallskip
+                \begin{itemize}
+                    \item[\pro] You see the result while you type
+                    \item[\pro] Easy to start
+                    \item[\con] You keep the formatting consistent
+                    \item[\con] Large documents get hard to manage
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{.47\textwidth}
+            \uncover<2->{%
+                \begin{block}{\LaTeX{}}
+                    {\small\color{black!60} Text and commands in a plain-text file\par}
+                    \smallskip
+                    \begin{itemize}
+                        \item[\pro] Formatting stays consistent
+                        \item[\pro] Numbers and references update automatically
+                        \item[\con] You compile to see the result
+                        \item[\con] Takes time to learn
+                    \end{itemize}
+                \end{block}
+            }
+        \end{column}
+    \end{columns}
+    \note{%
+        \begin{itemize}
+            \item WYSIWYG: ``what you see is what you get''.
+            \item Be fair to Word.
+                It has styles, automatic captions and an equation editor.
+                The difference: Word \emph{lets} you format directly, \LaTeX{} makes you describe the structure.
+            \item More points (Git, maths, collaboration) are in the handout.
+                Do not read them out here.
+        \end{itemize}
+    }
+\end{frame}
+
+
 \begin{frame}
     \frametitle{When it is worth the trouble}
     \begin{center}
-        \begin{tikzpicture}
-            \begin{axis}[
-                smooth, samples=100,
-                axis lines=left,
-                axis line style={thick},
-                width=.85\textwidth,
-                height=4.6cm,
-                xlabel=Complexity of the document,
-                ylabel=Effort,
-                x label style={at={(axis description cs:1,.1)}, anchor=east},
-                ytick=\empty,
-                xtick={2, 4, 6, 11, 13, 16, 20, 22},
-                xticklabels={Text, Figures, Tables, Maths, Plots, {Technical\\ Report}, Thesis, Book},
-                xticklabel style={align=center},
-                x tick label style={rotate=70, anchor=east, font=\footnotesize},
-                legend style={legend pos=north west},
-                no markers, domain=0:25,
-            ]
-                \addplot[densely dashed, very thick, palette quaternary.bg, domain=0:14]{exp(x/3 - 2.5)};
-                \addlegendentry{Word processor}
-                \addplot[very thick, palette primary.bg]{3/(1 + exp(-2*(x-2.5))) + x/50*exp((x-4)/12)};
-                \addlegendentry{\textrm{\LaTeX}}
-            \end{axis}
-        \end{tikzpicture}
+        \input{../handout/figures/effort-plot.tex}
     \end{center}
     \begin{columns}[t, onlytextwidth]
         \begin{column}{.47\textwidth}
@@ -166,6 +179,93 @@
     }
 \end{frame}
 
+% ---------------------------------------------------------------------
+%  How LaTeX works
+% ---------------------------------------------------------------------
+\begin{frame}
+    \frametitle{How \LaTeX{} works}
+    \vfill
+    \begin{center}
+        \begin{tikzpicture}[
+            >=stealth,
+            stage/.style={
+                draw=structure.fg, line width=1pt, rounded corners=1.3mm,
+                fill=block body example.bg,
+                minimum width=3.2cm, minimum height=1.6cm, align=center,
+            },
+            flow/.style={->, line width=1.2pt, structure.fg},
+        ]
+            \node[stage] (src) at (0,0)   {Source file\\[1mm]\texttt{report.tex}};
+            \node[stage] (tex) at (4.6,0) {\LaTeX{}};
+            \node[stage] (pdf) at (9.2,0) {PDF\\[1mm]\texttt{report.pdf}};
+            \node[above, structure.fg] at (tex.north) {compile};
+            \draw[flow] (src) -- (tex);
+            \draw[flow] (tex) -- (pdf);
+            \draw[flow] (pdf.south) to[out=-120, in=-60]
+                node[below] {change the source, compile again} (src.south);
+        \end{tikzpicture}
+    \end{center}
+    \vfill
+    \note{%
+        \begin{itemize}
+            \item The source file is plain text.
+                Any editor can open it.
+            \item You never edit the PDF.
+                You change the source and compile again.
+            \item The program that compiles is called the engine,
+                e.g.\ \hologo{pdfLaTeX} or \hologo{LuaLaTeX}.
+                One name is enough for today.
+        \end{itemize}
+    }
+\end{frame}
+
+% Overlay 1: article, overlay 2: scrartcl. The renders are the listings
+% compiled as they are; the viewport shows the same region of the page
+% for both (in bp from the bottom-left corner of the A4 page).
+\begin{frame}
+    \frametitle{Same text, one word changed}
+    \only<1| handout:1>{\tcbinputlst[fontsize=\footnotesize]{listings/00-class-article.tex}}%
+    \only<2| handout:2>{\tcbinputlst[fontsize=\footnotesize, highlightlines={1}]{listings/00-class-scrartcl.tex}}%
+    \begin{tcolorbox}[deckbox, thinframe, colback=white, left=0mm, right=0mm, top=0mm, bottom=0mm]
+        \only<1| handout:1>{\includegraphics[width=\linewidth, viewport=80 677 470 764, clip]{renders/00-class-article.pdf}}%
+        \only<2| handout:2>{\includegraphics[width=\linewidth, viewport=80 677 470 764, clip]{renders/00-class-scrartcl.pdf}}%
+    \end{tcolorbox}
+    \note{%
+        \begin{itemize}
+            \item Click back and forth between the two states.
+            \item The text did not change, only the document class.
+                Heading font, margins and text size follow from it.
+            \item Do not explain \texttt{\textbackslash documentclass} here.
+                It is the first thing in block 1.
+        \end{itemize}
+    }
+\end{frame}
+
+% ---------------------------------------------------------------------
+%  History
+% ---------------------------------------------------------------------
+% The timeline is shared with the handout: figures/tex-timeline.tex
+\begin{frame}
+    \frametitle{Not a new idea}
+    \vfill
+    \begin{center}
+        \input{../handout/figures/tex-timeline.tex}
+    \end{center}
+    \vfill
+    \note{%
+        \begin{itemize}
+            \item Only background: \LaTeX{} is older than most of the room, and still maintained.
+                The \LaTeX{} kernel gets new releases twice a year.
+            \item Top: \TeX{} and what was written on top of it.
+                Bottom: newer programs that run it.
+                \hologo{LaTeXe} from 1994 is the \LaTeX{} everyone uses today.
+            \item \hologo{ConTeXt} is a separate system with the same roots, not a part of \LaTeX{}.
+        \end{itemize}
+    }
+\end{frame}
+
+
+
 \begin{frame}[fragile]
     \frametitle{Getting started}
     \begin{columns}[t, onlytextwidth]
@@ -189,7 +289,7 @@
                 \midrule
                 Windows & \hologo{MiKTeX} & VS Code, TeXstudio \\
                 macOS   & Mac\TeX{}       & TeXShop, VS Code \\
-                Linux   & \TeX{} Live     & VS Code, TeXstudio \\
+                Linux   & \hologo{TeXLive}& VS Code, TeXstudio \\
                 \bottomrule
             \end{tabular}
 

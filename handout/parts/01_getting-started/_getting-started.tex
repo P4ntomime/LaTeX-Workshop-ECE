@@ -1,61 +1,100 @@
 \part{Getting Started}
 %   Why LaTeX?
-\section{Why \LaTeX?}\label{sec:why-latex}
-% NOTE: Maybe start with something like: "If you ever had to deal with a large Word document, you know it can be a pain to update all its references, replace an image, or just navigate it in general."
-% NOTE: LaTeX is one of many tools usable for writing text. 
-%       Contrary to other tools such as Word, Google Docs and similar, it is similar to programming.
-%       Describe layout with its syntax, write "annotated" text separately with functions -- or as they're called in LaTeX: commands.
-%       LaTeX then converts text with its "annotations" together with the layout rules into a PDF (or other output format).
-%       Pros: 
-%       - Less hassle with updating references
-%           - Automatic recomputation of ToC, List of figure, references etc.
-%       - Easier structuring for large documents
-%       - Uniform appearance throughout document
-%       - Easier reference/bibliography management
-%       - TODO: add something about handling of Mathematical Formulas
-%
-%       Cons:
-%       - No instant preview -> need to run LaTeX compiler to see result
-%       TODO: find more Cons...
-%       - Graphical customization can be a pain to do yourself
-If you've ever had to deal with a large Word document, you know it can be a pain to do simple tasks such as update all its references, replace or move an image, or just navigate through the document in general. 
-\gls{wysiwyg} programs such as Word provide an instant visual preview of the document, but they tend to reach their limits once the structure of a document becomes more important as its size grows.
-Especially when wanting to change the formatting of a document later on, it tends to rely more on the user checking that e.g. all the image captions look the same, or the new heading formatting has been applied to all the headings and not just the one you happened to have selected.
-This is exactly where \LaTeX\ comes into play.
-Instead of providing a direct visual feedback to the user, it relies on a syntax that describes how a document should be formatted.
+\section{What is \hologo{LaTeX}?}\label{sec:what-is-latex}
+If you've ever had to deal with a large Word document, you know it can be a pain to do simple tasks such as updating all its references, replacing or moving an image, or just navigating through the document in general.
+\gls{wysiwyg} programs such as Word provide an instant visual preview of the document,
+but they tend to reach their limits once the structure of a document becomes more important as its size grows.
+Especially when wanting to change the formatting of a document later on,
+it tends to rely more on the user checking that e.g.\ all the image captions look the same,
+or the new heading formatting has been applied to all the headings and not just the one you happened to have selected.
+
+This is exactly where \hologo{LaTeX} comes into play.
+Instead of providing direct visual feedback to the user, it relies on a syntax that describes the structure of a document.
 The user then writes plain-text files with some special annotations such as \texttt{\textbackslash section\{\}}.
-\LaTeX\ then uses these annotations to treat the text marked by them differently and apply a specific formatting.
+These annotations mark what each part of the document is, e.g.\ a heading, a list or an equation.
+\hologo{LaTeX} then uses these annotations to treat the text marked by them differently and apply a specific formatting.
+This formatting is defined once for the whole document.
+If you change it, every heading, caption or list in the document follows.
 
-% TODO: write some more text here...
+\subsection{Strengths and weaknesses}\label{sec:strengths-weaknesses}
 
-\begin{center}
-    \begin{minipage}[t]{.48\linewidth}
-        \textbf{Pros}
-        \begin{itemize}
-            \item Less hassle keeping references up to date.
-            \item Automatic recomputation of table of contents, list of figures etc.
-            \item Simpler structuring for large documents.
-            \item Uniform layout throughout the document.
-            \item Better references \& bibliography management.
-            \item Mathematical syntax for complicated math formulas.
-        \end{itemize}
-    \end{minipage}\hfill
-    \begin{minipage}[t]{.48\linewidth}
-        \textbf{Cons}
-        \begin{itemize}
-            \item No instant preview.
-            \item Steep learning curve.
-            \item Format customizations can be a pain to do yourself.
-        \end{itemize}
-    \end{minipage}
-\end{center}
+Neither approach is better in every case.
+Modern word processors also have styles, automatic captions and an equation editor,
+and used with discipline, they can handle a lot.
+The difference is that a word processor lets you format text directly,
+while \hologo{LaTeX} makes you describe the structure first.
 
+\begin{description}
+    \item[\gls{wysiwyg}]
+        You see the result while you type, and you can start without learning anything new.
+        It is also easy to work with other people, e.g.\ with comments and tracked changes.
+        On the other hand, a consistent layout depends on you.
+        Large documents with many images can become slow and hard to manage.
+        The files are binary, so version control such as Git cannot show what changed.
+    \item[\hologo{LaTeX}]
+        The formatting stays consistent, because it is defined in one place.
+        Numbers of sections, figures, tables and equations are set automatically,
+        and so are references to them, the table of contents and the bibliography.
+        \hologo{LaTeX} is very good at typesetting mathematics.
+        The source files are plain text, so any editor can open them and Git can show every change.
+        On the other hand, you must compile the document to see the result.
+        It takes time to learn, and the error messages are hard to read at first.
+        Placing one element at an exact position can take some effort,
+        and everyone who edits the source must know some \hologo{LaTeX} too.
+\end{description}
 
-%   Short history of LaTeX
-\section{A Short History of \LaTeX}
-\begin{center}
-    \input{figures/latex-history.tex}
-\end{center}
+Figure~\ref{fig:effort} sketches what this means in practice.
+For a short text, a word processor needs less effort.
+Every figure, table and equation adds more effort in a word processor than in \hologo{LaTeX},
+so for a report or a thesis, \hologo{LaTeX} soon pays off.
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/effort-plot.tex}
+    \caption{Effort for documents of growing complexity. A sketch, not a measurement.}
+    \label{fig:effort}
+\end{figure}
+
+\subsection{From source file to PDF}\label{sec:source-to-pdf}
+
+A \hologo{LaTeX} document starts as a plain-text source file with the extension \texttt{.tex}.
+A program called the engine, e.g.\ \hologo{pdfLaTeX} or \hologo{LuaLaTeX}, reads this file and writes the PDF.
+This step is called compiling (Figure~\ref{fig:pipeline}).
+You never edit the PDF itself, only the source file.
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/build-pipeline.tex}
+    \caption{From source file to PDF. After every change to the source file, you compile again.}
+    \label{fig:pipeline}
+\end{figure}
+
+Because the formatting is not part of the text, one small change can affect the whole document.
+For example, changing the document class from \texttt{article} to \texttt{scrartcl} changes the heading font, the margins and the text size,
+but not a single word of the text.
+Section~\ref{sec:document-setup} explains the document class in more detail.  % TODO: adjust label to the handout
+
+\subsection{A short history}\label{sec:history}
+
+\hologo{LaTeX} is not a new idea.
+Figure~\ref{fig:tex-timeline} shows how it developed.
+Donald Knuth wrote \hologo{TeX}, the program \hologo{LaTeX} is based on, in 1978.
+In 1984, Leslie Lamport released \hologo{LaTeX} as a set of commands on top of \hologo{TeX} that are easier to use.
+The version used today, \hologo{LaTeXe}, was released in 1994 and is still maintained by the \hologo{LaTeX} Project.
+
+Newer engines were added over time.
+\hologo{pdfTeX} (around 1996) writes PDF files directly,
+while \hologo{XeTeX} (2004) and \hologo{LuaTeX} (2007) can use the fonts installed on your computer.
+\hologo{ConTeXt} (around 1996) is a separate system based on \hologo{TeX}, but it is not a part of \hologo{LaTeX}.
+
+\begin{figure}[htbp]
+    \centering
+    % One year is narrower than on the slides, so the timeline fits the text width.
+    \newcommand{\timelineunit}{0.36cm}
+    \input{figures/tex-timeline.tex}
+    \caption{\hologo{TeX} and \hologo{LaTeX} above the line, newer engines below.}
+    \label{fig:tex-timeline}
+\end{figure}
 
 %   Setup
 \section{Setup}

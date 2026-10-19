@@ -1,0 +1,33 @@
+% =====================================================================
+%  Effort vs. complexity of a document, for the slides and the handout.
+%  A sketch, not measured data.
+%  Needs: pgfplots, hologo
+%  Colours: `figaccent' (LaTeX) and `figalt' (word processor), the deck's
+%  colours unless defined before \input-ing this file.
+% =====================================================================
+\providecolor{figaccent}{HTML}{8C195F}
+\providecolor{figalt}{HTML}{746BD2}
+\begin{tikzpicture}
+    \begin{axis}[
+        smooth, samples=100,
+        axis lines=left,
+        axis line style={thick},
+        width=.85\textwidth,
+        height=4.6cm,
+        xlabel=Complexity of the document,
+        ylabel=Effort,
+        x label style={at={(axis description cs:1,.1)}, anchor=east},
+        ytick=\empty,
+        xtick={2, 4, 6, 11, 13, 16, 20, 22},
+        xticklabels={Text, Figures, Tables, Maths, Plots, {Technical\\ Report}, Thesis, Book},
+        xticklabel style={align=center},
+        x tick label style={rotate=70, anchor=east, font=\footnotesize},
+        legend style={legend pos=north west},
+        no markers, domain=0:25,
+    ]
+        \addplot[densely dashed, very thick, figalt, domain=0:14]{exp(x/3 - 2.5)};
+        \addlegendentry{Word processor}
+        \addplot[very thick, figaccent]{3/(1 + exp(-2*(x-2.5))) + x/50*exp((x-4)/12)};
+        \addlegendentry{\textrm{\hologo{LaTeX}}}
+    \end{axis}
+\end{tikzpicture}
