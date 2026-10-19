@@ -1,0 +1,43 @@
+% =====================================================================
+%  Driver for the snippet renders
+% =====================================================================
+%  Some listings are only a piece of a document (a sentence, an equation).
+%  This file wraps one of them in an article and compiles it, so the slide
+%  can show the output next to the code.
+%  Which listing it wraps is decided by the job name:
+%
+%      latexmk -pdf -outdir=renders/build -jobname=01-styling renders/snippet.tex
+%
+%  compiles listings/01-styling.tex into renders/build/01-styling.pdf.
+%  `make renders' does this for every name in SNIPPETS (see Makefile).
+%  Run it from the slides directory: the paths below are relative to it.
+%
+%  standalone with class=article gives exactly the article's layout
+%  (a4paper, 11pt: 360pt text width, 17pt paragraph indent),
+%  and crops the PDF to the content, so no trim values are needed.
+%
+%  Keep the packages below in sync with the preamble of workshop.tex,
+%  so the renders look like what the students see.
+% =====================================================================
+\documentclass[class=article, a4paper, 11pt, border=8pt]{standalone}
+
+\usepackage{amsmath}
+
+% The snippet environment: one text-width column, like a crop of a page.
+% It starts like text right after a \section heading: the first paragraph
+% is not indented, every following one is.
+\newlength{\docparindent}
+\setlength{\docparindent}{\parindent}
+\newenvironment{snippet}{%
+    \begin{minipage}{\textwidth}%
+    \setlength{\parindent}{\docparindent}%
+    \noindent\ignorespaces
+}{%
+    \end{minipage}%
+}
+
+\begin{document}
+\begin{snippet}
+    \input{listings/\jobname.tex}
+\end{snippet}
+\end{document}

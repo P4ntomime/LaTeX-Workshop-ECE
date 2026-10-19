@@ -243,7 +243,7 @@
 }
 
 % ---------------------------------------------------------------------
-%  The roadmap: the "Where we are going" timeline
+%  The roadmap: the "Schedule" timeline
 % ---------------------------------------------------------------------
 %  One line from left to right is the whole session.
 %  The solid stretches are the four blocks, the dashed ones the breaks.
@@ -411,9 +411,8 @@
     {\large #5\par}
 
     \vfill
-    \begin{alertblock}{Stuck? Do not debug alone.}
-        Copy \texttt{checkpoints/#4} over \texttt{workshop.tex} and carry on with everyone else.
-        You will not have missed anything.
+    \begin{alertblock}{Stuck?}
+        Copy \texttt{checkpoints/#4} over \texttt{workshop.tex} and continue from there.
     \end{alertblock}
 }
 
@@ -427,8 +426,18 @@
     },
 }
 
+% \outputrender[<includegraphics options>]{<file>}: a pre-compiled output,
+% framed like the crops on the Sections slide.
+% Every example output on the slides is compiled separately (see renders/),
+% so text and maths look exactly like the students' own PDF.
+% Snippet renders all have the same width (the article's text width),
+% so scaling them to the line width gives the same text size on every slide.
+\newcommand{\outputrender}[2][]{%
+    \includegraphics[width=\dimexpr\linewidth-0.8pt\relax, frame, #1]{#2}%
+}
+
 % A box with a compiled-output look: white, thin frame, serif text.
-% For short examples where the slide itself typesets the output:
+% Being replaced by \outputrender; remove it once no block uses it anymore.
 %   \begin{outputbox} A freshly poured coffee... \end{outputbox}
 % Each box starts the equation counter at 0, like a fresh document,
 % so its first numbered equation is always (1).

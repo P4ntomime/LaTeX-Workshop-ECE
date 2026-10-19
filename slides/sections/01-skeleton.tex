@@ -3,7 +3,7 @@
 \blockframe{1}{The skeleton}{From an empty file to a structured PDF}
 
 \begin{frame}
-    \frametitle{Where we are going}
+    \frametitle{Schedule}
     \vfill
     \begin{roadmap}{1}
         \roadmapresults
@@ -23,10 +23,7 @@
 % Overlays 1-4 show the command without, overlay 5 on with the optional
 % argument; the marks have the same names in both, so the brackets follow.
 \begin{frame}[fragile]
-    \frametitle{Everything is a command}
-    Anything that is not text is a command:
-
-    \vspace{1.2cm}
+    \frametitle{Commands}
     \begin{center}
         \LARGE
         \begin{onlyenv}<1-4| handout:1>
@@ -63,10 +60,7 @@
 % Marks: n1l/n1r and n2l/n2r around the two environment names,
 % b0 and e0 at the start of the \begin and \end lines.
 \begin{frame}[fragile]
-    \frametitle{\ldots and some commands wrap things}
-    Commands that apply to a whole region: \textbf{environments}
-
-    \vspace{1cm}
+    \frametitle{Environments}
     \begin{center}
         \begin{minipage}{4.6cm}
             \begin{minted}[fontsize=\LARGE, escapeinside=||]{latex}
@@ -111,7 +105,7 @@
 \end{frame}
 
 \begin{frame}[fragile]
-    \frametitle{The characters \LaTeX{} keeps for itself}
+    \frametitle{Reserved Characters}
     \begin{center}
         \renewcommand{\arraystretch}{1.3}
         \begin{tabular}{@{}>{\ttfamily}r l l@{}}
@@ -145,7 +139,7 @@
 % Three states of the same document. The lines that are new in each state
 % get a coloured background (highlightlines).
 \begin{frame}
-    \frametitle{The smallest document that compiles}
+    \frametitle{Minimal Document}
     \begin{center}
         \only<1| handout:1>{\tcbinputlst[][width=.8\textwidth]{listings/01-minimal-1.tex}}%
         \only<2| handout:2>{\tcbinputlst[highlightlines={3-5,8}][width=.8\textwidth]{listings/01-minimal-2.tex}}%
@@ -163,7 +157,7 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{What you typed, and what came out}
+    \frametitle{Sections}
     \begin{columns}[T, onlytextwidth]
         \begin{column}{.56\textwidth}
             \only<1| handout:1>{\tcbinputlst[fontsize=\footnotesize]{listings/01-sections.tex}}%
@@ -174,7 +168,7 @@
             \includegraphics[width=\dimexpr\textwidth-0.8pt\relax, frame, trim=110 606 265 118, clip]{renders/01-sections.pdf}
 
             \bigskip
-            \uncover<3-| handout:2>{\Large You never typed \textbf{1}, \textbf{2} or \textbf{3}.}
+            \uncover<3-| handout:2>{\Large Numbering is automatic}
         \end{column}
     \end{columns}
     \note{%
@@ -190,7 +184,7 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{One line, and the document indexes itself}
+    \frametitle{Table of Contents}
     \begin{columns}[T, onlytextwidth]
         \begin{column}{.56\textwidth}
             \tcbinputlst[fontsize=\footnotesize, highlightlines={4}]{listings/01-toc.tex}
@@ -221,57 +215,78 @@
     }
 \end{frame}
 
+% ---------------------------------------------------------------------
+%  Text styling: the commands, then an example, then \emph
+% ---------------------------------------------------------------------
+% One row per click. \onslide is used as a switch inside the cells
+% because \code (verbatim) cannot sit inside the argument of \uncover.
 \begin{frame}[fragile]
-    \frametitle{Marking up text}
-    \tcbinputlst[fontsize=\footnotesize]{listings/01-styling.tex}
-    \begin{outputbox}
-        \input{listings/01-styling.tex}
-    \end{outputbox}
-    \begin{columns}[T, onlytextwidth]
-        \begin{column}<2->{.31\textwidth}
-            \begin{outputbox}[height=1.9cm]
-                \code|\emph{...}|\par
-                ``this matters''\par
-                {\small\color{black!60} usually italic}
-            \end{outputbox}
-        \end{column}
-        \begin{column}<3->{.31\textwidth}
-            \begin{outputbox}[height=1.9cm]
-                \code|\textbf{...}|\par
-                ``make this bold''\par
-                {\small\color{black!60} always bold}
-            \end{outputbox}
-        \end{column}
-        \begin{column}<4->{.31\textwidth}
-            \begin{outputbox}[height=1.9cm]
-                \code|\texttt{...}|\par
-                ``this is code''\par
-                {\small\color{black!60} monospace}
-            \end{outputbox}
-        \end{column}
-    \end{columns}
-    \vfill
-    \begin{exampleblock}<5->{}
-        Prefer \code|\emph|
-    \end{exampleblock}
+    \frametitle{Text Styling}
+    \begin{center}
+        \Large
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{@{}l@{\hspace{3em}}l@{}}
+            \toprule
+            \textbf{Command} & \textbf{Output} \\
+            \midrule
+            \onslide<1->\code|\textbf{bold}|          & \onslide<1->\textbf{bold} \\
+            \onslide<2->\code|\textit{italic}|        & \onslide<2->\textit{italic} \\
+            \onslide<3->\code|\underline{underlined}| & \onslide<3->\underline{underlined} \\
+            \onslide<4->\code|\texttt{typewriter}|    & \onslide<4->\texttt{typewriter} \\
+            \onslide<5->\code|\textsf{sans-serif}|    & \onslide<5->\textsf{sans-serif} \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
     \note{%
+        Click through quickly; they all have the same shape as \texttt{\textbackslash documentclass}.
         \begin{itemize}
-            \item \texttt{\textbackslash emph} says what you \emph{mean}, \texttt{\textbackslash textbf} what you \emph{want}.
-                Italics inside italics then comes out upright.
-            \item The \texttt{\textbackslash emph} vs.\ \texttt{\textbackslash textbf} distinction
-                is the structure-vs-appearance idea from the opening, in miniature.
-                That is why it is here, and not a table of nine font commands.
-            \item 20 seconds spare?
-                \texttt{\textbackslash emph} inside \texttt{\textbackslash emph} flips back to upright,
-                \texttt{\textbackslash textit} inside \texttt{\textbackslash textit} does not.
-            \item The other styling commands are in the handout.
-                Do not read them out.
+            \item \texttt{\textbackslash underline} does not break across lines.
+                For longer underlined text there is the \texttt{ulem} package (handout).
+            \item \texttt{\textbackslash texttt} is the one they will use most after bold and italic:
+                file names, commands, code.
+            \item More commands (\texttt{\textbackslash textsc}, \texttt{\textbackslash textsl}, \ldots) are in the handout.
         \end{itemize}
     }
 \end{frame}
 
 \begin{frame}
-    \frametitle{Block 1, in one screen}
+    \frametitle{Text Styling: Example}
+    \vfill
+    \tcbinputlst[fontsize=\footnotesize]{listings/01-styling.tex}
+    \uncover<2->{\outputrender{renders/01-styling.pdf}}
+    \vfill
+    \note{%
+        The same commands in a real sentence.
+        TODO 1.5 asks for exactly these three.
+    }
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Emphasis}
+    \vfill
+    \tcbinputlst[fontsize=\footnotesize]{listings/01-emph.tex}
+    \uncover<2->{\outputrender{renders/01-emph.pdf}}
+    \vfill
+    \begin{uncoverenv}<3->
+        \begin{center}
+            \color{black!60}
+            How \code|\emph| looks is set in the preamble $\rightarrow$ block 2
+        \end{center}
+    \end{uncoverenv}
+    \note{%
+        \texttt{\textbackslash emph} marks text as emphasised compared to what is around it.
+        \begin{itemize}
+            \item In upright text that means italic, in italic text upright.
+            \item Do not go further here.
+                Block 2 changes how emphasis looks for the whole document, with one line in the preamble.
+            \item If someone asks why it does not flip on their beamer slides:
+                beamer redefines \texttt{\textbackslash emph} as ``always italic''.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Summary}
     \tcbinputlst[fontsize=\footnotesize]{listings/01-summary.tex}
     \vfill
     \begin{center}
@@ -285,13 +300,18 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{Your turn}
+    \frametitle{Exercise}
     \handson{1}{1.1--1.5}{5--10}{checkpoint-01.tex}{%
-        Open \texttt{workshop.tex} and work down the TODOs.\par
-        \medskip
-        {\normalsize\color{black!60}
-        a document that compiles $\rightarrow$ a title block $\rightarrow$ five sections
-        $\rightarrow$ a table of contents $\rightarrow$ three styled words}
+        Open \texttt{workshop.tex} and work down the TODOs.
+        \begin{itemize}
+            \normalsize\color{black!60}
+            \setbeamercolor{itemize item}{fg=black!60}
+            \item Compiling document
+            \item Title block
+            \item Sections
+            \item Table of contents
+            \item Styled words
+        \end{itemize}
     }
     \note{%
         \textbf{5 to 10 minutes.}
