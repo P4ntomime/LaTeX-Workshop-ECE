@@ -12,8 +12,15 @@ TEMPLATE ?= ../workshop-template
 # Add a new snippet's file name (without .tex) here.
 # SNIPPETS:         shown before the Paragraph Spacing slide (block 2), no parskip
 # SNIPPETS_PARSKIP: shown after it, wrapped by renders/snippet-parskip.tex
+# SNIPPETS_ERROR:   like SNIPPETS_PARSKIP, but the listing contains a mistake
+#                   on purpose; it is compiled through the error, and the PDF
+#                   shows what LaTeX makes of it (block 3 warm-up)
 SNIPPETS = 01-styling 01-emph 02-linebreaks 02-newline 02-paragraph 02-percent 02-space 02-tilde 02-lists 02-paragraphs 02-noindent
-SNIPPETS_PARSKIP = 02-paragraphs-parskip 02-emph
+SNIPPETS_PARSKIP = 02-paragraphs-parskip 02-emph \
+                   03-warmup-fix 03-scripts 03-scripts-wrong 03-scripts-right \
+                   03-labels-wrong 03-labels-right 03-inline-display \
+                   03-equation-1 03-equation-2 03-align 03-derivation 03-cases
+SNIPPETS_ERROR = 03-warmup
 
 slides.pdf: slides.tex preamble.tex beamerthemeown.sty beamercolorthemeown.sty \
             $(wildcard sections/*.tex) $(wildcard listings/*)
@@ -22,7 +29,7 @@ slides.pdf: slides.tex preamble.tex beamerthemeown.sty beamercolorthemeown.sty \
 # renders/ holds the PDFs the slides include:
 #   01-sections.pdf, 01-toc.pdf   compiled from listings/, shown next to their code
 #   01-styling.pdf, 01-emph.pdf   snippets from listings/, see SNIPPETS above
-#   02-...                        snippets of block 2, see SNIPPETS above
+#   02-..., 03-...                snippets of blocks 2 and 3, see SNIPPETS above
 #   checkpoint-04.pdf             the finished template document (intro slide)
 #   cooling-curves.pdf            the template's figure (figure slide)
 # They are committed, so this is only needed after changing their sources.
@@ -49,6 +56,22 @@ snippets:
 	# from SNIPPETS to SNIPPETS_PARSKIP).
 	for s in $(SNIPPETS_PARSKIP); do \
 	    latexmk -pdf -outdir=renders/build-parskip -jobname=$$s renders/snippet-parskip.tex || exit 1; \
+	    cp renders/build-parskip/$$s.pdf renders/; \
+	done
+	# These fail on purpose, so they run last: the other snippets are built
+	# whatever happens here.
+	#   -f            latexmk keeps going despite the error
+	#   -g            always rerun: latexmk remembers the error of the last run
+	#                 and would otherwise refuse ("error in previous invocation")
+	#   -pdflatex=... overrides latexmkrc, so a -halt-on-error there cannot
+	#                 stop pdflatex before it writes the PDF
+	#   nonstopmode   pdflatex recovers from the error and writes the PDF
+	# Only a missing PDF counts as a failure here.
+	for s in $(SNIPPETS_ERROR); do \
+	    rm -f renders/build-parskip/$$s.pdf; \
+	    latexmk -pdf -f -g -pdflatex='pdflatex %O %S' -interaction=nonstopmode \
+	        -outdir=renders/build-parskip -jobname=$$s renders/snippet-parskip.tex; \
+	    test -f renders/build-parskip/$$s.pdf || exit 1; \
 	    cp renders/build-parskip/$$s.pdf renders/; \
 	done
 

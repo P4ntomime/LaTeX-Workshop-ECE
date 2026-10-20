@@ -1,144 +1,331 @@
-\section[Maths]{Maths}
+\section{Math}
 
-\blockframe{3}{Maths}{The reason most people are here}
+\blockframe{3}{Math}{Math mode, sub- and superscripts, equations and alignment}
 
 \begin{frame}
-    \frametitle{Where we are going}
+    \frametitle{Schedule}
     \vfill
     \begin{roadmap}{3}
         \roadmapresults
     \end{roadmap}
     \vfill
+    \note{%
+        Halfway.
+        The next 20 minutes are the reason most people signed up.
+    }
 \end{frame}
 
+% Predict first: the code, then what LaTeX makes of it, then the fix.
+% 03-warmup contains a mistake on purpose; the Makefile compiles it through
+% the error (SNIPPETS_ERROR), so the render shows what students would see.
+% overprint keeps the height of the tallest state, so nothing jumps.
 \begin{frame}
-    \frametitle{Warm-up: what comes out?}
-    \begin{center}
-        \tcbinputlst[][width=.6\textwidth]{listings/03-warmup.tex}
-    \end{center}
+    \frametitle{Warm-Up}
     \vfill
-    \begin{alertblock}<2->{}
-        No empty line: \textbf{not} a new paragraph
-    \end{alertblock}
+    \begin{overprint}
+        \onslide<1| handout:0>
+            \tcbinputlst{listings/03-warmup.tex}
+        \onslide<2| handout:1>
+            \tcbinputlst{listings/03-warmup.tex}
+            \outputrender{renders/03-warmup.pdf}
+            \begin{alertblock}{Error}
+                \texttt{Missing \$ inserted.}
+            \end{alertblock}
+        \onslide<3-| handout:2>
+            \tcbinputlst[highlightlines={1}]{listings/03-warmup-fix.tex}
+            \outputrender{renders/03-warmup-fix.pdf}
+            \begin{center}
+                \color{black!60}
+                In text: \texttt{\textbackslash\_}
+            \end{center}
+    \end{overprint}
+    \vfill
     \note{%
         \textbf{Two minutes, in pairs, laptops shut.}
+        ``What comes out?''
+        Most will say: the sentence, exactly as typed.
         \begin{itemize}
-            \item Nasty on purpose.
-                Those who get it right will be pleased with themselves for the rest of the hour;
-                those who get it wrong made the mistake where it costs nothing.
-            \item Tie it back: ``the empty line is the paragraph break.''
-                Same rule as before the break, in a place where it is easy to forget.
+            \item Second click: \LaTeX{} stops with \texttt{Missing \$ inserted}, but still writes a PDF
+                (Overleaf shows it next to the error).
+                \texttt{\_} is the subscript character from the reserved-characters table in block 1.
+                It only exists in math mode, so \LaTeX{} switches to math mode on its own:
+                the 0 becomes a subscript, and everything up to the end of the paragraph is italic and loses its spaces.
+            \item The error message names the dollar sign.
+                That is the way into math mode, and the next slide.
+            \item They will hit this with file names, variable names from code and URLs.
+                \texttt{\textbackslash texttt\{cooling\_01.csv\}} fails the same way;
+                \texttt{\textbackslash\_} works inside \texttt{\textbackslash texttt} too.
         \end{itemize}
     }
 \end{frame}
 
-\begin{frame}
-    \frametitle{Two ways in}
-    \begin{columns}[T, onlytextwidth]
-        \begin{column}{.48\textwidth}
-            {\large\bfseries Inline, inside a sentence\par}
-            \medskip
-            \tcbinputlst[fontsize=\footnotesize]{listings/03-inline.tex}
-            \begin{outputbox}
-                \input{listings/03-inline.tex}
-            \end{outputbox}
-        \end{column}
-        \begin{column}{.48\textwidth}
-            {\large\bfseries Display, on its own line\par}
-            \medskip
-            \tcbinputlst[fontsize=\footnotesize]{listings/03-display.tex}
-            \begin{outputbox}
-                \input{listings/03-display.tex}
-            \end{outputbox}
-        \end{column}
-    \end{columns}
+% One row per click, like Text Styling in block 1.
+% \onslide is used as a switch inside the cells because \code (verbatim)
+% cannot sit inside the argument of \uncover; uncoverenv works for the same reason.
+\begin{frame}[fragile]
+    \frametitle{Math Mode}
+    \begin{center}
+        \Large
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{@{}l@{\hspace{3em}}l@{\hspace{3em}}l@{}}
+            \toprule
+                                          & \textbf{Inline}              & \textbf{Display} \\
+            \midrule
+            \onslide<1->\textbf{\LaTeX}   & \onslide<1->\code|\(...\)|   & \onslide<1->\code|\[...\]| \\
+            \onslide<2->\textbf{Plain \TeX} & \onslide<2->\code|$...$|   & \onslide<2->\code|$$...$$| \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
     \vfill
-    \begin{alertblock}<2->{}
-        \nope{} \texttt{\$\$...\$\$}
-        \qquad
-        \yep{} \texttt{\textbackslash[...\textbackslash]}
+    \begin{uncoverenv}<3->
+        \begin{center}
+            \color{black!60}
+            \code|$...$| does the same as \code|\(...\)|, and is fine to use
+        \end{center}
+    \end{uncoverenv}
+    \vfill
+    \begin{alertblock}<4->{\texttt{\$\$...\$\$}}
+        Avoid it: not \LaTeX{} syntax, uneven spacing, no \texttt{amsmath} support.
+        Use \texttt{\textbackslash[...\textbackslash]} instead.
     \end{alertblock}
     \note{%
+        Inline: inside a sentence.
+        Display: on its own, centred line.
         \begin{itemize}
-            \item \texttt{\$\$...\$\$} is a plain-\TeX{} leftover and breaks the spacing.
-            \item The \texttt{\$\$} warning matters: they \emph{will} have met it in Markdown, Jupyter
-                and every StackExchange answer.
+            \item \texttt{\$...\$} is what everyone writes, the template included.
+                \texttt{\textbackslash(...\textbackslash)} gives the clearer error message when one side is missing,
+                because opening and closing are different characters.
+            \item Why not \texttt{\$\$...\$\$}:
+                it is plain \TeX{}, which \LaTeX{} never adapted.
+                \texttt{\textbackslash[} is \LaTeX{}'s own, and \texttt{amsmath} builds on it.
+            \item In practice: the space around the formula can come out wrong
+                (e.g.\ an extra empty line above it after a paragraph break),
+                the class option \texttt{fleqn} (left-aligned equations) ignores it,
+                and \texttt{amsmath} features such as \texttt{\textbackslash tag} do not work inside it.
+            \item A missing \texttt{\textbackslash]} is a clear error;
+                a missing \texttt{\$\$} silently flips the rest of the text in or out of math mode.
+            \item They \emph{will} have met \texttt{\$\$} in Markdown, Jupyter and on StackExchange.
+                It works there because those are not \LaTeX{}.
                 Say it once, clearly; the handout repeats it.
-            \item Inline maths shrinks to fit the line (small fractions, compact limits), display maths does not.
-                Not a bug: it keeps the line spacing even.
+            \item Also exists: \texttt{equation*} from \texttt{amsmath}, the same as \texttt{\textbackslash[...\textbackslash]}.
         \end{itemize}
     }
 \end{frame}
 
-% Three states: unnumbered, numbered, labelled and referenced.
-% Three separate frames rather than overlays: beamer only sets a \label on
-% the first overlay of a frame, so the label would never exist otherwise.
-\begin{frame}
-    \frametitle{Numbered, and worth pointing at}
-    \tcbinputlst{listings/03-equation-1.tex}
-    \begin{outputbox}
-        \input{listings/03-equation-1.tex}
-    \end{outputbox}
-    \note{%
-        Three steps: unnumbered, numbered, labelled and referenced.
-    }
-\end{frame}
-
-\begin{frame}
-    \frametitle{Numbered, and worth pointing at}
-    \tcbinputlst[highlightlines={1,3}]{listings/03-equation-2.tex}
-    \begin{outputbox}
-        \input{listings/03-equation-2.tex}
-    \end{outputbox}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Numbered, and worth pointing at}
-    \tcbinputlst[highlightlines={3,5}]{listings/03-equation-3.tex}
-    \begin{outputbox}
-        \input{listings/03-equation-3.tex}
-    \end{outputbox}
+% Three examples in the same spot: both characters, then the problem
+% (10^25 raises only the 2), then the fix with braces.
+% All three listings have one line, so the box keeps its size.
+\begin{frame}[fragile]
+    \frametitle{Sub- and Superscripts}
+    \begin{itemize}
+        \item<1-> \code|_|: subscript, \code|^|: superscript
+        \item<3-> More than one character: braces \code|{...}|
+    \end{itemize}
     \vfill
-    \begin{exampleblock}<2->{}
-        The number is never typed
-    \end{exampleblock}
+    \begin{overprint}
+        \onslide<1| handout:1>
+            \tcbinputlst{listings/03-scripts.tex}
+            \outputrender{renders/03-scripts.pdf}
+        \onslide<2| handout:2>
+            \tcbinputlst{listings/03-scripts-wrong.tex}
+            \outputrender{renders/03-scripts-wrong.pdf}
+        \onslide<3-| handout:3>
+            \tcbinputlst[highlightlines={1}]{listings/03-scripts-right.tex}
+            \outputrender{renders/03-scripts-right.pdf}
+    \end{overprint}
+    \vfill
     \note{%
+        The two characters from the warm-up, where they belong.
         \begin{itemize}
-            \item Add an equation above it and everything renumbers.
-            \item The first callback to the block 1 promise.
-                Name it: ``remember the contents list? Same deal.''
-            \item \texttt{\textbackslash eqref} gives ``(1)'' with the brackets, \texttt{\textbackslash ref} a bare ``1''.
-                For equations you almost always want \texttt{\textbackslash eqref}.
+            \item Second click: ask what went wrong.
+                \texttt{\^{}} only takes the next character, so only the 2 is raised.
+            \item Braces group, exactly like the argument braces from block 1.
+                \texttt{T\_\{\textbackslash mathrm\{env\}\}} on the next slide is the same rule.
+            \item Order does not matter: \texttt{T\_0\^{}2} and \texttt{T\^{}2\_0} give the same output.
+            \item 250\,ml of water is about $8 \cdot 10^{24}$ molecules, so the sentence is even true.
         \end{itemize}
     }
 \end{frame}
 
+% Before and after in the same spot: T_{env}, then T_{\mathrm{env}}.
+\begin{frame}[fragile]
+    \frametitle{Upright Labels}
+    \vfill
+    \begin{overprint}
+        \onslide<1| handout:1>
+            \tcbinputlst{listings/03-labels-wrong.tex}
+            \outputrender{renders/03-labels-wrong.pdf}
+        \onslide<2-| handout:2>
+            \tcbinputlst[highlightlines={1}]{listings/03-labels-right.tex}
+            \outputrender{renders/03-labels-right.pdf}
+    \end{overprint}
+    \vfill
+    \begin{exampleblock}<2-| handout:2>{Variables and Labels}
+        \Large
+        Variables italic, labels upright: \code|\mathrm{...}|
+    \end{exampleblock}
+    \begin{uncoverenv}<3-| handout:2>
+        \begin{center}
+            \color{black!60}
+            Every label: \code|V_{\mathrm{out}}|, \code|t_{\mathrm{max}}|, \code|m_{\mathrm{water}}|
+        \end{center}
+    \end{uncoverenv}
+    \vfill
+    \note{%
+        \textbf{Say it explicitly: if they keep one rule from this block, it is this one.}
+        Slow down here.
+        \begin{itemize}
+            \item First click: ask what is wrong.
+                In math mode every letter is a variable, so ``env'' is set as $e \cdot n \cdot v$:
+                italic, with the spacing of three separate symbols.
+            \item \texttt{T\_\{env\}} is the most common thing beginners get wrong in a report,
+                and it is visible from the back of the room.
+                Supervisors and reviewers notice it immediately; it marks a document as careless.
+            \item Third click: it is not about this one symbol.
+                Every subscript that is a word or an abbreviation is a label.
+            \item The same rule makes the constant e and the d in $\mathrm{d}x$ upright (ISO 80000-2):
+                \texttt{\textbackslash mathrm\{e\}}, \texttt{\textbackslash mathrm\{d\}}.
+                The next slides use that.
+                Many textbooks set them italic; what matters is being consistent.
+        \end{itemize}
+    }
+\end{frame}
+
+% One row per click, like Text Styling in block 1. The output column is
+% typeset on the slide: it is a table of commands, not an example output.
+\begin{frame}[fragile]
+    \frametitle{Common Commands}
+    \begin{center}
+        \large
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{@{}l@{\hspace{3em}}l@{\hspace{3em}}l@{}}
+            \toprule
+            \textbf{Command} & \textbf{Output} & \\
+            \midrule
+            \onslide<1->\code|\frac{a}{b}|               & \onslide<1->$\displaystyle\frac{a}{b}$                  & \onslide<1->{\color{black!60}fraction} \\
+            \onslide<2->\code|\sqrt{x}|                  & \onslide<2->$\sqrt{x}$                                  & \onslide<2->{\color{black!60}root} \\
+            \onslide<3->\code|\alpha \tau \Delta|        & \onslide<3->$\alpha \enspace \tau \enspace \Delta$      & \onslide<3->{\color{black!60}Greek letters} \\
+            \onslide<4->\code|a \cdot b|                 & \onslide<4->$a \cdot b$                                 & \onslide<4->{\color{black!60}product} \\
+            \onslide<5->\code|\ln x \sin x|              & \onslide<5->$\ln x \enspace \sin x$                     & \onslide<5->{\color{black!60}function names} \\
+            \onslide<6->\code|\left( \frac{a}{b} \right)| & \onslide<6->$\displaystyle\left( \frac{a}{b} \right)$  & \onslide<6->{\color{black!60}brackets that grow} \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vfill
+    \begin{uncoverenv}<7->
+        \begin{center}
+            \color{black!60}
+            Other function names: \code|\operatorname{sgn}|, see the handout
+        \end{center}
+    \end{uncoverenv}
+    \vfill
+    \note{%
+        Click through quickly; the handout has more of each.
+        \begin{itemize}
+            \item \texttt{\textbackslash frac} is the first command with two mandatory arguments: numerator, then denominator.
+            \item Greek: the capital letter of the name gives the capital letter, \texttt{\textbackslash Delta} vs.\ \texttt{\textbackslash delta}.
+                There is no \texttt{\textbackslash Alpha}: it would look like A.
+            \item Function names (\texttt{\textbackslash ln}, \texttt{\textbackslash sin}, \texttt{\textbackslash exp}, \texttt{\textbackslash log}, \ldots)
+                are upright and get the right spacing.
+                Typed as plain letters, \texttt{sin} would be three italic variables.
+            \item Last click: only a fixed set of names is predefined:
+                the trigonometric and hyperbolic functions, \texttt{\textbackslash exp}, \texttt{\textbackslash ln}, \texttt{\textbackslash log},
+                \texttt{\textbackslash lim}, \texttt{\textbackslash max}, \texttt{\textbackslash min}, \texttt{\textbackslash det} and a few more.
+                No \texttt{\textbackslash sgn}, \texttt{\textbackslash erf} or \texttt{\textbackslash Tr}.
+            \item For one use: \texttt{\textbackslash operatorname\{sgn\}}.
+                For repeated use, once in the preamble: \texttt{\textbackslash DeclareMathOperator\{\textbackslash sgn\}\{sgn\}}, then \texttt{\textbackslash sgn} works like \texttt{\textbackslash sin}.
+                Both come from \texttt{amsmath}; the handout has the details.
+            \item \texttt{\textbackslash left} and \texttt{\textbackslash right} always come in pairs and size the brackets to the content.
+                Plain \texttt{(} stays small, even around a tall fraction.
+            \item Fractions, \texttt{\textbackslash ln} and the growing brackets are what the derivation in the exercise needs.
+        \end{itemize}
+    }
+\end{frame}
+
+% The same formula inline and as display, so the difference in size is visible.
 \begin{frame}
-    \frametitle{Several lines, one alignment}
-    \only<1>{\tcbinputlst[fontsize=\footnotesize]{listings/03-align.tex}}%
-    \only<2>{\tcbinputlst[fontsize=\footnotesize, highlightlines={3,4}]{listings/03-align.tex}}%
-    \only<3->{\tcbinputlst[fontsize=\footnotesize, highlightlines={3}]{listings/03-align.tex}}%
-    \begin{outputbox}
-        \input{listings/03-align.tex}
-    \end{outputbox}
-    \begin{columns}[T, onlytextwidth]
-        \begin{column}{.47\textwidth}
-            \uncover<2->{%
-                \texttt{\&}: align here, before each \texttt{=}
-            }
-        \end{column}
-        \begin{column}{.47\textwidth}
-            \uncover<3->{%
-                \texttt{\textbackslash\textbackslash}: new line\par
-                \texttt{\textbackslash notag}: no number for this line
-            }
-        \end{column}
-    \end{columns}
+    \frametitle{Inline and Display}
+    \vfill
+    \tcbinputlst[fontsize=\footnotesize]{listings/03-inline-display.tex}
+    \uncover<2->{\outputrender{renders/03-inline-display.pdf}}
+    \vfill
+    \begin{itemize}
+        \item<3-> Inline: smaller, so the line spacing stays even
+        \item<4-> Display: full size, on its own line
+    \end{itemize}
+    \vfill
+    \note{%
+        \textbf{Predict first:} will the two formulas look the same?
+        \begin{itemize}
+            \item Inline math keeps the line spacing of the paragraph even, so tall things get squeezed:
+                small fractions, compact limits.
+                Not a bug.
+            \item Rule of thumb: if an inline formula looks cramped, give it its own line.
+            \item The formula is Newton's law of cooling, the topic of the template:
+                the temperature changes in proportion to the difference $\Delta T$ to the room.
+        \end{itemize}
+    }
+\end{frame}
+
+% Two states in the same spot: \[...\] and equation.
+% Both listings have three lines, so the box keeps its size.
+% No \label and \eqref here: references come in block 4.
+\begin{frame}
+    \frametitle{Equations}
+    \vfill
+    \begin{overprint}
+        \onslide<1| handout:1>
+            \tcbinputlst{listings/03-equation-1.tex}
+            \outputrender{renders/03-equation-1.pdf}
+        \onslide<2-| handout:2>
+            \tcbinputlst[highlightlines={1,3}]{listings/03-equation-2.tex}
+            \outputrender{renders/03-equation-2.pdf}
+    \end{overprint}
+    \vfill
+    \uncover<2-| handout:2>{%
+        \begin{center}
+            \Large Numbered automatically
+        \end{center}
+    }
+    \vfill
+    \uncover<3-| handout:2>{%
+        \begin{center}
+            \color{black!60}
+            More on this in block 4
+        \end{center}
+    }
     \note{%
         \begin{itemize}
-            \item \texttt{\textbackslash notag} is for a line nobody will cite.
+            \item Only the first and last line change.
+            \item Add an equation above it and everything renumbers.
+                The first callback to the block 1 promise:
+                ``remember the contents list? Same deal.''
+            \item If someone asks how to write ``see Equation (1)'': block 4, together with figures and tables.
+                Do not show \texttt{\textbackslash label} here, or they will start typing numbers by hand in between.
+        \end{itemize}
+    }
+\end{frame}
+
+% The rules on a short example; the long derivation from the template
+% is the exercise (Exercise: Derivation, right before Exercise).
+\begin{frame}[fragile]
+    \frametitle{Alignment}
+    \tcbinputlst{listings/03-align.tex}
+    \uncover<2->{\outputrender{renders/03-align.pdf}}
+    \vfill
+    \begin{itemize}
+        \item<3-> \code|&|: align here, in every line
+        \item<4-> \code|\\|: new line
+        \item<5-> \code|\notag|: no number for this line
+    \end{itemize}
+    \vfill
+    \note{%
+        \textbf{Predict first:} where will the lines line up?
+        \begin{itemize}
+            \item The \texttt{\&} goes in the same place in every line, usually right before the \texttt{=}.
+            \item \texttt{align} numbers every line; \texttt{\textbackslash notag} is for a line nobody will cite.
             \item Callback: in block 2 you said \texttt{\textbackslash\textbackslash} belongs in two places,
-                tables and maths.
+                tables and math.
                 This is one of them.
                 Say ``told you''; the payoff for the earlier promise makes the next one credible.
             \item Do not teach \texttt{align*}, \texttt{gather}, \texttt{split}, \texttt{multline} or \texttt{aligned}.
@@ -148,59 +335,24 @@
     }
 \end{frame}
 
-\begin{frame}
-    \frametitle{Labels are not variables}
-    \begin{columns}[T, onlytextwidth]
-        \begin{column}{.48\textwidth}
-            {\large\bfseries\nope{} Wrong\par}
-            \smallskip
-            \tcbinputlst[fontsize=\footnotesize]{listings/03-subscript-wrong.tex}
-            \begin{outputbox}
-                \input{listings/03-subscript-wrong.tex}
-                \hfill
-                {\small\color{black!60} $V \cdot o \cdot u \cdot t$?}
-            \end{outputbox}
-        \end{column}
-        \begin{column}{.48\textwidth}
-            {\large\bfseries\yep{} Right\par}
-            \smallskip
-            \tcbinputlst[fontsize=\footnotesize]{listings/03-subscript-right.tex}
-            \begin{outputbox}
-                \input{listings/03-subscript-right.tex}
-                \hfill
-                {\small\color{black!60} upright}
-            \end{outputbox}
-        \end{column}
-    \end{columns}
+\begin{frame}[fragile]
+    \frametitle{Words Inside Formulas}
     \vfill
-    \begin{exampleblock}<2->{}
-        Variables italic, labels upright: \texttt{\textbackslash mathrm}
-    \end{exampleblock}
+    \tcbinputlst[fontsize=\footnotesize]{listings/03-cases.tex}
+    \uncover<2->{\outputrender{renders/03-cases.pdf}}
+    \vfill
+    \begin{uncoverenv}<3->
+        \begin{center}
+            \Large
+            Words in a formula: \code|\text{...}|
+        \end{center}
+    \end{uncoverenv}
+    \vfill
     \note{%
         \begin{itemize}
-            \item \texttt{V\_\{out\}} is the most common thing beginners get wrong in a report,
-                and it is visible from the back of the room.
-            \item ``out'' is a label, not three variables multiplied together.
-        \end{itemize}
-    }
-\end{frame}
-
-\begin{frame}
-    \frametitle{Words inside formulas}
-    \tcbinputlst{listings/03-cases.tex}
-    % cases only works in maths mode, hence the \[ \] around it
-    \begin{outputbox}
-        \[
-            \input{listings/03-cases.tex}
-        \]
-    \end{outputbox}
-    \vfill
-    \begin{exampleblock}<2->{}
-        Words in a formula: \texttt{\textbackslash text\{...\}}
-    \end{exampleblock}
-    \note{%
-        \begin{itemize}
-            \item A quantity goes in maths mode, a word goes in \texttt{\textbackslash text}, even mid-sentence.
+            \item A quantity goes in math mode, a word goes in \texttt{\textbackslash text}, even mid-formula.
+                Without it, ``otherwise'' would be nine italic variables without spaces, like the warm-up.
+            \item \texttt{cases} only works in math mode, hence the \texttt{\textbackslash[ \textbackslash]} around it.
             \item \texttt{cases} shows \texttt{\&} and \texttt{\textbackslash\textbackslash} doing the same job as in \texttt{align}.
                 Point that out.
             \item The template's version has a third branch: same shape, one more line.
@@ -212,7 +364,7 @@
 \end{frame}
 
 \begin{frame}[fragile]
-    \frametitle{Dos and don'ts}
+    \frametitle{Dos and Don'ts}
     \begin{center}
         \renewcommand{\arraystretch}{1.25}
         \begin{tabular}{@{}lll@{}}
@@ -220,19 +372,23 @@
             \textbf{Don't}     & \textbf{Do}                                  & \textbf{Why} \\
             \midrule
             \code|a * b|       & \code|a \cdot b|                             & \texttt{*} is convolution \\
-            \code|$$...$$|     & \code|\[...\]|                               & plain-\TeX{} leftover \\
-            \code|V_{out}|     & \code|V_\mathrm{out}|                        & a label, not variables \\
+            \code|x^10|        & \code|x^{10}|                                & more than one character \\
+            \code|V_{out}|     & \code|V_{\mathrm{out}}|                      & a label, not variables \\
             \code|sin(x)|      & \code|\sin(x)|                               & upright, spaced \\
             \code|d/dx|        & \code|\frac{\mathrm{d}f}{\mathrm{d}x}|       & operator, upright \\
             \bottomrule
         \end{tabular}
     \end{center}
     \vfill
-    \begin{exampleblock}<2->{}
-        \code|\cdot|: product
-        \qquad
-        \code|\times|: cross product, dimensions
-    \end{exampleblock}
+    \begin{uncoverenv}<2->
+        \begin{center}
+            \color{black!60}
+            \code|\cdot|: product
+            \qquad
+            \code|\times|: cross product, dimensions
+        \end{center}
+    \end{uncoverenv}
+    \vfill
     \note{%
         \begin{itemize}
             \item Two minutes.
@@ -243,39 +399,61 @@
             \item The 2025 deck said ``never use \texttt{\textbackslash times}''.
                 Too strong: it is right for cross products and dimensions,
                 and someone in the room will know that.
+            \item If asked: \texttt{\textbackslash sin}, \texttt{\textbackslash frac}, \texttt{\textbackslash mathrm} and \texttt{\textbackslash[...\textbackslash]} need no package.
+                \texttt{align}, \texttt{\textbackslash notag}, \texttt{\textbackslash text} and \texttt{cases} come from \texttt{amsmath},
+                which the template loads from the start.
         \end{itemize}
     }
 \end{frame}
 
 \begin{frame}
-    \frametitle{Don't know the symbol?}
+    \frametitle{Finding Symbols}
     \vfill
     \begin{center}
         {\LARGE\bfseries\href{https://detexify.kirelabs.org}{detexify.kirelabs.org}\par}
-        \bigskip
+        \medskip
         {\Large Draw a symbol, get the command\par}
     \end{center}
     \vfill
+    \uncover<2->{%
+        {\large\bfseries Lists to search\par}
+        \medskip
+        \begin{itemize}
+            \item \href{https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols}{Overleaf: List of Greek letters and math symbols}
+            \item \href{https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols}{OEIS wiki: List of \LaTeX{} mathematical symbols}
+            \item \href{https://ctan.org/pkg/comprehensive}{The Comprehensive \LaTeX{} Symbol List} {\color{black!60}(\texttt{texdoc comprehensive})}
+        \end{itemize}
+    }
+    \vfill
     \note{%
-        Ten seconds, and worth every one.
+        Ten seconds for Detexify, and worth every one.
         Nobody memorises the symbol tables.
         \begin{itemize}
             \item The fear of memorising hundreds of commands is the main reason people bounce off \LaTeX{}.
                 This kills it.
+            \item Second click, the lists: Overleaf's is short and a good start,
+                the OEIS one has long tables,
+                and the Comprehensive Symbol List has every symbol of every package.
+                Search it, do not read it.
+                \texttt{texdoc comprehensive} opens it on a local installation.
+            \item All of them are in the handout and in a comment in the template.
             \item The same is true of everything today: you look it up until you stop needing to.
         \end{itemize}
     }
 \end{frame}
 
 \begin{frame}
-    \frametitle{Your turn}
-    \handson{3}{3.1--3.6}{5--10}{checkpoint-03.tex}{%
-        Fill in the Theory section.\par
-        \medskip
-        {\normalsize\color{black!60}
-        load \texttt{amsmath} $\rightarrow$ set the symbol list in maths
-        $\rightarrow$ a numbered equation with a label $\rightarrow$ an \texttt{align} derivation
-        $\rightarrow$ refer back to both $\rightarrow$ a \texttt{cases} block}
+    \frametitle{Exercise}
+    \handson{3}{3.1--3.4}{5--10}{checkpoint-03.tex}{%
+        Fill in the Theory section.
+        \begin{itemize}
+            \normalsize\color{black!60}
+            \setbeamercolor{itemize item}{fg=black!60}
+            \item Symbols in math mode
+            \item Numbered equation
+            \item Derivation
+            \item Cases
+        \end{itemize}
     }
     \note{%
         \textbf{5 to 10 minutes.}
@@ -287,8 +465,42 @@
                 The Laplace one keeps the strongest person busy until you stop.
             \item Walk the room looking for \emph{one} thing:
                 missing \texttt{\$} around symbols in prose.
+            \item Referring to the equations comes in block 4; if someone asks, that is the answer.
             \item \textbf{Break after this}, 5 minutes.
                 Last one.
+        \end{itemize}
+    }
+\end{frame}
+
+% The target of TODO 3.3, output only: the students write the align
+% themselves from what the block taught. It comes after the Exercise slide,
+% so the hint (second click) is not shown before they have tried. 03-derivation is render-only and
+% starts at equation (2), as it follows the cooling law (TODO 3.2) in the template.
+\begin{frame}[fragile]
+    \frametitle{Exercise: Derivation}
+    \vfill
+    {\large \texttt{TODO} 3.3: produce this with \code|align|\par}
+    \medskip
+    \outputrender{renders/03-derivation.pdf}
+    \vfill
+    \begin{uncoverenv}<2->
+        \begin{center}
+            \color{black!60}
+            You need: \code|&| \quad \code|\\| \quad \code|\notag| \quad \code|\frac| \quad \code|\ln| \quad \code|\left( \right)|
+        \end{center}
+    \end{uncoverenv}
+    \vfill
+    \note{%
+        Show this right after the Exercise slide and leave it up while they work.
+        It is equation (1) from the Equations slide, solved for $t$.
+        \begin{itemize}
+            \item No code on purpose: every piece is on an earlier slide, and finding it is the exercise.
+                Give the second click (the list of pieces) only after a few minutes, or when several people are stuck.
+            \item Where people get stuck: the \texttt{\&} goes before the \texttt{=} in \emph{both} lines,
+                and the first line needs \texttt{\textbackslash notag}.
+            \item Brackets typed as plain \texttt{(} stay small next to the fraction.
+                If you see that on a screen, point at \texttt{\textbackslash left( \textbackslash right)}.
+            \item The solution is in \texttt{checkpoint-03.tex}.
         \end{itemize}
     }
 \end{frame}
