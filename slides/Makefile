@@ -24,7 +24,8 @@ SNIPPETS_PARSKIP = 02-paragraphs-parskip 02-emph \
                    04-grid 04-lines 04-figure 04-ref-render 04-autoref-render \
                    04-cite 04-styles-numeric 04-styles-authoryear \
                    04-citecmds 04-org-wrong 04-org-right \
-                   04-ref-typo 04-cite-typo
+                   04-ref-typo 04-cite-typo \
+                   99-siunitx
 SNIPPETS_ERROR = 03-warmup
 
 # Listings that are complete documents (with \documentclass). They are
@@ -43,7 +44,7 @@ slides.pdf: slides.tex preamble.tex beamerthemeown.sty beamercolorthemeown.sty \
 #   00-class-*.pdf                compiled from listings/, the class comparison (intro)
 #   01-sections.pdf, 01-toc.pdf   compiled from listings/, shown next to their code
 #   01-styling.pdf, 01-emph.pdf   snippets from listings/, see SNIPPETS above
-#   02-..., 03-..., 04-...        snippets of blocks 2 to 4, see SNIPPETS above
+#   02-..., 03-..., 04-..., 99-...  snippets of blocks 2 to 4 and the closing, see SNIPPETS above
 #   checkpoint-04.pdf             the finished template document (intro slide)
 #   figures/cooling-curves.pdf    the template's figure, used by the figure snippet
 # They are committed, so this is only needed after changing their sources.
