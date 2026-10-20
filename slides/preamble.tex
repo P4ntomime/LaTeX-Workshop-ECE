@@ -36,7 +36,6 @@
 \usepackage[export]{adjustbox}      % adds the `frame' key to \includegraphics
 \usepackage{booktabs}               % thick and thin lines in tables
 \usepackage{array}
-\usepackage{pifont}                 % \ding{51} and \ding{55}: tick and cross
 \usepackage{siunitx}                % only for the siunitx example in the closing section
 \usepackage{qrcode}                 % QR code generation (also clickable)
 \hypersetup{hidelinks}              % beamer already loads hyperref
@@ -437,22 +436,3 @@
     \includegraphics[width=\dimexpr\linewidth-0.8pt\relax, frame, #1]{#2}%
 }
 
-% A box with a compiled-output look: white, thin frame, serif text.
-% Being replaced by \outputrender; remove it once no block uses it anymore.
-%   \begin{outputbox} A freshly poured coffee... \end{outputbox}
-% Each box starts the equation counter at 0, like a fresh document,
-% so its first numbered equation is always (1).
-\newtcolorbox{outputbox}[1][]{%
-    deckbox,
-    thinframe,
-    after skip=2.5mm,
-    colback=white,
-    arc=1mm,
-    before upper={\setcounter{equation}{0}},
-    #1
-}
-
-% A red cross and a green tick, for "do / don't" lists.
-\colorlet{goaldone}{green!60!black}
-\newcommand{\nope}{\textcolor{psecbg}{\ding{55}}}
-\newcommand{\yep}{\textcolor{goaldone}{\ding{51}}}

@@ -1,0 +1,12 @@
+% Render only, never shown on a slide.
+% The grid table and the booktabs table side by side in one render,
+% so the comparison has the same text size as every other render.
+% booktabs comes from the preamble hook (04-lines-preamble.tex).
+\begin{minipage}{.5\textwidth}
+    \centering
+    \input{listings/04-grid.tex}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+    \centering
+    \input{listings/04-booktabs.tex}
+\end{minipage}%
