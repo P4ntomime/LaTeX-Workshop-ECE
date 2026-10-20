@@ -10,7 +10,10 @@ TEMPLATE ?= ../workshop-template
 # Listings that are only a piece of a document. Each one is wrapped in an
 # article by renders/snippet.tex and compiled to renders/<name>.pdf.
 # Add a new snippet's file name (without .tex) here.
-SNIPPETS = 01-styling 01-emph
+# SNIPPETS:         shown before the Paragraph Spacing slide (block 2), no parskip
+# SNIPPETS_PARSKIP: shown after it, wrapped by renders/snippet-parskip.tex
+SNIPPETS = 01-styling 01-emph 02-linebreaks 02-newline 02-paragraph 02-percent 02-space 02-tilde 02-lists 02-paragraphs 02-noindent
+SNIPPETS_PARSKIP = 02-paragraphs-parskip 02-emph
 
 slides.pdf: slides.tex preamble.tex beamerthemeown.sty beamercolorthemeown.sty \
             $(wildcard sections/*.tex) $(wildcard listings/*)
@@ -19,6 +22,7 @@ slides.pdf: slides.tex preamble.tex beamerthemeown.sty beamercolorthemeown.sty \
 # renders/ holds the PDFs the slides include:
 #   01-sections.pdf, 01-toc.pdf   compiled from listings/, shown next to their code
 #   01-styling.pdf, 01-emph.pdf   snippets from listings/, see SNIPPETS above
+#   02-...                        snippets of block 2, see SNIPPETS above
 #   checkpoint-04.pdf             the finished template document (intro slide)
 #   cooling-curves.pdf            the template's figure (figure slide)
 # They are committed, so this is only needed after changing their sources.
@@ -34,15 +38,22 @@ renders: snippets
 	cp renders/build/template/checkpoint-04.pdf $(TEMPLATE)/figures/cooling-curves.pdf renders/
 
 # Only the snippets, without the template: make snippets
-# The job name tells renders/snippet.tex which listing to wrap.
+# The job name tells the driver which listing to wrap.
 snippets:
 	for s in $(SNIPPETS); do \
 	    latexmk -pdf -outdir=renders/build -jobname=$$s renders/snippet.tex || exit 1; \
 	    cp renders/build/$$s.pdf renders/; \
 	done
+	# Own build directory, so latexmk never mistakes a snippet built with one
+	# driver for an up-to-date build with the other (e.g. after moving a name
+	# from SNIPPETS to SNIPPETS_PARSKIP).
+	for s in $(SNIPPETS_PARSKIP); do \
+	    latexmk -pdf -outdir=renders/build-parskip -jobname=$$s renders/snippet-parskip.tex || exit 1; \
+	    cp renders/build-parskip/$$s.pdf renders/; \
+	done
 
 clean:
 	latexmk -C slides.tex
-	rm -rf _minted-slides renders/build
+	rm -rf _minted-slides renders/build renders/build-parskip
 
 .PHONY: renders snippets clean

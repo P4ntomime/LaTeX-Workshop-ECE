@@ -1,9 +1,9 @@
-\section[Text]{Text that behaves}
+\section{Text}
 
-\blockframe{2}{Text that behaves}{Paragraphs, line breaks and lists}
+\blockframe{2}{Text}{Paragraphs, line breaks, lists and the preamble}
 
 \begin{frame}
-    \frametitle{Where we are going}
+    \frametitle{Schedule}
     \vfill
     \begin{roadmap}{2}
         \roadmapresults
@@ -17,17 +17,19 @@
 \end{frame}
 
 \begin{frame}[fragile]
-    \frametitle{Warm-up: three things are wrong here}
+    \frametitle{Warm-Up}
     \begin{columns}[T, onlytextwidth]
         \begin{column}{.55\textwidth}
             \tcbinputlst[fontsize=\footnotesize]{listings/02-warmup.tex}
         \end{column}
         \begin{column}{.4\textwidth}
+            % No brace inside \code here: editors do not know \code is
+            % verbatim, and an unbalanced { breaks their highlighting.
             \begin{alertblock}<2->{Line 6}
-                \code|\emph{| never closes
+                \code|\textit| is never closed
             \end{alertblock}
             \begin{alertblock}<2->{Line 9}
-                A bare \code|%| eats the rest of the line
+                A bare \code|%| comments out the rest of the line
             \end{alertblock}
             \begin{alertblock}<2->{Line 10}
                 \texttt{itemized} $\neq$ \texttt{itemize}
@@ -36,7 +38,7 @@
     \end{columns}
     \note{%
         \textbf{Two minutes, laptops shut.}
-        In pairs, out loud.
+        In pairs, out loud: find the three mistakes.
         \begin{itemize}
             \item Retrieval practice: pulling block 1 back out after a break
                 is worth far more than you re-explaining it.
@@ -48,20 +50,17 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{Where do line breaks come from?}
-    You type this:
-    \tcbinputlst[][width=.6\textwidth]{listings/02-linebreaks.tex}
-
-    \uncover<2->{%
-        You get this:
-        \begin{outputbox}[width=.9\textwidth]
-            \input{listings/02-linebreaks.tex}
-        \end{outputbox}
+    \frametitle{Line Breaks}
+    \vfill
+    \tcbinputlst[fontsize=\footnotesize]{listings/02-linebreaks.tex}
+    \uncover<2->{\outputrender{renders/02-linebreaks.pdf}}
+    \vfill
+    \uncover<3->{%
+        \begin{center}
+            \Large Three lines in, one line out
+        \end{center}
     }
     \vfill
-    \begin{alertblock}<3->{}
-        Three lines in, one line out
-    \end{alertblock}
     \note{%
         \textbf{Predict first.}
         Ask the room what will come out before you click.
@@ -74,35 +73,83 @@
     }
 \end{frame}
 
+% One rule per click; the example under the rules swaps with it.
+% overprint keeps the height of the tallest example, so nothing jumps.
+% The tilde gets two examples in the same spot, the same sentence with a
+% normal space and with ~: with the normal space, "2." ends up alone on the
+% second line; on the next click "Section" moves down to join it.
+% That sentence is tuned to the article's text width: if snippet.tex changes
+% (fonts, size), check that 02-space still breaks before the "2".
 \begin{frame}[fragile]
-    \frametitle{The rules, all of them}
+    \frametitle{Spaces and Paragraphs}
     \begin{itemize}
         \item<1-> \textbf{Single newline}: a space
         \item<2-> \textbf{Empty line}: a new paragraph
         \item<3-> \code|%| at the end of a line: no space at all
-        \item<4-> \code|~|: a space that never breaks, \code|Fig.~\ref{...}|
+        \item<4-> \code|~|: a space that never breaks a line
     \end{itemize}
     \vfill
+    \begin{overprint}
+        \onslide<1| handout:1>
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-newline.tex}
+            \outputrender{renders/02-newline.pdf}
+        \onslide<2| handout:2>
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-paragraph.tex}
+            \outputrender{renders/02-paragraph.pdf}
+        \onslide<3| handout:3>
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-percent.tex}
+            \outputrender{renders/02-percent.pdf}
+        \onslide<4| handout:4>
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-space.tex}
+            \outputrender{renders/02-space.pdf}
+        \onslide<5| handout:5>
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-tilde.tex}
+            \outputrender{renders/02-tilde.pdf}
+    \end{overprint}
+    \vfill
+    \note{%
+        One rule per click, each with its own example.
+        \begin{itemize}
+            \item The first one is the coffee sentence from the previous slide, in short.
+            \item The second paragraph is indented, the first one after a heading is not.
+                That is the default; Paragraph Spacing later in this block changes it.
+            \item \texttt{luke\%} plus \texttt{warm} gives ``lukewarm'': the \texttt{\%} swallows the line end, and with it the space.
+                Useful in tables and macros.
+            \item Tilde, first click: ask what is wrong with the output.
+                Someone will spot the lonely ``2.''.
+                Second click: the same sentence with \texttt{\textasciitilde}, and ``Section'' moves down to join it.
+            \item Use it between a word and the number or name that belongs to it:
+                \texttt{Section\textasciitilde 2}, \texttt{Dr.\textasciitilde Watson}, \texttt{10\textasciitilde K}.
+                It comes back in block 4, as the space in \texttt{Fig.\textasciitilde\textbackslash ref}.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Dos and Don'ts}
     \begin{columns}[T, onlytextwidth]
         \begin{column}{.47\textwidth}
-            \begin{exampleblock}<5->{One sentence per line}
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-one-sentence.tex}
+            \begin{exampleblock}{One Sentence per Line}
                 Same PDF, cleaner \texttt{git diff}
             \end{exampleblock}
         \end{column}
         \begin{column}{.47\textwidth}
-            \begin{alertblock}<6->{\texttt{\textbackslash\textbackslash} is \textbf{not} a paragraph break}
-                Only in tables and maths
+            \uncover<2->{%
+                \tcbinputlst[fontsize=\footnotesize]{listings/02-forced-break.tex}
+            }
+            \begin{alertblock}<2->{Forced Line Breaks}
+                \code|\\| ends a line, not a paragraph.
+                Only use it in tables and maths.
             \end{alertblock}
         \end{column}
     \end{columns}
     \note{%
         The \texttt{\textbackslash\textbackslash} warning is the most valuable thing in block 2.
         \begin{itemize}
-            \item \texttt{\%} at the end of a line is useful in tables and macros.
             \item One sentence per line: \texttt{git diff} then shows the sentence that changed, not the paragraph.
                 The template is written this way.
-            \item \texttt{\textbackslash\textbackslash} ends a line; anywhere but tables and maths it gives underfull boxes.
-            \item Every beginner reaches for it because it feels like Word's Enter key.
+            \item Every beginner reaches for \texttt{\textbackslash\textbackslash} because it feels like Word's Enter key.
                 It is wrong in a way that only shows once the document is long enough to reflow.
             \item Name the symptom, so they recognise it later:
                 \texttt{Underfull \textbackslash hbox (badness 10000)} in the log,
@@ -111,128 +158,238 @@
     }
 \end{frame}
 
+% The three lists are rendered side by side in one snippet (02-lists),
+% so the render spans the slide and has the same text size as all others.
 \begin{frame}
-    \frametitle{Paragraph spacing: do it once}
+    \frametitle{Lists}
     \begin{columns}[T, onlytextwidth]
-        \begin{column}{.47\textwidth}
-            {\large\bfseries What beginners do\par}
-            \medskip
-            \tcbinputlst{listings/02-noindent.tex}
-            \begin{alertblock}{}
-                Every paragraph, every time
-            \end{alertblock}
+        \begin{column}{.31\textwidth}
+            {\bfseries itemize\par}
+            {\small\color{black!60} order does not matter\par}
+            \smallskip
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-itemize.tex}
         \end{column}
-        \begin{column}{.47\textwidth}
-            {\large\bfseries What you do\par}
-            \medskip
-            \tcbinputlst{listings/02-parskip.tex}
-            \begin{exampleblock}{}
-                Once, in the preamble
-            \end{exampleblock}
+        \begin{column}{.31\textwidth}
+            {\bfseries enumerate\par}
+            {\small\color{black!60} order matters\par}
+            \smallskip
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-enumerate.tex}
+        \end{column}
+        \begin{column}{.31\textwidth}
+            {\bfseries description\par}
+            {\small\color{black!60} terms and definitions\par}
+            \smallskip
+            \tcbinputlst[fontsize=\footnotesize]{listings/02-description.tex}
         \end{column}
     \end{columns}
+    \medskip
+    \uncover<2->{\outputrender{renders/02-lists.pdf}}
+    \vfill
+    \uncover<3->{%
+        \begin{center}
+            \color{black!60}
+            Same shape: \texttt{\textbackslash begin}, \texttt{\textbackslash item}s, \texttt{\textbackslash end}
+        \end{center}
+    }
+    \vfill
+    \note{%
+        Fast, three minutes.
+        They already know what a list is; they need the three names and the shared shape.
+        \begin{itemize}
+            \item Lists nest, and the labels sort themselves out
+                (bullet to dash, 1 to a).
+                Another small ``it did that for me'' moment.
+            \item \texttt{description} is the one they have never seen.
+                The bracket argument is the term being defined.
+                TODO 2.5 uses it for the symbol list, which becomes maths in block 3.
+        \end{itemize}
+    }
+\end{frame}
+
+% Overlay 1: the gap between \documentclass and \begin{document}.
+% Overlay 2: the gap is named. Overlay 3: the gap is filled.
+% Both listings have 8 lines, so the box does not change size.
+\begin{frame}
+    \frametitle{Preamble}
+    \only<1| handout:0>{\tcbinputlst{listings/02-preamble-empty.tex}}%
+    \only<2| handout:0>{\tcbinputlst[highlightlines={2-7}]{listings/02-preamble-empty.tex}}%
+    \only<3-| handout:1>{\tcbinputlst[highlightlines={3-6}]{listings/02-preamble.tex}}%
+    \begin{itemize}
+        \item<2-| handout:1> The preamble: between \texttt{\textbackslash documentclass} and \texttt{\textbackslash begin\{document\}}
+        \item<3-| handout:1> Settings for the whole document, e.g.\ packages
+    \end{itemize}
     \note{%
         \begin{itemize}
-            \item Miss one \texttt{\textbackslash noindent} and it looks broken;
-                undo \texttt{parskip} by deleting one line.
+            \item First click: ``what goes in this gap?''
+                Since block 1 it has been empty.
+            \item ``Can \LaTeX{} do\ldots?'' Almost always, with one line in the preamble.
+            \item Held back until now on purpose.
+                In block 1 the preamble was ``the settings area, we come back to it'',
+                which was enough because they had nothing to put in it yet.
+                Now \texttt{amsmath} is waiting for the next block.
+        \end{itemize}
+    }
+\end{frame}
+
+% Same anatomy as the Commands slide in block 1: \tikzmark's between the parts.
+\begin{frame}[fragile]
+    \frametitle{Packages}
+    \vspace{1.2cm}
+    \begin{center}
+        \LARGE
+        \mintinline[escapeinside=||]{latex}{\usepackage|\tikzmark{p1}|[english]|\tikzmark{p2}|{babel}|\tikzmark{p3}|}
+    \end{center}
+    \begin{tikzpicture}[remember picture, overlay]
+        \only<2-| handout:1>{\annotatebelow{p2}{p3}{3mm}{Package name}}
+        \only<2-| handout:1>{\annotateabove{p1}{p2}{3mm}{Options}}
+    \end{tikzpicture}
+    \vspace{1.1cm}
+    \begin{itemize}
+        \item<3-| handout:1> Adds commands, or changes how the document looks
+        \item<4-| handout:1> Usually already installed (MiKTeX fetches it on first use)
+        \item<5-| handout:1> Documentation: \texttt{ctan.org/pkg/<name>}
+    \end{itemize}
+    \note{%
+        Same shape as \texttt{\textbackslash documentclass}: a command with an optional and a mandatory argument.
+        Let them notice that themselves if they can.
+        \begin{itemize}
+            \item CTAN has about 6\,000 packages.
+                That always gets a reaction; the follow-up is that they will personally use about eight of them.
+            \item TeX Live, MacTeX and Overleaf have all of them.
+                MiKTeX asks to install a missing package the first time a document loads it.
+            \item Package order rarely matters.
+                The one exception (\texttt{hyperref} goes last) comes up in block 4.
+        \end{itemize}
+    }
+\end{frame}
+
+% Three states in the same spot: the default (indented paragraphs), the fix
+% by hand (\noindent everywhere), and the fix in the preamble (parskip).
+% The document code is on the left; the right column says what is going on,
+% and in the last state also holds the preamble.
+% overprint keeps the height of the tallest state, so nothing jumps.
+\begin{frame}
+    \frametitle{Paragraph Spacing}
+    \begin{overprint}
+        \onslide<1| handout:1>
+            \begin{columns}[T, onlytextwidth]
+                \begin{column}{.47\textwidth}
+                    \tcbexinputlst[fontsize=\footnotesize]{listings/02-paragraphs.tex}[Document]
+                \end{column}
+                \begin{column}{.47\textwidth}
+                    {\large\bfseries The default\par}
+                    \medskip
+                    Every paragraph after the first is indented
+                \end{column}
+            \end{columns}
+            \medskip
+            \outputrender{renders/02-paragraphs.pdf}
+        \onslide<2| handout:2>
+            \begin{columns}[T, onlytextwidth]
+                \begin{column}{.47\textwidth}
+                    \tcbexinputlst[fontsize=\footnotesize]{listings/02-noindent.tex}[Document]
+                \end{column}
+                \begin{column}{.47\textwidth}
+                    {\large\bfseries In every paragraph\par}
+                    \medskip
+                    Removes the indent, but adds no gap
+                \end{column}
+            \end{columns}
+            \medskip
+            \outputrender{renders/02-noindent.pdf}
+        \onslide<3| handout:3>
+            \begin{columns}[T, onlytextwidth]
+                \begin{column}{.47\textwidth}
+                    \tcbexinputlst[fontsize=\footnotesize]{listings/02-paragraphs.tex}[Document]
+                \end{column}
+                \begin{column}{.47\textwidth}
+                    {\large\bfseries Once, in the preamble\par}
+                    \medskip
+                    \tcbexinputlst[fontsize=\footnotesize]{listings/02-parskip.tex}[Preamble]
+                \end{column}
+            \end{columns}
+            \medskip
+            \outputrender{renders/02-paragraphs-parskip.pdf}
+    \end{overprint}
+    \note{%
+        The first real use of the preamble.
+        \begin{itemize}
+            \item First click: the default.
+                The first paragraph after a heading is not indented, every later one is.
+                Fine for a novel, unusual for a lab report.
+            \item Second click: the fix most beginners find, \texttt{\textbackslash noindent} everywhere.
+                It removes the indent, but the paragraphs now run into each other,
+                and missing one \texttt{\textbackslash noindent} looks broken.
+            \item Third click: one line in the preamble.
+                No indent, a gap between paragraphs, and the document itself is back to plain paragraphs.
+                Undo it by deleting one line.
             \item If you find yourself repeating a command, look for a package.
-            \item Structure before appearance, for the third time.
-                By now they should feel the pattern rather than need it explained.
             \item A blank line between paragraphs is the normal convention in German-language typesetting anyway,
                 so for a lot of their coursework \texttt{parskip} is simply correct.
         \end{itemize}
     }
 \end{frame}
 
-% Each list is typeset twice from the same file: once as code, once for real.
+% Overlay 1 is the block 1 example as it was; overlay 2 adds one line to the
+% preamble and swaps the render. The document box never changes.
 \begin{frame}
-    \frametitle{Three kinds of list}
-    \begin{columns}[T, onlytextwidth]
-        \begin{column}{.31\textwidth}
-            \tcbinputlst[fontsize=\footnotesize]{listings/02-itemize.tex}
-            \begin{outputbox}[height=1.6cm]
-                \input{listings/02-itemize.tex}
-            \end{outputbox}
-            \textbf{itemize}: order does not matter
-        \end{column}
-        \begin{column}{.31\textwidth}
-            \tcbinputlst[fontsize=\footnotesize]{listings/02-enumerate.tex}
-            \begin{outputbox}[height=1.6cm]
-                \input{listings/02-enumerate.tex}
-            \end{outputbox}
-            \textbf{enumerate}: order \emph{does} matter
-        \end{column}
-        \begin{column}{.31\textwidth}
-            \tcbinputlst[fontsize=\footnotesize]{listings/02-description.tex}
-            \begin{outputbox}[height=1.6cm]
-                \input{listings/02-description.tex}
-            \end{outputbox}
-            \textbf{description}: naming things
-        \end{column}
-    \end{columns}
+    \frametitle{Emphasis Revisited}
     \vfill
-    \begin{exampleblock}<2->{}
-        Same shape: \texttt{\textbackslash begin}, \texttt{\textbackslash item}s, \texttt{\textbackslash end}
-    \end{exampleblock}
+    \uncover<2-| handout:1>{%
+        \tcbexinputlst[fontsize=\footnotesize]{listings/02-emph-preamble.tex}[Preamble]
+    }
+    \tcbexinputlst[fontsize=\footnotesize]{listings/01-emph.tex}[Document]
+    \only<1| handout:0>{\outputrender{renders/01-emph.pdf}}%
+    \only<2-| handout:1>{\outputrender{renders/02-emph.pdf}}%
+    \vfill
+    \uncover<3-| handout:1>{%
+        \begin{center}
+            \color{black!60}
+            One line changes every \texttt{\textbackslash emph} in the document
+        \end{center}
+    }
     \note{%
-        Fast, three minutes.
-        They already know what a list is; they need the three names and the shared shape.
+        The promise from block 1, kept.
         \begin{itemize}
-            \item Lists nest, and the labels sort themselves out.
-                Worth demoing live.
-                The automatic change of label (bullet to dash, 1 to a) is another small
-                ``it did that for me'' moment.
-            \item \texttt{description} is the one they have never seen.
-                The bracket argument is the term being defined.
-                TODO 2.6 uses it for the symbol list, which becomes maths in block 3.
+            \item First click: the block 1 example, exactly as they saw it.
+                Second click: one line in the preamble, and every \texttt{\textbackslash emph} is bold.
+                The document box does not change at all.
+            \item Do not explain \texttt{\textbackslash renewcommand}.
+                ``Copy this line'' is enough.
+                If someone asks about \texttt{\#1}: it is the argument placeholder from the reserved-characters table.
+            \item Bold is only an example.
+                The point is that the decision lives in one place.
+            \item Optional TODO 2.7 for the fast ones.
         \end{itemize}
     }
 \end{frame}
 
 \begin{frame}
-    \frametitle{The preamble: where the settings live}
-    \only<1>{\tcbinputlst[highlightlines={1}]{listings/02-preamble.tex}}%
-    \only<2>{\tcbinputlst[highlightlines={3-6}]{listings/02-preamble.tex}}%
-    \only<3->{\tcbinputlst[highlightlines={8}]{listings/02-preamble.tex}}%
-    \begin{itemize}
-        \item<4-> Between \texttt{\textbackslash documentclass} and \texttt{\textbackslash begin\{document\}}
-        \item<5-> \texttt{\textbackslash usepackage}: load an extension (CTAN: about 6\,000)
-        \item<6-> \texttt{hyperref} goes last
-    \end{itemize}
-    \note{%
+    \frametitle{Exercise}
+    \handson{2}{2.1--2.7}{5--10}{checkpoint-02.tex}{%
+        Continue with the TODOs in \texttt{workshop.tex}.
         \begin{itemize}
-            \item ``Can \LaTeX{} do\ldots?'' Almost always, with one line in the preamble.
-            \item Package order rarely matters; \texttt{hyperref} is the one to remember.
-            \item Held back until now on purpose.
-                In block 1 the preamble was ``the settings area, we come back to it'',
-                which was enough because they had nothing to put in it yet.
-                Now \texttt{amsmath} is waiting for the next block.
-            \item 6\,000 always gets a reaction.
-                The follow-up: you will personally use about eight of them.
+            \normalsize\color{black!60}
+            \setbeamercolor{itemize item}{fg=black!60}
+            \item Second paragraph
+            \item Line breaks
+            \item Lists
+            \item Paragraph spacing
+            \item Bold emphasis (optional)
         \end{itemize}
-    }
-\end{frame}
-
-\begin{frame}
-    \frametitle{Your turn}
-    \handson{2}{2.1--2.6}{5--10}{checkpoint-02.tex}{%
-        Work down the file.\par
-        \medskip
-        {\normalsize\color{black!60}
-        add \texttt{parskip} $\rightarrow$ write a second paragraph
-        $\rightarrow$ fix the three line-break crimes in Setup
-        $\rightarrow$ an \texttt{itemize}, an \texttt{enumerate} and a \texttt{description}}
     }
     \note{%
         \textbf{5 to 10 minutes.}
         \begin{itemize}
-            \item TODO 2.3 is the interesting one: the paragraph has the \texttt{\textbackslash\textbackslash} habits baked in,
+            \item TODO 2.2 is the interesting one: the paragraph has the \texttt{\textbackslash\textbackslash} habits baked in,
                 and it compiles perfectly happily.
                 \LaTeX{} will not tell you; you have to look at the page.
             \item Watch for a blank line \emph{inside} a list and strange spacing.
                 Common, harmless, worth a word from the front if you see it twice.
+            \item TODO 2.7 is optional.
+                Point the fast ones at it; nobody else needs it.
             \item \textbf{Break after this}, 5 minutes.
-                Again: name the restart time.
+                Say the actual restart time, and start then.
         \end{itemize}
     }
 \end{frame}
