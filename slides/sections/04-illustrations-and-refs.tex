@@ -45,9 +45,9 @@
 % The highlighted lines follow the bullet points.
 \begin{frame}
     \frametitle{A table, the hard way first}
-    \only<1,5->{\tcbinputlst{listings/04-tabular.tex}}%
-    \only<2>{\tcbinputlst[highlightlines={1}]{listings/04-tabular.tex}}%
-    \only<3-4>{\tcbinputlst[highlightlines={2-4}]{listings/04-tabular.tex}}%
+    \only<1,5-| handout:1,4->{\tcbinputlst{listings/04-tabular.tex}}%
+    \only<2| handout:2>{\tcbinputlst[highlightlines={1}]{listings/04-tabular.tex}}%
+    \only<3-4| handout:3>{\tcbinputlst[highlightlines={2-4}]{listings/04-tabular.tex}}%
     \begin{columns}[T, onlytextwidth]
         \begin{column}{.52\textwidth}
             \begin{outputbox}
@@ -57,15 +57,15 @@
         \end{column}
         \begin{column}{.44\textwidth}
             \begin{itemize}
-                \item<2-> \texttt{\{lllr\}}: one letter per column
+                \item<2-| handout:2-> \texttt{\{lllr\}}: one letter per column
                     (\textbf{l}eft, \textbf{c}entre, \textbf{r}ight)
-                \item<3-> \texttt{\&}: next column
-                \item<4-> \texttt{\textbackslash\textbackslash}: end of row
+                \item<3-| handout:3-> \texttt{\&}: next column
+                \item<4-| handout:3-> \texttt{\textbackslash\textbackslash}: end of row
             \end{itemize}
         \end{column}
     \end{columns}
     \vfill
-    \begin{alertblock}<5->{}
+    \begin{alertblock}<5-| handout:4>{}
         Not a table yet: no caption, no number, no placement
     \end{alertblock}
     \note{%
@@ -85,22 +85,22 @@
     \frametitle{Make it float}
     \begin{columns}[T, onlytextwidth]
         \begin{column}{.52\textwidth}
-            \only<1,5->{\tcbinputlst[fontsize=\footnotesize]{listings/04-table-float.tex}}%
-            \only<2>{\tcbinputlst[fontsize=\footnotesize, highlightlines={1,8}]{listings/04-table-float.tex}}%
-            \only<3>{\tcbinputlst[fontsize=\footnotesize, highlightlines={3}]{listings/04-table-float.tex}}%
-            \only<4>{\tcbinputlst[fontsize=\footnotesize, highlightlines={4}]{listings/04-table-float.tex}}%
+            \only<1,5-| handout:1,2>{\tcbinputlst[fontsize=\footnotesize]{listings/04-table-float.tex}}%
+            \only<2| handout:none>{\tcbinputlst[fontsize=\footnotesize, highlightlines={1,8}]{listings/04-table-float.tex}}%
+            \only<3| handout:none>{\tcbinputlst[fontsize=\footnotesize, highlightlines={3}]{listings/04-table-float.tex}}%
+            \only<4| handout:none>{\tcbinputlst[fontsize=\footnotesize, highlightlines={4}]{listings/04-table-float.tex}}%
         \end{column}
         \begin{column}{.44\textwidth}
             \begin{itemize}
-                \item<2-> \texttt{[htbp]}: \textbf{h}ere, \textbf{t}op, \textbf{b}ottom, own \textbf{p}age
-                \item<3-> \texttt{\textbackslash caption}: numbered for you
-                \item<4-> \texttt{\textbackslash label} \textbf{after} \texttt{\textbackslash caption}
-                \item<5-> \texttt{\textbackslash usepackage\{caption\}}: proper spacing
+                \item<2-| handout:2> \texttt{[htbp]}: \textbf{h}ere, \textbf{t}op, \textbf{b}ottom, own \textbf{p}age
+                \item<3-| handout:2> \texttt{\textbackslash caption}: numbered for you
+                \item<4-| handout:2> \texttt{\textbackslash label} \textbf{after} \texttt{\textbackslash caption}
+                \item<5-| handout:2> \texttt{\textbackslash usepackage\{caption\}}: proper spacing
             \end{itemize}
         \end{column}
     \end{columns}
     \vfill
-    \begin{exampleblock}<6->{}
+    \begin{exampleblock}<6-| handout:2>{}
         Let \LaTeX{} decide where floats go
     \end{exampleblock}
     \note{%
@@ -179,14 +179,14 @@
 
 \begin{frame}
     \frametitle{A figure is the same shape}
-    \only<1-2,5->{\tcbinputlst[fontsize=\footnotesize]{listings/04-figure.tex}}%
-    \only<3-4>{\tcbinputlst[fontsize=\footnotesize, highlightlines={3}]{listings/04-figure.tex}}%
+    \only<1-2,5-| handout:1>{\tcbinputlst[fontsize=\footnotesize]{listings/04-figure.tex}}%
+    \only<3-4| handout:none>{\tcbinputlst[fontsize=\footnotesize, highlightlines={3}]{listings/04-figure.tex}}%
     \begin{columns}[T, onlytextwidth]
         \begin{column}{.68\textwidth}
             \begin{itemize}
-                \item<2-> Same structure as \texttt{table}
-                \item<3-> \texttt{0.8\textbackslash textwidth}: scales with the page
-                \item<4-> No file extension
+                \item<2-| handout:1> Same structure as \texttt{table}
+                \item<3-| handout:1> \texttt{0.8\textbackslash textwidth}: scales with the page
+                \item<4-| handout:1> No file extension
             \end{itemize}
         \end{column}
         \begin{column}{.26\textwidth}
