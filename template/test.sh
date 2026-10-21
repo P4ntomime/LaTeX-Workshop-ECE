@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Build workshop.tex, workshop.tex with TODO 1.1 done, and every checkpoint,
 # each copied to the template root as a student would, and report problems.
 # Fails on any error, warning or undefined reference.
