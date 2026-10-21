@@ -1,5 +1,5 @@
-% \documentclass[aspectratio=169]{beamer}
-\documentclass[aspectratio=169,handout]{beamer}  % one page per frame, overlays collapsed
+\documentclass[aspectratio=169]{beamer}
+% \documentclass[aspectratio=169,handout]{beamer}  % one page per frame, overlays collapsed
 % \documentclass[aspectratio=169,handout, draft]{beamer}  % draft mode for quicker compile during writing
 
 \usetheme{own}
@@ -9,7 +9,7 @@
 % slide on the left, notes on the right.
 % Comment out the next two lines for a plain PDF without notes.
 \usepackage{pgfpages}
-% \setbeameroption{show notes on second screen}
+\setbeameroption{show notes on second screen}
 
 \title{\LaTeX{} Workshop}
 \subtitle{An introductory course to \LaTeX}
@@ -26,10 +26,10 @@
 \colorlet{figalt}{palette quaternary.bg}
 
 \begin{document}
-    % \input{sections/00-intro.tex}
-    % \input{sections/01-skeleton.tex}
-    % \input{sections/02-text.tex}
-    % \input{sections/03-math.tex}
-    % \input{sections/04-illustrations-and-refs.tex}
+    \input{sections/00-intro.tex}
+    \input{sections/01-skeleton.tex}
+    \input{sections/02-text.tex}
+    \input{sections/03-math.tex}
+    \input{sections/04-illustrations-and-refs.tex}
     \input{sections/99-closing.tex}
 \end{document}
