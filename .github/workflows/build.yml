@@ -1,0 +1,136 @@
+# Builds the workshop template, the slides and the handout.
+#
+#   push to main, pull request, manual run:  build only; the files are
+#                                             attached to the run as an artifact
+#   push of a tag v*:                         build, then publish a GitHub
+#                                             release with the three files
+#
+# Release a new version (from the repository root):
+#   git tag -a v2026.1 -m "Workshop 2026"
+#   git push origin v2026.1
+
+name: Build and release
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+# A newer push to the same branch cancels the build still running for it.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Full TeX Live (all packages, no docs), rebuilt weekly, with Python and
+    # Pygments for minted. If a weekly update ever breaks the warning-free
+    # template test, pin a dated tag instead, e.g. texlive/texlive:TL2026-2026-10-19-...
+    container: texlive/texlive:latest
+    timeout-minutes: 30
+    steps:
+      # The image has no make; git before checkout gives a real clone
+      # (otherwise checkout falls back to a plain download without .git).
+      - name: Install build tools
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends make git zip
+
+      - uses: actions/checkout@v7
+
+      - name: Show versions
+        run: |
+          pdflatex --version | head -n 1
+          biber --version
+          python3 --version
+
+      # Generates build/workshop-template/, builds every state (fails on any
+      # LaTeX warning) and writes build/workshop-template.zip.
+      - name: Template
+        run: make -C template zip
+
+      # Rebuilds all renders from their sources, including checkpoint-04.pdf,
+      # so the release never ships a render that is older than its listing.
+      # stdin from /dev/null: a LaTeX error must fail, not wait for input.
+      - name: Slide renders
+        run: make -C slides renders </dev/null
+
+      - name: Slides
+        run: make -C slides </dev/null
+
+      - name: Handout
+        working-directory: handout
+        run: |
+          make renders </dev/null
+          latexmk -pdf handout.tex </dev/null
+
+      - name: Collect files
+        run: |
+          mkdir -p dist
+          cp template/build/workshop-template.zip dist/
+          cp slides/slides.pdf dist/
+          cp handout/handout.pdf dist/
+          ls -l dist
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: workshop
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+
+      # On failure, keep the logs so the error can be read without a local build.
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: logs
+          path: |
+            **/*.log
+            **/*.blg
+            **/latexmk.out
+          if-no-files-found: ignore
+          retention-days: 7
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: workshop
+          path: dist
+
+      # Creates the release, or replaces its files if it already exists
+      # (e.g. when the workflow is re-run for the same tag).
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          cat > notes.md <<'EOF'
+          | File | What it is |
+          | --- | --- |
+          | `workshop-template.zip` | The template for the hands-on part. On Overleaf: New Project, Upload Project, select the zip. |
+          | `slides.pdf` | The workshop slides. |
+          | `handout.pdf` | The handout: everything from the slides, plus more. |
+
+          Download `workshop-template.zip`, not the "Source code" archives below.
+          EOF
+          if gh release view "$TAG" >/dev/null 2>&1; then
+              gh release upload "$TAG" dist/* --clobber
+          else
+              gh release create "$TAG" dist/* \
+                  --verify-tag \
+                  --title "LaTeX Workshop $TAG" \
+                  --notes-file notes.md
+          fi
