@@ -1,71 +1,91 @@
-\usepackage[utf8]{inputenc}
+% =====================================================================
+%  Preamble for handout.tex
+% =====================================================================
+%  Sections in this file:
+%    1. Fonts, language and page
+%    2. Tables, math, graphics
+%    3. Colours, figures and links
+%    4. Code and example outputs
+%    5. Bibliography, hyperref, glossary
+%    6. Title page and small helpers
+% =====================================================================
+
+% The renders are PDF 1.7; without this, pdfTeX warns on every one of them.
+\pdfminorversion=7
+
+% ---------------------------------------------------------------------
+%  1. Fonts, language and page
+% ---------------------------------------------------------------------
 \usepackage[T1]{fontenc}            % font encoding: T1
-\usepackage{textcomp}
-\usepackage{times}
-\usepackage{inconsolata}
-\usepackage[main=english]{babel}
+\usepackage[british]{babel}         % British hyphenation, dates and names
+\usepackage{amsmath}                % before newtxmath, as its manual asks
+\usepackage{newtxtext}              % Times for text
+\usepackage{newtxmath}              % and for math (brings the AMS symbols)
+\usepackage[varqu]{inconsolata}     % code font, with straight quotes
+\usepackage{microtype}              % finer justification
+\usepackage{csquotes}               % \enquote, and biblatex wants it with babel
 
-\usepackage{geometry}
+% The text block is exactly as wide as the students' article
+% (a4paper, 11pt: 360pt), so the example outputs (renders) are shown at
+% their natural size and their text lines up with the handout's text.
+\usepackage[a4paper, textwidth=360pt, top=3cm, bottom=3cm]{geometry}
 
+\usepackage{parskip}                % no indent, a gap between paragraphs
+% Long typewriter words (file names, commands) cannot be hyphenated;
+% a little extra stretch lets TeX break the line before them instead.
+\setlength{\emergencystretch}{1.5em}
 \usepackage{enumitem}
 \setlist[itemize]{itemsep=0ex, leftmargin=1em}
-\usepackage{tabularx}
-\usepackage{tabu}
-\usepackage{hhline}
+
+% ---------------------------------------------------------------------
+%  2. Tables, math, graphics
+% ---------------------------------------------------------------------
+\usepackage{array}
 \usepackage{booktabs}
-
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{mathtools}
-\usepackage{txfonts}
+\usepackage{tabularx}
+\usepackage{multicol}               % cheat sheet
 \usepackage{siunitx}
-\usepackage{bm}
-
-\usepackage{parskip}
-\usepackage{multicol}
 
 \usepackage{graphicx}
-\usepackage{scalerel}
-\usepackage{anyfontsize}
-\usepackage[table]{xcolor}
-\definecolor{backcolour}{HTML}{f5f5f0} % background color for highlighted text
+\usepackage[export]{adjustbox}      % frames around the example outputs
+
+\usepackage{caption}
+\captionsetup{%
+    labelfont=bf,
+    labelsep=quad,
+}
+
+% ---------------------------------------------------------------------
+%  3. Colours, figures and links
+% ---------------------------------------------------------------------
+\usepackage{xcolor}
+\definecolor{backcolour}{HTML}{f5f5f0}      % background of code
+\definecolor{titlecolour}{HTML}{e4e4dc}     % title bar of a code box
 \definecolor{commentcolour}{HTML}{6a9955}
 \definecolor{keywordcolour}{HTML}{7f0055}
 \definecolor{stringcolour}{HTML}{9e22bd}
 \definecolor{numbercolour}{HTML}{808080}
+\definecolor{linkcolour}{HTML}{1a4fbf}
 
+% Colours of the figures shared with the slides (figures/*.tex).
 \definecolor{figaccent}{HTML}{3d3dff}
 \definecolor{figalt}{HTML}{64cf4e}
 \definecolor{figfill}{HTML}{d1d1d1}
 
-\usepackage{hologo}
+\usepackage{hologo}                 % \hologo{MiKTeX}
+\usepackage{skipink}                % underlines that skip descenders
 
-\usepackage{float}
-\usepackage{caption}
-\captionsetup{%
-    labelfont=bf,
-    labelsep=quad
-}
-
-\usepackage{skipink}
-
-% ----------------------------------- TIKZ & PGF-PLOTS SETTINGS -----------------------------------
 \usepackage{tikz}
-\usepackage{pgfplots}
-\usetikzlibrary{arrows}
-\usetikzlibrary{arrows.meta}
-\usetikzlibrary{bending}
-\usetikzlibrary{decorations.pathreplacing}
-\usetikzlibrary{angles}
-\usetikzlibrary{tikzmark}
-\usetikzlibrary{petri}
-\usetikzlibrary{positioning}
-\usetikzlibrary{shapes}
-\usetikzlibrary{calc}
-\usetikzlibrary{external}
+\usetikzlibrary{%
+    positioning,
+    calc,
+    arrows.meta,
+    fit,
+}
 \tikzset{>=stealth}
-
+\usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
+\usepackage[edges]{forest}          % directory trees
 
 % inline tikz node for later referencing
 \newcommand{\tn}[2]{% from https://tex.stackexchange.com/a/402466/121799
@@ -76,41 +96,247 @@
     \else%
     \tikz[remember picture,baseline= (#1.base),inner sep=0pt]{%
         \node(#1){#2};%
-        % \draw (#1.south west) to ++(0,-2mm) -| (#1.south east) -- (#1.south east);
     }%
     \fi%
 }
 
+% ---------------------------------------------------------------------
+%  4. Code and example outputs
+% ---------------------------------------------------------------------
+%  Code is set by listings, so the handout compiles without -shell-escape.
+%  listings has no complete list of LaTeX commands, so the `ltx' language
+%  below colours everything that starts with a backslash instead.
 \usepackage{listings}
-
-\usepackage{hyperref}
-
-\hypersetup{%
-    hidelinks
+\lstdefinelanguage{ltx}{%
+    alsoletter={\\@*},
+    keywordsprefix={\\},
+    morekeywords={\\begin},         % keywordsprefix needs one keyword to work
+    morecomment=[l]{\%},
+    % Escaped characters: not a command, and \% does not start a comment.
+    literate=%
+        {\\\%}{{\textbackslash\%}}2
+        {\\\{}{{\textbackslash\{}}2
+        {\\\}}{{\textbackslash\}}}2
+        {\\\&}{{\textbackslash\&}}2
+        {\\\#}{{\textbackslash\#}}2
+        {\\\$}{{\textbackslash\$}}2
+        {\\\_}{{\textbackslash\_}}2
+        % listings cannot read UTF-8 by itself; the letters used in examples:
+        {ä}{{\"a}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+        {Ä}{{\"A}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1 {ß}{{\ss}}1,
+}
+% .bib files: the entry type (@book) is coloured.
+\lstdefinelanguage{bib}{%
+    alsoletter={@},
+    keywordsprefix={@},
+    morekeywords={@book},
+    morecomment=[l]{\%},
+}
+\lstdefinestyle{code}{%
+    language=ltx,
+    basicstyle=\ttfamily\footnotesize,
+    aboveskip=0pt,                  % the box has its own padding
+    belowskip=0pt,
+    columns=fullflexible,
+    keepspaces,
+    showstringspaces=false,
+    tabsize=4,
+    keywordstyle=\color{keywordcolour},
+    commentstyle=\color{commentcolour},
+    numbers=left,
+    numberstyle=\ttfamily\scriptsize\color{numbercolour},
+    numbersep=12pt,                 % line numbers sit in the margin
+    breaklines,
+    postbreak=\mbox{\textcolor{numbercolour}{$\hookrightarrow$}\space},
+}
+\lstset{style=code}
+% Commands for a terminal (no colours, no line numbers):
+%   \begin{codeblock}[style=shell] ... \end{codeblock}
+% listings cannot read non-ASCII characters; quoted error messages that
+% contain one write it as LaTeX between (* and *), e.g. (*$\leq$*).
+\lstdefinestyle{shell}{%
+    style=code,
+    language={},
+    keywordstyle={},
+    commentstyle={},
+    numbers=none,
+    escapeinside={(*}{*)},
 }
 
+% Code boxes: light background, no frame.
+% A box sticks out 8pt into both margins, exactly like the frame of a
+% render (standalone's border), so code and output line up.
+\usepackage{tcolorbox}
+\tcbuselibrary{listings, skins, breakable, raster}
+\newlength{\exoverhang}
+\setlength{\exoverhang}{8pt}
+\tcbset{%
+    codebox/.style={%
+        enhanced,
+        listing only,
+        colback=backcolour,
+        frame hidden,
+        boxrule=0pt,
+        arc=1mm,
+        boxsep=0pt,
+        left=5pt, right=2pt, top=4pt, bottom=4pt,
+        grow to left by=\exoverhang,
+        grow to right by=\exoverhang,
+        colbacktitle=titlecolour,
+        coltitle=black,
+        fonttitle=\small\bfseries,
+        toptitle=2pt, bottomtitle=2pt,
+        % No page break before a code box: it stays with the sentence that
+        % introduces it, and with the code box or render before it.
+        before={\par\nopagebreak\vskip\smallskipamount\nopagebreak},
+        after={\par\nopagebreak\vskip\smallskipamount},
+    },
+}
+
+% \codefile[<listings options>]{<file>}: a file as a code box.
+% \codefiletitled[<listings options>]{<file>}{<title>}: the same, with a
+% title bar (Preamble, Document, references.bib, ...).
+% For a .bib file: \codefile[language=bib]{...}.
+\NewTCBInputListing{\codefile}{O{} m}{%
+    codebox,
+    listing file={#2},
+    listing options={style=code, #1},
+}
+\NewTCBInputListing{\codefiletitled}{O{} m m}{%
+    codebox,
+    title={#3},
+    listing file={#2},
+    listing options={style=code, #1},
+}
+% Code typed directly in the handout:
+%   \begin{codeblock}[<listings options>] ... \end{codeblock}
+% !O{}: the optional argument must follow \begin{codeblock} directly;
+% otherwise the search for it would read the first line of code too early.
+\DeclareTCBListing{codeblock}{!O{}}{%
+    codebox,
+    listing options={style=code, #1},
+}
+% The same with a title bar:
+%   \begin{codeblocktitled}{<title>}[<listings options>] ... \end{codeblocktitled}
+\DeclareTCBListing{codeblocktitled}{m !O{}}{%
+    codebox,
+    title={#1},
+    listing options={style=code, #2},
+}
+% Long listings (the appendix) may break across pages.
+\NewTCBInputListing{\codefilelong}{O{} m}{%
+    codebox,
+    breakable,
+    listing file={#2},
+    listing options={style=code, #1},
+}
+
+% \render[<includegraphics options>]{<file>}: a pre-compiled output.
+% Renders are 360pt wide plus an 8pt border on each side, shown at their
+% natural size: the text in them has the size the students see.
+\newcommand{\render}[2][]{%
+    \par\nopagebreak                      % stays with the code above
+    \noindent\makebox[\linewidth][c]{%
+        \includegraphics[cframe=black!35 0.4pt, #1]{#2}%
+    }\par\medskip
+}
+
+% Where the slides are. Locally the handout sits next to them
+% (../slides). Compiled from the repository root (Overleaf, see
+% README.md), they are in slides/.
+\IfFileExists{../slides/renders/snippet.tex}{%
+    \newcommand{\slidesdir}{../slides}%
+}{%
+    \newcommand{\slidesdir}{slides}%
+}
+
+% Where the generated workshop template is (make in template/), found the
+% same way. It is optional: without it, the appendix shows only the
+% rendered pages.
+\IfFileExists{../template/build/workshop-template/checkpoints/checkpoint-04.tex}{%
+    \newcommand{\templatedir}{../template/build/workshop-template}%
+}{%
+    \newcommand{\templatedir}{template/build/workshop-template}%
+}
+
+% Shortcuts for the two places listings and renders come from:
+%   \slidecode{02-itemize.tex}        slides/listings/02-itemize.tex
+%   \sliderender{02-lists.pdf}        slides/renders/02-lists.pdf
+%   \owncode{...}, \ownrender{...}    the handout's own listings/ and renders/
+\newcommand{\slidecode}[2][]{\codefile[#1]{\slidesdir/listings/#2}}
+\newcommand{\slidecodetitled}[3][]{\codefiletitled[#1]{\slidesdir/listings/#2}{#3}}
+\newcommand{\sliderender}[2][]{\render[#1]{\slidesdir/renders/#2}}
+\newcommand{\owncode}[2][]{\codefile[#1]{listings/#2}}
+\newcommand{\owncodetitled}[3][]{\codefiletitled[#1]{listings/#2}{#3}}
+\newcommand{\ownrender}[2][]{\render[#1]{renders/#2}}
+
+% Inline code, coloured like the code boxes: \code|\section{Results}|
+% Like all verbatim, it does not work inside the argument of another
+% command (\section{...}, \caption{...}, \item[...]); use \texttt there.
+\lstdefinestyle{inline}{%
+    style=code,
+    basicstyle=\ttfamily,
+    numbers=none,
+    breaklines=false,
+}
+\newcommand{\code}{\lstinline[style=inline]}
+
+% A grey note under an example, like the grey lines on the slides.
+\newcommand{\examplenote}[1]{{\small\color{black!60}#1\par}}
+
+% ---------------------------------------------------------------------
+%  5. Bibliography, hyperref, glossary
+% ---------------------------------------------------------------------
+\usepackage[backend=biber, style=numeric]{biblatex}
+\addbibresource{handout.bib}
+
+% hyperref last; the glossary comes after it, as glossaries must.
+\usepackage{hyperref}
+\hypersetup{%
+    hidelinks,
+    pdftitle={LaTeX Workshop: Handout},
+}
 \urlstyle{same}
 
+% \autoref names, capitalised.
+% babel sets the names when the language starts, so they are changed
+% through its hook for british.
+\addto\extrasbritish{%
+    \def\chapterautorefname{Chapter}%
+    \def\sectionautorefname{Section}%
+    \def\subsectionautorefname{Section}%
+    \def\subsubsectionautorefname{Section}%
+    \def\appendixautorefname{Appendix}%
+    \def\equationautorefname{Equation}%
+}
+
+% External links: blue and underlined, so they can be told apart from
+% the internal references (black) on paper as well.
+% The text is usually the address without https://, so a printed copy
+% still says where the link goes.
 \newcommand{\myhref}[2]{%
-    \textcolor{blue}{\skipul{\href{#1}{#2}}}
+    \textcolor{linkcolour}{\skipul{\href{#1}{#2}}}%
 }
 
 % ------------------------------------------------------- acronyms/glossary --
-% \printunsrtglossary needs no makeindex/bib2gls run — entries appear in
-% definition order. One less moving part in the build.
+% \makenoidxglossaries sorts the entries in LaTeX itself, so no extra
+% program (makeglossaries, bib2gls) has to run.
 \IfFileExists{tracklang.sty}{%
-\usepackage[abbreviations]{glossaries-extra}
+    \usepackage[abbreviations, toc]{glossaries-extra}
     \setabbreviationstyle[acronym]{long-short}
-    \makenoidxglossaries%
+    \makenoidxglossaries
     \loadglsentries{appendix/glossary_entries.tex}
     \newcommand{\reportglossary}{\printnoidxglossary[nonumberlist, type=abbreviations, sort=word, title={Glossary}]}
 }{%
-  \newcommand{\reportglossary}{}
+    \newcommand{\reportglossary}{}
 }
 
-% Titlepage
+% ---------------------------------------------------------------------
+%  6. Title page and small helpers
+% ---------------------------------------------------------------------
 \makeatletter
 \renewcommand{\maketitle}{%
+    \hypersetup{pageanchor=false}% the title page has no number of its own
     \begin{titlepage}
         \centering
         \vspace*{0.2\textheight}
@@ -124,6 +350,7 @@
         % \vspace{2em}
         {\large\@date\par}
     \end{titlepage}%
+    \hypersetup{pageanchor=true}%
 }
 % Optional extra field, used like \title
 \newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}

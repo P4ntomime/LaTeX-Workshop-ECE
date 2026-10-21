@@ -1,0 +1,236 @@
+\chapter{Useful Packages}\label{chap:packages-chapter}
+
+This chapter describes packages that most reports need sooner or later,
+starting with the ones the workshop's last part introduced.
+All of them are loaded in the preamble, before \texttt{hyperref} (\autoref{sec:hyperref}).
+\autoref{sec:preamble-to-copy} puts them together into a preamble you can copy.
+
+\section{\texttt{siunitx}}\label{sec:siunitx}
+
+In \autoref{sec:words-in-formulas}, the temperature was typed by hand:
+a thin space, a superscript circle and an upright C.
+The package \texttt{siunitx} does this for you:
+
+\slidecodetitled{99-units-before.tex}{Document, by hand}
+\slidecodetitled{99-siunitx-preamble.tex}{Preamble}
+\slidecodetitled{99-siunitx.tex}{Document, with \texttt{siunitx}}
+\sliderender{99-siunitx.pdf}
+
+The output is the same, but the spacing and the upright units are always right,
+and nobody types an exponent: \code|\per\minute| builds \enquote{\unit{\per\minute}}.
+\code|\qty| works in the text and in math mode.
+
+\begin{center}
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Command} & \textbf{For} \\
+        \midrule
+        \code|\qty{65}{\degreeCelsius}|          & a number with its unit \\
+        \code|\num{1.2e-3}|                       & only a number, formatted \\
+        \code|\unit{\metre\per\second}|          & only a unit \\
+        \code|\qtyrange{50}{65}{\degreeCelsius}| & a range \\
+        \bottomrule
+    \end{tabular}
+\end{center}
+
+\owncode{ch09-siunitx-more.tex}
+\ownrender{ch09-siunitx-more.pdf}
+
+Units are written as words, e.g.\
+\code|\metre|, \code|\second|, \code|\kilogram|, \code|\kelvin|,
+\code|\degreeCelsius|, \code|\litre|, \code|\minute| or \code|\percent|.
+Prefixes such as \code|\milli| or \code|\kilo| go in front,
+and \code|\per| and \code|\squared| combine them.
+The \texttt{siunitx} manual (\code|texdoc siunitx|) lists them all.
+
+Settings for the whole document go into \code|\sisetup{...}| in the preamble.
+\code|per-mode=symbol| writes \enquote{m/s} instead of \enquote{\unit{\metre\per\second}},
+and \code|locale=DE| a decimal comma:
+
+\begin{codeblocktitled}{Preamble}
+\sisetup{per-mode=symbol, locale=DE}
+\end{codeblocktitled}
+
+In tables, the column type \code|S| aligns numbers at the decimal point;
+text in an \code|S| column, such as the header, goes in braces:
+
+\owncode{ch09-scolumn.tex}
+\ownrender{ch09-scolumn.pdf}
+
+Older tutorials write \code|\SI{65}{\celsius}| and \code|\si{...}|.
+That is version~2 of \texttt{siunitx}; it still works, but \code|\qty| and \code|\unit| are the current names.
+
+\section{\texttt{babel}}\label{sec:babel}
+
+\texttt{babel} sets the language of the document:
+the words \hologo{LaTeX} prints itself (\enquote{Contents}, \enquote{Figure}, the date),
+the hyphenation rules, and some typographic conventions.
+
+\owncodetitled{ch09-babel-preamble.tex}{Preamble}
+\owncodetitled{ch09-babel.tex}{Document}
+\ownrender{ch09-babel-render.pdf}
+
+\begin{itemize}
+    \item \texttt{ngerman} for German (the \enquote{n} stands for the spelling reform of 1996),
+        \texttt{nswissgerman} for Swiss German conventions,
+        \texttt{english}, \texttt{british} or \texttt{american} for English.
+    \item \code|\autoref| and \texttt{cleveref} follow the language: \enquote{Abbildung}, \enquote{Tabelle}.
+    \item For a document in several languages, list them all;
+        the last one, or the one given as \code|main=|, is the main language:
+        \code|\usepackage[english, main=ngerman]{babel}|.
+        \code|\foreignlanguage{english}{...}| switches for a few words, so they are hyphenated correctly.
+    \item With German, load \code|\usepackage[T1]{fontenc}| too (\autoref{sec:preamble}), so words with umlauts are hyphenated.
+\end{itemize}
+
+\section{\texttt{geometry}}\label{sec:geometry}
+
+\texttt{geometry} sets the page margins, with one option:
+
+\begin{codeblocktitled}{Preamble}
+\usepackage[margin=2.5cm]{geometry}
+\end{codeblocktitled}
+
+\code|top|, \code|bottom|, \code|left| and \code|right| set single margins:
+
+\begin{codeblocktitled}{Preamble}
+\usepackage[top=2cm, bottom=3cm, left=3cm, right=2cm]{geometry}
+\end{codeblocktitled}
+
+Use it for the margins a supervisor asks for,
+but do not shrink them to fit more text on a page.
+The defaults are wide on purpose: lines longer than about 60 to 80 characters are hard to read.
+
+\section{\texttt{enumitem}}\label{sec:enumitem}
+
+\texttt{enumitem} changes the spacing and the labels of lists.
+Options go in square brackets after \code|\begin{...}|:
+
+\owncodetitled{ch09-enumitem-preamble.tex}{Preamble}
+\owncodetitled{ch09-enumitem.tex}{Document}
+\ownrender{ch09-enumitem.pdf}
+
+\begin{itemize}
+    \item \code|noitemsep| removes the space between the items.
+    \item \code|label=(\alph*)| numbers with (a), (b), (c);
+        \code|\arabic*|, \code|\roman*| and \code|\Alph*| work the same way.
+    \item \code|\setlist{noitemsep}| in the preamble changes every list of the document at once;
+        \code|\setlist[itemize]{...}| only the bullet lists.
+\end{itemize}
+
+\section{\texttt{amssymb}}\label{sec:amssymb}
+
+\texttt{amssymb} adds many math symbols, e.g.\ \code|\mathbb{R}| for the real numbers,
+\code|\leqslant|, \code|\therefore| and \code|\checkmark|:
+
+\owncodetitled{ch09-amssymb-preamble.tex}{Preamble}
+\owncodetitled{ch09-amssymb.tex}{Document}
+\ownrender{ch09-amssymb.pdf}
+
+When Detexify (\autoref{sec:symbols}) answers with a symbol from \texttt{amssymb},
+it names the package next to the command.
+A close relative is \texttt{mathtools}, which extends \texttt{amsmath} (and loads it),
+e.g.\ with \code|\coloneqq| for \enquote{:=} and a starred \texttt{pmatrix*} with aligned columns.
+
+\section{\texttt{tabularx}}\label{sec:tabularx}
+
+\texttt{tabularx} makes a table exactly as wide as you say.
+Its column type \code|X| takes the rest of the width and wraps its text, like \code|p|,
+and it works together with \texttt{booktabs}:
+
+\owncodetitled{ch09-tabularx-preamble.tex}{Preamble}
+\owncodetitled{ch09-tabularx.tex}{Document}
+\ownrender{ch09-tabularx.pdf}
+
+Compared with \code|p{5cm}| (\autoref{sec:column-types}), you do not have to work out the width;
+several \code|X| columns share the rest equally.
+\texttt{tabularx} typesets its content several times to find the widths,
+which is why verbatim text (\code|\verb|) does not work inside it.
+
+\section{\texttt{xcolor}}\label{sec:xcolor}
+
+\texttt{xcolor} colours text:
+
+\owncodetitled{ch09-xcolor-preamble.tex}{Preamble}
+\owncodetitled{ch09-xcolor.tex}{Document}
+\ownrender{ch09-xcolor.pdf}
+
+\code|\textcolor{red}{...}| colours its argument, \code|{\color{red} ...}| everything up to the end of the group.
+Basic colours are predefined (\texttt{red}, \texttt{blue}, \texttt{gray}, \ldots);
+\code|\definecolor| defines your own, e.g.\ from the HTML code of a corporate colour.
+Mixtures are written with an exclamation mark: \code|black!60| is \qty{60}{\percent} black, a grey.
+Use colour sparingly in a report: it is for highlights, not decoration,
+and some readers print in black and white.
+Many packages (TikZ, \texttt{todonotes}) load \texttt{xcolor} themselves.
+
+\section{\texttt{microtype}}\label{sec:microtype}
+
+\begin{codeblocktitled}{Preamble}
+\usepackage{microtype}
+\end{codeblocktitled}
+
+\texttt{microtype} makes small adjustments that are hard to see but easy to feel:
+punctuation at the end of a line sticks out into the margin a little, so the margin looks straighter,
+and letters are stretched or squeezed imperceptibly, so fewer words need to be hyphenated
+and spaces between words are more even.
+There is nothing to configure: load it and forget it.
+It works with \hologo{pdfLaTeX} and \hologo{LuaLaTeX}; this handout uses it.
+
+\section{More packages}\label{sec:more-packages}
+
+\autoref{tab:more-packages} lists more packages you may meet, with what they are for.
+Their documentation is at \texttt{ctan.org/pkg/<name>}, or \code|texdoc <name>|.
+
+\begin{table}[htbp]
+    \centering
+    \caption{More packages, in alphabetical order.}
+    \label{tab:more-packages}
+    \begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+        \toprule
+        \textbf{Package} & \textbf{For} \\
+        \midrule
+        \texttt{acro}, \texttt{glossaries} & lists of abbreviations and glossaries; the first use is written out \\
+        \texttt{csquotes}   & quotation marks for the document's language, \texttt{\textbackslash enquote\{...\}}; \texttt{biblatex} asks for it when \texttt{babel} is loaded \\
+        \texttt{fancyhdr}   & page headers and footers \\
+        \texttt{float}      & the placement \texttt{[H]}, as a last resort (\autoref{sec:floats}) \\
+        \texttt{lipsum}     & \texttt{\textbackslash lipsum[1-3]}: filler text, to test a layout \\
+        \texttt{listings}, \texttt{minted} & program code with syntax highlighting (\texttt{minted} needs \texttt{-shell-escape}) \\
+        \texttt{mathtools}  & extensions of \texttt{amsmath} \\
+        \texttt{mhchem}     & chemical formulas and equations: \texttt{\textbackslash ce\{H2O\}} \\
+        \texttt{pdfpages}   & whole pages of another PDF, e.g.\ a datasheet in the appendix \\
+        \texttt{placeins}   & \texttt{\textbackslash FloatBarrier} (\autoref{sec:floats}) \\
+        \texttt{subcaption} & several figures side by side (\autoref{sec:images}) \\
+        \texttt{tikz}, \texttt{pgfplots} & drawing diagrams and plots in \hologo{LaTeX} itself; powerful, but a subject of its own \\
+        \texttt{todonotes}  & \texttt{\textbackslash todo\{...\}}: notes in the margin while you write \\
+        \texttt{ulem}       & underlines that break across lines (\autoref{sec:styling}) \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\subsection{Fonts}
+
+The default font of \hologo{LaTeX} is Computer Modern, the font of all the example outputs in this handout.
+To use a different one, load a font package, e.g.\ Times for text and math, as in this handout:
+
+\begin{codeblocktitled}{Preamble}
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+\end{codeblocktitled}
+
+Choose a font that comes with a matching math font, so formulas and text fit together;
+\texttt{newtx} (Times), \texttt{libertinus} and \texttt{lmodern} (Latin Modern, the default font in an outline version) are safe choices.
+\myhref{https://tug.org/FontCatalogue/}{tug.org/FontCatalogue} shows many more.
+
+\subsection{Packages you no longer need}
+
+Older templates load \code|\usepackage[utf8]{inputenc}|.
+Since 2018, \hologo{LaTeX} reads UTF-8 by default, so the line does nothing and can be deleted.
+The same is true of \texttt{textcomp}.
+Packages such as \texttt{times}, \texttt{txfonts} or \texttt{epsfig} are outdated;
+their manuals name the replacement.
+
+\section{A preamble to copy}\label{sec:preamble-to-copy}
+
+The packages of this chapter, in an order that works.
+Delete what you do not need; keep \texttt{hyperref} and \texttt{cleveref} at the end.
+
+\owncode{ch09-preamble.tex}

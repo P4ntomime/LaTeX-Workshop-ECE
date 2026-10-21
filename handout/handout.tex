@@ -1,62 +1,63 @@
-\documentclass[a4paper, 11pt]{extarticle}
+\documentclass[a4paper, 11pt]{report}
 
 \input{preamble.tex}
 
-\title{\LaTeX-Workshop}
+% The repository with the slides, the template and this handout.
+\newcommand{\repourl}{https://github.com/P4ntomime/LaTeX-Workshop-ECE}
+\newcommand{\repodisplay}{github.com/P4ntomime/LaTeX-Workshop-ECE}
+
+\title{\hologo{LaTeX} Workshop}
 \subtitle{Handout}
 
 \begin{document}
 
 \maketitle
 
-\newpage
+% Back of the title page: attribution and licence.
+% TODO before publishing: fill in the original author and link,
+% as on the slides' Attribution and Licence frame.
+\vspace*{\fill}
+\thispagestyle{empty}
+{\small
+\textbf{\hologo{LaTeX} Workshop: Handout}
 
+Based on: \textcolor{red}{TODO: original author}, \textcolor{red}{TODO: link}, CC~BY-SA~4.0.
+
+This revision: Laurin Heitzer, ECE, \the\year, CC~BY-SA~4.0.
+You may share and adapt it, also commercially, as long as you give credit and share your version under the same licence
+(\myhref{https://creativecommons.org/licenses/by-sa/4.0/}{creativecommons.org/licenses/by-sa/4.0}).
+
+Example document and figure: written for this workshop, synthetic data.
+
+Slides, template and the source of this handout:
+
+\myhref{\repourl}{\repodisplay}
+\par}
+\clearpage
+
+\setcounter{tocdepth}{1}       % chapters and sections
 \tableofcontents
 
-\newpage
+\input{chapters/00-about.tex}
+\input{chapters/01-introduction.tex}
+\input{chapters/02-setup.tex}
+\input{chapters/03-skeleton.tex}
+\input{chapters/04-text.tex}
+\input{chapters/05-math.tex}
+\input{chapters/06-tables-figures.tex}
+\input{chapters/07-references.tex}
+\input{chapters/08-errors.tex}
+\input{chapters/09-packages.tex}
+\input{chapters/10-larger-documents.tex}
+\input{chapters/11-resources.tex}
 
-% PART I -- Getting Started
-%   Why LaTeX?
-%   Short history of LaTeX
-%   Setup
-%   Syntax basics
-%   Minimal Document
-\include{parts/01_getting-started/_getting-started}
+\appendix
 
-% PART II -- Text
-%   Document Structuring
-%   Text and Typography
-%   Paragraphs, line breaks
-%   Lists
-\include{parts/02_text/_text}
+\input{chapters/A-workshop-document.tex}
+\input{chapters/B-cheat-sheet.tex}
 
-% PART III -- Mathematics
-%   Math mode
-%   Building Expressions
-%   amsmath
-%   Dos, don'ts and common mistakes
-\include{parts/03_mathematics/_mathematics}
+\printbibliography[heading=bibintoc]
 
-% PART IV -- Tables, figures & references
-%   Tables
-%   Figures
-%   Floats & captions
-%   Cross References
-%   Bibliography
-\include{parts/04_tables-figures-refs/_tables-figures-refs}
- 
-% PART V -- Beyond the Basics
-%   Preamble
-%   Custom Commands
-%   Larger Documents
-%   Infos, Warnings and Errors
-%   Useful packages and where to find more
-%
-\include{parts/05_beyond-basics/_beyond-basics}
-
-% APPENDIX
-%   Example from the Workshop
-%   Cheat sheet
-\include{appendix/_appendix}
+\reportglossary
 
 \end{document}

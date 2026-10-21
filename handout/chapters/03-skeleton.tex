@@ -1,0 +1,339 @@
+\chapter{The Skeleton}\label{chap:skeleton}
+
+This chapter covers the first block of the workshop:
+the two building blocks of every \hologo{LaTeX} source file, commands and environments,
+the characters that have a special meaning,
+and the smallest complete document, with a title, sections, a table of contents and some styled text.
+
+\section{Commands}\label{sec:commands}
+
+A command tells \hologo{LaTeX} to do something: start a section, print the date, set a word in bold.
+Every command has the same shape (\autoref{fig:command-anatomy}).
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/command-anatomy.tex}
+    \caption{The parts of a command.}
+    \label{fig:command-anatomy}
+\end{figure}
+
+\begin{description}
+    \item[Command delimiter]
+        A command starts with a backslash.
+    \item[Command name]
+        The name consists of letters only, and upper and lower case are different
+        (\code|\Delta| and \code|\delta| are two different commands).
+        The first character that is not a letter ends the name.
+    \item[Optional argument]
+        Settings in square brackets, separated by commas.
+        They can be left out, together with the brackets.
+        If there are optional arguments, they come before the mandatory ones.
+    \item[Mandatory argument]
+        What the command works on, in curly braces.
+        Some commands take two or more, each in its own pair of braces,
+        e.g.\ \code|\frac{a}{b}| for a fraction (\autoref{sec:math-commands}).
+\end{description}
+
+Some commands have no arguments at all:
+\code|\today| prints the current date, \code|\LaTeX| the logo.
+Some come in a second form with a star, which usually means \enquote{the same, but without a number}:
+\code|\section*{...}| is a section heading without a number (\autoref{sec:sections}).
+
+Because a non-letter ends the name, a command without arguments swallows the space that follows it:
+for \hologo{TeX}, that space only marks the end of the name.
+An empty pair of braces after the command keeps the space:
+
+\owncode{ch03-latex-space.tex}
+\ownrender{ch03-latex-space.pdf}
+
+For the same reason, \code|\LaTeX2e| does not print \enquote{\hologo{LaTeXe}}:
+the name ends at the \texttt{2}, and \enquote{2e} is printed as normal text after the logo.
+
+\section{Environments}\label{sec:environments}
+
+A command acts at one point; an environment acts on everything between its beginning and its end:
+
+\begin{codeblock}
+\begin{center}
+    Everything in here is centred.
+\end{center}
+\end{codeblock}
+
+The name appears twice, after \code|\begin| and after \code|\end|, and both must be the same.
+Environments can be nested, but like brackets, the inner one must end before the outer one:
+\code|\begin{a} \begin{b} ... \end{b} \end{a}|.
+A missing or misspelled \code|\end| is the error beginners meet most often;
+\hologo{LaTeX} then complains about the \code|\begin| that was never closed (\autoref{sec:common-errors}).
+
+Environments can take arguments too, written after \code|\begin{...}|,
+e.g.\ the column types of a table, \code|\begin{tabular}{lr}| (\autoref{sec:tables}).
+The indentation of the content is not required, but it makes the structure visible in the source.
+
+\section{Reserved characters}\label{sec:reserved}
+
+A few characters have a special meaning in the source file and are not printed as they are.
+\autoref{tab:reserved} lists them, together with what to type to get the character itself.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Reserved characters.}
+    \label{tab:reserved}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}>{\ttfamily}c l l@{}}
+        \toprule
+        \textnormal{\textbf{Character}} & \textbf{Meaning} & \textbf{To print it} \\
+        \midrule
+        \%                  & starts a comment             & \code|\%| \\
+        \{ \}               & grouping, arguments          & \code|\{| \code|\}| \\
+        \$                  & math mode on and off         & \code|\$| \\
+        \&                  & table column separator       & \code|\&| \\
+        \#                  & argument placeholder         & \code|\#| \\
+        \_                  & subscript (math mode)        & \code|\_| \\
+        \^{}                & superscript (math mode)      & \code|\^{}| \\
+        \textasciitilde     & non-breaking space           & \code|\textasciitilde| \\
+        \textbackslash      & starts a command             & \code|\textbackslash| \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+A few things to know about them:
+
+\begin{itemize}
+    \item A \code|%| turns the rest of the line into a comment, which \hologo{LaTeX} ignores.
+        \enquote{100\% of the samples}, typed without the backslash, loses everything after the 100.
+    \item \code|\\| is not a printed backslash, it is a line break (\autoref{sec:spaces}).
+        The backslash itself is \code|\textbackslash|.
+    \item \code|\^{}| and \code|\~{}| are accents that sit on the next character,
+        so on their own they need the empty braces.
+        The tilde is easier to get with \code|\textasciitilde|.
+    \item \code|_| and \code|^| outside of math mode give the error \texttt{Missing \$ inserted} (\autoref{sec:math-mode}).
+        This happens most often with file names and variable names from code:
+        \code|\texttt{cooling_01.csv}| fails, \code|\texttt{cooling\_01.csv}| works.
+    \item The tilde is used on purpose as a space that never breaks a line, e.g.\ \code|Section~2| (\autoref{sec:spaces}).
+\end{itemize}
+
+\section{A minimal document}\label{sec:minimal}
+
+The smallest complete \hologo{LaTeX} document has three lines that matter:
+
+\slidecode{01-minimal-1.tex}
+
+\begin{description}
+    \item[\texttt{\textbackslash documentclass}]
+        The first line of every document.
+        It says what kind of document this is (\autoref{sec:document-classes}).
+    \item[\texttt{\textbackslash begin\{document\}} and \texttt{\textbackslash end\{document\}}]
+        Everything between them is the content of the document.
+        Anything after \code|\end{document}| is ignored.
+\end{description}
+
+The space between \code|\documentclass| and \code|\begin{document}| is the preamble.
+It holds the settings for the whole document, and it is empty for now;
+\autoref{sec:preamble} comes back to it.
+
+A title block needs four more commands.
+\code|\title|, \code|\author| and \code|\date| only store the information,
+and \code|\maketitle| prints it at the place where it stands:
+
+\slidecode{01-minimal-2.tex}
+
+\code|\date{\today}| prints the date of the day the document was compiled.
+Leave out \code|\date| altogether and you get the same;
+write \code|\date{}| for no date at all.
+Several authors are separated with \code|\and|: \code|\author{Ada Lovelace \and Alan Turing}|.
+
+With a few sections, the document has its final shape:
+
+\slidecode{01-minimal-3.tex}
+% trim = left bottom right top, in bp: title block and sections of page 1
+\ownrender[trim=110 462 110 150, clip]{01-minimal-3.pdf}
+
+\section{Document classes}\label{sec:document-classes}
+
+The document class decides what a document looks like:
+fonts and sizes of the headings, the margins, which kinds of headings exist.
+\autoref{tab:classes} lists the common ones.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Common document classes.}
+    \label{tab:classes}
+    \begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+        \toprule
+        \textbf{Class} & \textbf{Use} \\
+        \midrule
+        \texttt{article}  & Short documents: lab reports, papers, exercise sheets. No chapters. \\
+        \texttt{report}   & Longer documents with chapters, e.g.\ a thesis. Each chapter starts on a new page. \\
+        \texttt{book}     & Like \texttt{report}, but printed on both sides of the page. \\
+        \texttt{scrartcl}, \texttt{scrreprt}, \texttt{scrbook} & The same three from the KOMA-Script bundle: sans-serif headings, page layout suited to A4, many settings. \\
+        \texttt{beamer}   & Presentations, e.g.\ the workshop's slides. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+The optional argument holds the class options.
+The ones you will need most are listed in \autoref{tab:class-options}.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Common class options.}
+    \label{tab:class-options}
+    \begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+        \toprule
+        \textbf{Option} & \textbf{Effect} \\
+        \midrule
+        \texttt{a4paper}          & A4 paper. Without it, the standard classes use the American letter size. \\
+        \texttt{10pt}, \texttt{11pt}, \texttt{12pt} & Size of the normal text; \texttt{10pt} is the default. \\
+        \texttt{twoside}          & Different left and right pages, for printing on both sides. \\
+        \texttt{twocolumn}        & The text in two columns. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+The workshop's documents all start with this line:
+
+\begin{codeblock}
+\documentclass[a4paper, 11pt]{article}
+\end{codeblock}
+
+This handout uses \code|report|, because it has chapters.
+
+\section{Sections and the table of contents}\label{sec:sections}
+
+A document is structured with headings of different levels.
+\hologo{LaTeX} numbers them for you:
+
+\slidecode{01-sections.tex}
+% trim = left bottom right top, in bp: the heading area of page 1
+\sliderender[trim=110 606 110 118, clip]{01-sections.pdf}
+
+Move a section, add one or delete one, and the numbers follow at the next compilation.
+\autoref{tab:sectioning} lists all levels.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Sectioning commands, from the top level down.}
+    \label{tab:sectioning}
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Command} & \textbf{Available in} \\
+        \midrule
+        \code|\part{...}|          & all classes \\
+        \code|\chapter{...}|       & \texttt{report}, \texttt{book} (not \texttt{article}) \\
+        \code|\section{...}|       & all classes \\
+        \code|\subsection{...}|    & all classes \\
+        \code|\subsubsection{...}| & all classes, not numbered in \texttt{report} and \texttt{book} \\
+        \code|\paragraph{...}|     & all classes, a heading in the text, not numbered \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+A few details:
+
+\begin{itemize}
+    \item \code|\section*{...}| gives a heading without a number, which does not appear in the table of contents.
+    \item \code|\section[Short]{A long title}| puts the short title into the table of contents
+        (and into the page header, if the class has one).
+    \item To refer to a section (\enquote{see Section~2}), give it a label on the same line:
+        \code|\section{Theory}\label{sec:theory}| (\autoref{sec:labels}).
+\end{itemize}
+
+\code|\tableofcontents| prints a table of contents at the place where it stands,
+built from the sectioning commands:
+
+\slidecode{01-toc.tex}
+% trim = left bottom right top, in bp: the contents and the headings of page 1
+\sliderender[trim=110 465 110 118, clip]{01-toc.pdf}
+
+Nobody typed that list, and it stays right when sections are renamed or reordered.
+It needs two compilations, though:
+the first one writes the headings into a file (\texttt{.toc}), the second one reads them (\autoref{sec:compiling}).
+Overleaf and \texttt{latexmk} take care of that.
+
+\section{Text styling}\label{sec:styling}
+
+\autoref{tab:styling} lists the commands that change the look of a few words.
+They all have the same shape: the text to change is the mandatory argument.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Text styling commands.}
+    \label{tab:styling}
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Command} & \textbf{Result} \\
+        \midrule
+        \code|\textbf{...}|      & bold \\
+        \code|\textit{...}|      & italic \\
+        \code|\textsl{...}|      & slanted (a tilted upright font, rarely used) \\
+        \code|\textsc{...}|      & small capitals \\
+        \code|\texttt{...}|      & typewriter: file names, commands, code \\
+        \code|\textsf{...}|      & sans-serif \\
+        \code|\underline{...}|   & underlined \\
+        \code|\textnormal{...}|  & back to the normal font \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\owncode{ch03-styling-all.tex}
+\ownrender{ch03-styling-all.pdf}
+
+In a real sentence:
+
+\slidecode{01-styling.tex}
+\sliderender{01-styling.pdf}
+
+Use them sparingly.
+In a report, bold is mostly for headings and table headers,
+and \code|\texttt| for anything the reader would type: file names, commands, code.
+
+\subsection{Underlined text}
+
+\code|\underline| puts its whole argument into one box, which cannot be broken across lines;
+a long underlined phrase runs into the margin.
+The package \texttt{ulem} (\autoref{sec:packages} explains packages) has \code|\uline|, which can:
+
+\owncodetitled{ch03-ulem-preamble.tex}{Preamble}
+\owncodetitled{ch03-ulem.tex}{Document}
+\ownrender{ch03-ulem.pdf}
+
+The option \texttt{normalem} is important:
+without it, \texttt{ulem} turns every \code|\emph| in the document into an underline.
+
+\subsection{Font sizes}
+
+The size of the text is changed with a switch:
+it applies to everything after it, up to the end of the current group.
+A group is a pair of braces, or an environment.
+
+\owncode{ch03-sizes.tex}
+\ownrender{ch03-sizes.pdf}
+
+From small to large, the sizes are
+\code|\tiny|, \code|\scriptsize|, \code|\footnotesize|, \code|\small|, \code|\normalsize|,
+\code|\large|, \code|\Large|, \code|\LARGE|, \code|\huge| and \code|\Huge|.
+They are relative to the size set in the class options (\texttt{11pt}).
+In a report you rarely need them: headings, captions and footnotes already have the right size.
+
+The styles have such switches too, e.g.\ \code|\bfseries| for bold or \code|\itshape| for italic,
+written as \code|{\bfseries ...}|.
+They are what you use inside your own commands;
+in the text, the \code|\text...| commands are easier to read.
+
+\section{Emphasis}\label{sec:emph}
+
+\code|\emph| marks text as emphasised compared to what is around it.
+In upright text that means italic; inside italic text, it switches back to upright:
+
+\slidecode{01-emph.tex}
+\sliderender{01-emph.pdf}
+
+The difference to \code|\textit| is that \code|\emph| says what the text \emph{is}, not what it should look like.
+How emphasis looks is decided once, for the whole document;
+\autoref{sec:emph-preamble} shows how to change it, e.g.\ to bold.
+
+\section*{Summary}
+
+The skeleton of every document, with the commands of this chapter:
+
+\slidecode{01-summary.tex}

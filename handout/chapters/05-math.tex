@@ -1,0 +1,435 @@
+\chapter{Math}\label{chap:math}
+
+This chapter covers the third block of the workshop:
+math mode, sub- and superscripts, the most common commands,
+numbered equations and equations over several lines.
+
+Almost everything here works with \hologo{LaTeX} alone,
+but a few of the most useful parts come from the package \texttt{amsmath}:
+the environments \texttt{align}, \texttt{gather} and \texttt{cases},
+\code|\text|, \code|\eqref|, \code|\operatorname| and matrices.
+It is maintained by the \hologo{LaTeX} Project and loaded by nearly every document that contains math,
+so load it as soon as your document has a formula:
+
+\begin{codeblocktitled}{Preamble}
+\usepackage{amsmath}
+\end{codeblocktitled}
+
+All examples in this chapter assume it is loaded.
+
+\section{Math mode}\label{sec:math-mode}
+
+\hologo{LaTeX} sets math in a mode of its own, with its own rules.
+Even a single symbol, such as a variable in the text, belongs in math mode.
+What happens outside of it shows a sentence with a file name:
+
+\slidecode{03-warmup.tex}
+\sliderender{03-warmup.pdf}
+
+The compilation stops with the error \texttt{Missing \$ inserted}.
+The underscore is the subscript character (\autoref{sec:reserved}).
+It only exists in math mode, so \hologo{LaTeX} switches to math mode on its own:
+the \texttt{0} becomes a subscript,
+and everything up to the end of the paragraph is set in italic and loses its spaces.
+In text, the underscore needs a backslash:
+
+\slidecode{03-warmup-fix.tex}
+\sliderender{03-warmup-fix.pdf}
+
+\subsection{Inline and display}
+
+There are two ways to set math (\autoref{tab:math-modes}).
+Inline math sits inside a sentence;
+display math stands on its own line, centred.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Switching math mode on and off.}
+    \label{tab:math-modes}
+    \begin{tabular}{@{}lll@{}}
+        \toprule
+                              & \textbf{Inline}  & \textbf{Display} \\
+        \midrule
+        \hologo{LaTeX}        & \code|\(...\)|   & \code|\[...\]| \\
+        Plain \hologo{TeX}    & \code|$...$|     & \code|$$...$$| \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+For inline math, \code|$...$| does the same as \code|\(...\)|, and is what almost everyone writes, the template included.
+\code|\(...\)| has one advantage: opening and closing are different characters,
+so a missing one gives a clearer error message.
+
+\begin{codeblock}
+The constant $\tau$ sets the pace, and \(T_0\) is where we start.
+\end{codeblock}
+
+\subsection{Why not \texttt{\$\$...\$\$}}
+
+For display math, use \code|\[...\]|, not \code|$$...$$|.
+The double dollar is syntax of plain \hologo{TeX}, the system underneath \hologo{LaTeX},
+and \hologo{LaTeX} never adapted it:
+
+\begin{itemize}
+    \item The vertical space around the formula can come out wrong,
+        e.g.\ an extra empty line above it after a paragraph break.
+    \item The class option \texttt{fleqn}, which sets all equations flush left, ignores it.
+    \item \texttt{amsmath} features such as \code|\tag| do not work inside it.
+    \item A missing \code|\]| gives a clear error.
+        A missing \code|$$| silently flips the rest of the text into or out of math mode,
+        and the error, if any, appears much later.
+\end{itemize}
+
+You will see \code|$$...$$| on websites, in Markdown and in Jupyter notebooks.
+It works there because those are not \hologo{LaTeX}.
+
+\section{Sub- and superscripts}\label{sec:scripts}
+
+\code|_| sets a subscript, \code|^| a superscript:
+
+\slidecode{03-scripts.tex}
+\sliderender{03-scripts.pdf}
+
+Both only take the next character.
+A longer sub- or superscript needs braces, otherwise only its first character is raised:
+
+\slidecode{03-scripts-wrong.tex}
+\sliderender{03-scripts-wrong.pdf}
+
+\slidecode{03-scripts-right.tex}
+\sliderender{03-scripts-right.pdf}
+
+The braces group, exactly like the braces around the argument of a command.
+Sub- and superscripts can be combined in either order (\code|T_0^2| and \code|T^2_0| give the same),
+and nested: \code|x^{2^n}|.
+A prime is typed as an apostrophe: \code|f'(x)|.
+
+\section{Upright labels}\label{sec:upright}
+
+In math mode, every letter is a variable, and variables are set in italic.
+A subscript that is a word or an abbreviation is not a variable but a label,
+and labels are set upright:
+
+\slidecode{03-labels-wrong.tex}
+\sliderender{03-labels-wrong.pdf}
+
+\slidecode{03-labels-right.tex}
+\sliderender{03-labels-right.pdf}
+
+Without \code|\mathrm|, \enquote{env} is set as the product of three variables $e$, $n$ and $v$:
+italic, with the spacing of three separate symbols.
+This is the mistake beginners make most often in a report,
+and readers who know the convention notice it immediately.
+It is not about this one symbol:
+every label gets \code|\mathrm|, e.g.\
+\code|V_{\mathrm{out}}|, \code|t_{\mathrm{max}}|, \code|m_{\mathrm{water}}|.
+
+The same rule makes the mathematical constants and operators upright
+(as the international standard ISO~80000-2 recommends \parencite{iso80000-2}):
+Euler's number \code|\mathrm{e}|,
+the \enquote{d} of a derivative or an integral \code|\mathrm{d}x|,
+and the imaginary unit \code|\mathrm{i}|.
+Many textbooks set them italic; what matters is being consistent within a document.
+
+\subsection{\texttt{\textbackslash mathrm} or \texttt{\textbackslash text}}
+
+\code|\text{...}| from \texttt{amsmath} also sets upright letters,
+but it takes the font of the surrounding text, including italic or bold.
+So \code|\mathrm| is the right choice for labels, which must always be upright,
+and \code|\text| for real words inside a formula (\autoref{sec:words-in-formulas}):
+
+\owncode{ch05-text-mathrm.tex}
+\ownrender{ch05-text-mathrm.pdf}
+
+\section{Common commands}\label{sec:math-commands}
+
+\autoref{tab:math-basics} lists the commands needed most often.
+None of them needs a package apart from those marked with \texttt{amsmath}.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Common math commands.}
+    \label{tab:math-basics}
+    \renewcommand{\arraystretch}{1.35}
+    \begin{tabular}{@{}lll@{}}
+        \toprule
+        \textbf{Command} & \textbf{Output} & \textbf{Note} \\
+        \midrule
+        \code|\frac{a}{b}|          & $\displaystyle\frac{a}{b}$       & numerator, denominator \\
+        \code|\dfrac{a}{b}|, \code|\tfrac{a}{b}| & $\dfrac{a}{b}$, $\tfrac{a}{b}$ & large, small (\texttt{amsmath}) \\
+        \code|\sqrt{x}|, \code|\sqrt[3]{x}| & $\sqrt{x}$, $\sqrt[3]{x}$ & roots \\
+        \code|a \cdot b|            & $a \cdot b$                      & product \\
+        \code|a \times b|           & $a \times b$                     & cross product, dimensions \\
+        \code|\pm|, \code|\mp|      & $\pm$, $\mp$                     & plus or minus \\
+        \code|\leq|, \code|\geq|, \code|\neq| & $\leq$, $\geq$, $\neq$ & comparisons \\
+        \code|\approx|, \code|\equiv|, \code|\propto| & $\approx$, $\equiv$, $\propto$ & approx., identical, proportional \\
+        \code|\to|, \code|\infty|   & $\to$, $\infty$                  & arrow (limits), infinity \\
+        \code|\partial|, \code|\nabla| & $\partial$, $\nabla$          & partial derivative, nabla \\
+        \code|\hat{x}|, \code|\bar{x}|, \code|\vec{x}| & $\hat{x}$, $\bar{x}$, $\vec{x}$ & accents \\
+        \code|\ldots|, \code|\cdots| & $\ldots$, $\cdots$              & dots on the line, centred dots \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Greek letters}
+
+A Greek letter is its name with a backslash, \code|\alpha|, \code|\tau|.
+The capital letter of the name gives the capital letter: \code|\Delta| ($\Delta$), \code|\delta| ($\delta$).
+Capitals that look like Latin letters do not exist as commands;
+there is no \code|\Alpha|, as it would look like A.
+\autoref{tab:greek} lists them all.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Greek letters. Capitals only where they differ from Latin letters.}
+    \label{tab:greek}
+    \renewcommand{\arraystretch}{1.15}
+    \small
+    \begin{tabular}{@{}ll@{\quad}ll@{\quad}ll@{\quad}ll@{}}
+        \toprule
+        $\alpha$   & \code|\alpha|   & $\iota$   & \code|\iota|   & $\rho$     & \code|\rho|     & $\Gamma$   & \code|\Gamma| \\
+        $\beta$    & \code|\beta|    & $\kappa$  & \code|\kappa|  & $\varrho$  & \code|\varrho|  & $\Delta$   & \code|\Delta| \\
+        $\gamma$   & \code|\gamma|   & $\lambda$ & \code|\lambda| & $\sigma$   & \code|\sigma|   & $\Theta$   & \code|\Theta| \\
+        $\delta$   & \code|\delta|   & $\mu$     & \code|\mu|     & $\tau$     & \code|\tau|     & $\Lambda$  & \code|\Lambda| \\
+        $\epsilon$ & \code|\epsilon| & $\nu$     & \code|\nu|     & $\upsilon$ & \code|\upsilon| & $\Xi$      & \code|\Xi| \\
+        $\varepsilon$ & \code|\varepsilon| & $\xi$ & \code|\xi|  & $\phi$     & \code|\phi|     & $\Pi$      & \code|\Pi| \\
+        $\zeta$    & \code|\zeta|    & $o$       & \code|o|       & $\varphi$  & \code|\varphi|  & $\Sigma$   & \code|\Sigma| \\
+        $\eta$     & \code|\eta|     & $\pi$     & \code|\pi|     & $\chi$     & \code|\chi|     & $\Phi$     & \code|\Phi| \\
+        $\theta$   & \code|\theta|   & $\varpi$  & \code|\varpi|  & $\psi$     & \code|\psi|     & $\Psi$     & \code|\Psi| \\
+        $\vartheta$ & \code|\vartheta| &        &                & $\omega$   & \code|\omega|   & $\Omega$   & \code|\Omega| \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The \code|\var...| forms are alternative shapes.
+$\epsilon$ and $\varepsilon$, $\phi$ and $\varphi$ are both common;
+pick one and use it throughout.
+
+\subsection{Sums, integrals and limits}
+
+Sums, products, integrals and limits take their bounds as sub- and superscripts.
+In display math, the bounds of sums and limits go above and below:
+
+\owncode{ch05-bigops.tex}
+\ownrender{ch05-bigops.pdf}
+
+\code|\,| adds a thin space, here between the function and the $\mathrm{d}t$ of the integral.
+Other spaces in math mode are \code|\;| (a little wider), \code|\quad| and \code|\qquad|.
+Normal spaces in the source have no effect in math mode at all.
+
+\subsection{Brackets}
+
+Plain brackets keep their size, even around a tall fraction.
+\code|\left| and \code|\right| size them to the content, and they always come in pairs.
+\code|\left.| is an invisible bracket, for a bracket on one side only.
+\code|\bigl(| and \code|\bigr)| (and \code|\Bigl|, \code|\biggl|, \code|\Biggl|) give a fixed larger size:
+
+\owncode{ch05-brackets.tex}
+\ownrender{ch05-brackets.pdf}
+
+Round and square brackets are typed directly.
+Curly braces need a backslash, \code|\{| and \code|\}|,
+and the vertical bars of an absolute value are \code|\lvert| and \code|\rvert|.
+
+\section{Function names}\label{sec:operators}
+
+Function names such as $\sin$ or $\ln$ are set upright,
+and \hologo{LaTeX} adds the right space after them.
+Typed as plain letters, \code|sin| would be three italic variables.
+A fixed set of names is predefined:
+
+\begin{quote}
+    \code|\sin| \code|\cos| \code|\tan| \code|\cot| \code|\sec| \code|\csc|
+    \code|\arcsin| \code|\arccos| \code|\arctan|
+    \code|\sinh| \code|\cosh| \code|\tanh| \code|\coth|
+    \code|\exp| \code|\ln| \code|\log| \code|\lg|
+    \code|\lim| \code|\liminf| \code|\limsup| \code|\max| \code|\min| \code|\sup| \code|\inf|
+    \code|\det| \code|\dim| \code|\ker| \code|\deg| \code|\arg| \code|\gcd| \code|\Pr| \code|\hom|
+\end{quote}
+
+Everything else, e.g.\ $\operatorname{sgn}$, $\operatorname{erf}$ or $\operatorname{Tr}$, has to be made.
+For a single use, \code|\operatorname{sgn}| sets the name upright with the right spacing.
+For a name you use often, declare it once in the preamble with \code|\DeclareMathOperator|;
+afterwards \code|\sgn| works like \code|\sin|.
+Both come from \texttt{amsmath}.
+
+\owncodetitled{ch05-operators-preamble.tex}{Preamble}
+\owncodetitled{ch05-operators.tex}{Document}
+\ownrender{ch05-operators.pdf}
+
+For an operator with limits below it, like $\lim$, use the starred form:
+
+\begin{codeblocktitled}{Preamble}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\end{codeblocktitled}
+
+\section{Equations}\label{sec:equations}
+
+\subsection{Inline and display}
+
+The same formula looks different inline and in display:
+
+\slidecode{03-inline-display.tex}
+\sliderender{03-inline-display.pdf}
+
+Inline math keeps the line spacing of the paragraph even, so tall things are squeezed:
+fractions get small, the bounds of a sum move to its side.
+That is not a bug.
+If an inline formula looks cramped, give it its own line.
+
+\subsection{Numbered equations}
+
+\code|\[...\]| gives an unnumbered equation.
+For a number, use the environment \texttt{equation}; only the first and last line change:
+
+\slidecode{03-equation-1.tex}
+\sliderender{03-equation-1.pdf}
+
+\slidecode{03-equation-2.tex}
+\sliderender{03-equation-2.pdf}
+
+The numbers are assigned automatically: add an equation above, and everything renumbers.
+\code|equation*| (from \texttt{amsmath}) is the same as \code|\[...\]|.
+To refer to an equation, give it a label (\autoref{sec:labels}) and write \code|Equation~\eqref{eq:cooling}|.
+
+An equation is part of a sentence, so it ends with a comma or a full stop when the sentence does,
+as in the template.
+And no empty line before a displayed equation:
+it would end the paragraph, and the equation would start a new one with extra space above.
+
+\section{Alignment and other environments}\label{sec:align}
+
+\subsection{\texttt{align}}
+
+Several equations whose \enquote{=} line up go in an \texttt{align} environment:
+
+\slidecode{03-align.tex}
+\sliderender{03-align.pdf}
+
+\begin{itemize}
+    \item \code|&| marks the point to align at, in every line, usually right before the \code|=|.
+    \item \code|\\| ends a line (one of the places where it belongs, \autoref{sec:spaces}).
+    \item Every line gets a number; \code|\notag| leaves it out for one line.
+\end{itemize}
+
+A derivation is the typical use, here the cooling law solved for the time
+(the workshop's exercise, numbered (2) because it follows the cooling law in the template):
+
+\slidecode[firstline=5, firstnumber=1]{03-derivation.tex}
+\sliderender{03-derivation.pdf}
+
+\subsection{Other environments}
+
+\texttt{align} with \code|\notag| covers most needs.
+\autoref{tab:math-environments} lists the others; all of them come from \texttt{amsmath}.
+Every environment that numbers its lines has a starred form without numbers,
+e.g.\ \texttt{align*}, \texttt{gather*}, \texttt{multline*}.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Environments for display math.}
+    \label{tab:math-environments}
+    % A plain tabular, not tabularx: \code (verbatim) cannot be used in tabularx.
+    \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.6\linewidth}@{}}
+        \toprule
+        \textbf{Environment} & \textbf{Use} \\
+        \midrule
+        \texttt{equation}  & One equation, numbered. \\
+        \texttt{align}     & Several equations, aligned at \code|&|, each numbered. \\
+        \texttt{gather}    & Several equations, each centred, not aligned. \\
+        \texttt{multline}  & One equation too long for one line: the first line left, the last line right, one number. \\
+        \texttt{split}     & Inside \texttt{equation}: one equation over several aligned lines, one number. \\
+        \texttt{aligned}   & Inside another display: an aligned block that can be combined with other things, e.g.\ a brace. \\
+        \texttt{cases}     & Case distinctions with a brace on the left. \\
+        \texttt{pmatrix} & Matrix in round brackets; \texttt{bmatrix} square, \texttt{vmatrix} straight. \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\texttt{gather} centres each line:
+
+\owncode{ch05-gather.tex}
+\ownrender{ch05-gather.pdf}
+
+\texttt{multline} breaks one long equation; the number goes on the last line:
+
+\owncode{ch05-multline.tex}
+\ownrender{ch05-multline.pdf}
+
+\texttt{split} aligns the lines of one equation, which gets a single number:
+
+\owncode{ch05-split.tex}
+\ownrender{ch05-split.pdf}
+
+\texttt{aligned} is a block that can be put next to other things, e.g.\ a brace:
+
+\owncode{ch05-aligned.tex}
+\ownrender{ch05-aligned.pdf}
+
+Matrices separate columns with \code|&| and rows with \code|\\|, like tables:
+
+\owncode{ch05-matrix.tex}
+\ownrender{ch05-matrix.pdf}
+
+\subsection{Words inside formulas}\label{sec:words-in-formulas}
+
+A word inside a formula goes in \code|\text{...}|.
+Without it, \enquote{otherwise} would be nine italic variables without spaces.
+\texttt{cases} shows it, and uses \code|&| and \code|\\| for the same job as in \texttt{align}:
+
+\slidecode{03-cases.tex}
+\sliderender{03-cases.pdf}
+
+\texttt{cases} only works in math mode, hence the \code|\[...\]| around it.
+Spaces inside \code|\text| are kept, so \code|\text{if }| keeps its space before the formula.
+The temperature $65\,^{\circ}\mathrm{C}$ is typed by hand here;
+the package \texttt{siunitx} does that better (\autoref{sec:siunitx}).
+
+\section{Dos and don'ts}\label{sec:math-dos}
+
+\autoref{tab:math-dos} collects the mistakes that make a formula look careless.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Common mistakes in math mode.}
+    \label{tab:math-dos}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}ll>{\raggedright\arraybackslash}p{.3\linewidth}@{}}
+        \toprule
+        \textbf{Don't}     & \textbf{Do}                              & \textbf{Why} \\
+        \midrule
+        \code|a * b|       & \code|a \cdot b|                         & \code|*| is the convolution \\
+        \code|x^10|        & \code|x^{10}|                            & more than one character needs braces \\
+        \code|V_{out}|     & \code|V_{\mathrm{out}}|                  & a label, not three variables \\
+        \code|sin(x)|      & \code|\sin(x)|                           & function names are upright and spaced \\
+        \code|d/dx|        & \code|\frac{\mathrm{d}f}{\mathrm{d}x}|   & a fraction, with an upright d \\
+        \code|$$...$$|     & \code|\[...\]|                           & plain \hologo{TeX}, see \autoref{sec:math-mode} \\
+        \code|65^\circ C|  & \code|\qty{65}{\degreeCelsius}|          & units are upright and spaced (\autoref{sec:siunitx}) \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\code|\cdot| is the product, \code|\times| the cross product of vectors,
+and the \enquote{by} of dimensions, e.g.\ $\qty{3}{\metre} \times \qty{4}{\metre}$.
+
+\section{Finding symbols}\label{sec:symbols}
+
+Nobody memorises the symbol tables.
+To find the command for a symbol:
+
+\begin{itemize}
+    \item \myhref{https://detexify.kirelabs.org}{detexify.kirelabs.org}:
+        draw the symbol with the mouse and get the command,
+        together with the package it needs (often \texttt{amssymb}, \autoref{sec:amssymb}).
+    \item \myhref{https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols}{Overleaf: List of Greek letters and math symbols}:
+        short, a good start.
+    \item \myhref{https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols}{OEIS wiki: List of \hologo{LaTeX} mathematical symbols}:
+        long tables, sorted by kind.
+    \item \myhref{https://ctan.org/pkg/comprehensive}{The Comprehensive \hologo{LaTeX} Symbol List}:
+        every symbol of every package, several hundred pages.
+        Search it, do not read it.
+        On your own installation, \code|texdoc comprehensive| opens it.
+\end{itemize}
+
+The same is true of everything in \hologo{LaTeX}:
+you look it up until you stop needing to.

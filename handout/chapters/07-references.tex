@@ -1,0 +1,399 @@
+\chapter{Cross-References and Citations}\label{chap:references}
+
+This chapter covers the second half of the fourth block:
+referring to sections, equations, figures and tables by their number,
+and citing sources with a bibliography that builds itself.
+
+\section{Labels}\label{sec:labels}
+
+Anything that \hologo{LaTeX} numbers can get a label, a name to refer to it:
+
+\slidecode{04-labels.tex}
+
+\begin{itemize}
+    \item A section gets its label on the same line as \code|\section|.
+        With a paragraph break in between, \code|\pageref| can point at the wrong page.
+    \item An equation gets its label inside the environment.
+        In \texttt{align}, each numbered line can have its own.
+    \item A table or a figure gets its label after \code|\caption| (\autoref{sec:floats}).
+\end{itemize}
+
+The name is up to you, but it must be unique in the document;
+a name used twice gives the warning \texttt{Label `...' multiply defined},
+and references to it are unreliable.
+A prefix for the kind of thing makes a long list of labels readable,
+and the editor's autocompletion groups them:
+
+\begin{description}
+    \item[\texttt{sec:}] sections (and \texttt{chap:} for chapters)
+    \item[\texttt{eq:}] equations
+    \item[\texttt{fig:}] figures
+    \item[\texttt{tab:}] tables
+\end{description}
+
+\hologo{LaTeX} itself ignores the prefixes; \texttt{fig:results} is just a name.
+
+\section{References}\label{sec:refs}
+
+\code|\ref| prints the number of a label, \code|\eqref| the number of an equation in brackets:
+
+\slidecode{04-ref.tex}
+\sliderender{04-ref-render.pdf}
+
+\begin{itemize}
+    \item \code|\ref| only gives the number; the word in front, \enquote{Figure}, is typed by you.
+        \autoref{sec:hyperref} gets rid of that too.
+    \item \code|\eqref| comes from \texttt{amsmath}.
+        It gives \enquote{(1)}, the usual way to refer to an equation.
+    \item The tilde is the non-breaking space from \autoref{sec:spaces}.
+        Without it, \enquote{Figure} can end one line and \enquote{1} start the next.
+    \item \code|\pageref| gives the page instead of the number.
+        Write it with a tilde too: \code|page~\pageref{fig:cooling}|.
+\end{itemize}
+
+No number is typed by hand.
+Move the figure, add an equation, and every number and every reference follows,
+like the table of contents.
+Like the table of contents, references need two compilations:
+the first one collects the numbers, the second one prints them (\autoref{sec:compiling}).
+A reference to a label that does not exist prints \texttt{??} (\autoref{sec:undefined-refs}).
+
+\section{Automatic names: \texttt{hyperref}}\label{sec:hyperref}
+
+The package \texttt{hyperref} adds \code|\autoref|, which writes the name in front of the number itself:
+
+\slidecodetitled{04-autoref-preamble.tex}{Preamble}
+\slidecodetitled{04-autoref.tex}{Document}
+\sliderender{04-autoref-render.pdf}
+
+\begin{itemize}
+    \item The name comes from what was labelled:
+        a \texttt{figure} gives \enquote{Figure}, a \texttt{table} \enquote{Table}, a \code|\section| \enquote{section}.
+        With \texttt{babel}, the names follow the language of the document,
+        e.g.\ \enquote{Abbildung} in German (\autoref{sec:babel}).
+    \item \code|\autoref| writes the non-breaking space itself.
+    \item Equations come out as \enquote{Equation 1}, without brackets.
+        For equations, \code|Equation~\eqref{...}| stays the better choice.
+\end{itemize}
+
+\texttt{hyperref} also turns every reference, every citation and the table of contents into a link,
+fills in the bookmarks of the PDF,
+and adds \code|\href{https://ctan.org}{CTAN}| (a link with its own text)
+and \code|\url{https://ctan.org}| (an address, printed as it is) for links to websites.
+
+\subsection{Load it last}
+
+\texttt{hyperref} changes many other packages, so it goes after them, at the end of the preamble.
+This is the one package where the order matters
+(the few packages that must come after it say so in their manual; \texttt{cleveref} is one of them).
+
+\subsection{Coloured boxes around links}
+
+By default, links get coloured boxes in a PDF viewer.
+They are only shown on screen, never printed, but most people find them ugly.
+\code|\hypersetup{hidelinks}|, after \code|\usepackage{hyperref}|, removes them.
+The links still work.
+
+\subsection{Where the reference commands come from}
+
+\autoref{tab:ref-commands} lists the reference commands and the package each one needs.
+\code|\nameref| prints the title of a section instead of its number:
+
+\owncode{ch07-nameref.tex}
+\ownrender{ch07-nameref.pdf}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Reference commands and where they come from.}
+    \label{tab:ref-commands}
+    \begin{tabular}{@{}lll@{}}
+        \toprule
+        \textbf{Command} & \textbf{Prints} & \textbf{Package} \\
+        \midrule
+        \code|\ref|       & the number                       & \hologo{LaTeX} itself \\
+        \code|\pageref|   & the page                         & \hologo{LaTeX} itself \\
+        \code|\eqref|     & the number in brackets            & \texttt{amsmath} \\
+        \code|\autoref|   & name and number                   & \texttt{hyperref} \\
+        \code|\nameref|   & the title (of a section, or the caption) & \texttt{hyperref} \\
+        \code|\cref|      & name and number, also several at once & \texttt{cleveref} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{\texttt{cleveref}}\label{sec:cleveref}
+
+The package \texttt{cleveref} does what \code|\autoref| does, with more control.
+It is loaded after \texttt{hyperref}:
+
+\owncodetitled{ch07-cleveref-preamble.tex}{Preamble}
+\owncodetitled{ch07-cleveref.tex}{Document}
+\ownrender{ch07-cleveref-render.pdf}
+
+\begin{itemize}
+    \item \code|\cref| writes the name and the number, like \code|\autoref|.
+        Equations get their brackets.
+    \item Several labels in one \code|\cref| are combined and sorted: \enquote{Figures 1 to 3}.
+    \item Without the option \texttt{noabbrev}, names are abbreviated (\enquote{fig.}, \enquote{eq.}).
+        Without \texttt{capitalise}, they are lower case in the middle of a sentence,
+        and \code|\Cref| capitalises them at the start of one.
+    \item \code|\crefname{figure}{Fig.}{Figs.}| in the preamble changes a name.
+\end{itemize}
+
+For a lab report, \code|\autoref| is enough.
+\texttt{cleveref} is worth it in a thesis, where references to several figures or to ranges of equations are common.
+
+\section{The bibliography file}\label{sec:bibfile}
+
+Every source is written down once, in a file of its own next to the document, usually \texttt{references.bib}.
+Each source is an entry:
+
+\slidecodetitled[language=bib]{04-bib-entry.bib}{\texttt{references.bib}}
+
+\begin{description}
+    \item[Entry type] after the \code|@|: what kind of source it is (\autoref{tab:entry-types}).
+    \item[Key] your choice, the name you cite it by.
+        Author plus year is the usual pattern, e.g.\ \texttt{halliday2018}.
+    \item[Fields] \code|name = {value}|, separated by commas.
+        The order does not matter; a comma after the last one is allowed.
+\end{description}
+
+The format is called Bib\hologo{TeX}, after the program that introduced it in the 1980s.
+It is still the format that every reference manager and publisher website exports.
+
+\subsection{Entry types}
+
+\autoref{tab:entry-types} lists the common entry types and the fields \texttt{biblatex} needs for each
+\parencite{biblatex}.
+More fields are always allowed: \texttt{doi}, \texttt{isbn}, \texttt{url}, \texttt{pages}, \texttt{edition}, \texttt{publisher}.
+A missing field is not an error, but the reference list will lack that information.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Common entry types and the fields they need.}
+    \label{tab:entry-types}
+    \begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+        \toprule
+        \textbf{Type} & \textbf{For} & \textbf{Fields} \\
+        \midrule
+        \texttt{@article}       & a journal article     & author, title, journaltitle, year; often volume, number, pages, doi \\
+        \texttt{@book}          & a book                & author, title, year; often publisher, edition \\
+        \texttt{@incollection}  & a chapter by its own authors in an edited book & author, title, booktitle, year; often editor, publisher, pages \\
+        \texttt{@inproceedings} & a conference paper    & author, title, booktitle, year \\
+        \texttt{@thesis}        & a thesis              & author, title, type (e.g.\ {Bachelor's thesis}), institution, year \\
+        \texttt{@report}        & a technical report    & author, title, type, institution, year \\
+        \texttt{@manual}        & a manual, a datasheet, a standard & author or organisation, title, year \\
+        \texttt{@online}        & a web page            & author or organisation, title, url, year; urldate (when you read it) \\
+        \texttt{@misc}          & anything else         & author, title, year \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+Exports often use the older names of Bib\hologo{TeX}:
+\texttt{journal} instead of \texttt{journaltitle},
+\texttt{@phdthesis}, \texttt{@mastersthesis} and \texttt{@techreport}.
+\texttt{biblatex} understands all of them.
+
+\subsection{Author names}
+
+\autoref{tab:author-names} shows how to write the \texttt{author} field.
+Bib\hologo{TeX} splits every name into parts (given name, family name and a few more),
+and the citation style decides how to put them back together.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Names in the \texttt{author} field.}
+    \label{tab:author-names}
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{In the \texttt{author} field} & \textbf{Meaning} \\
+        \midrule
+        \code|Halliday, David|                       & family, given \\
+        \code|David Halliday|                        & also works \\
+        \code|Halliday, David and Resnick, Robert|   & several authors: \code|and| \\
+        \code|Halliday, David and others|            & \enquote{et al.} \\
+        \code|van Beethoven, Ludwig|                 & \enquote{van} stays with the family name \\
+        \code|{{World Health Organization}}|         & organisation: one name \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item With a comma, everything before it is the family name.
+        Without a comma, the last word is.
+        Both give the same result; exports use the comma form.
+    \item Names are separated by \code|and|, never by commas.
+        \texttt{Halliday, David, Resnick, Robert} is read as one strange name.
+        This is the mistake you are most likely to make when typing an entry by hand.
+    \item Prefixes such as \enquote{van} or \enquote{von} are recognised because they are lower case.
+    \item An organisation needs a second pair of braces, otherwise its last word is taken as a family name.
+\end{itemize}
+
+The last rule is easy to miss, because it only shows with some styles.
+Cited with \code|\textcite| and \texttt{style=authoryear} (\autoref{sec:cite-styles}),
+without the inner braces:
+
+\slidecodetitled[language=bib]{04-org-wrong.bib}{\texttt{references.bib}}
+\sliderender{04-org-wrong.pdf}
+
+\enquote{World Health} is taken as the given name, \enquote{Organization} as the family name.
+With double braces, the outer pair belongs to the field and the inner pair makes the whole name one unit:
+
+\slidecodetitled[language=bib]{04-org-right.bib}{\texttt{references.bib}}
+\sliderender{04-org-right.pdf}
+
+\subsection{Capitals in titles}
+
+Some styles change titles to sentence case (\texttt{apa}, for example),
+so \enquote{Cooling of DNA Samples} would become \enquote{Cooling of dna samples}.
+Braces protect what must keep its capitals: \code|title = {Cooling of {DNA} Samples}|.
+The standard \texttt{biblatex} styles leave titles as they are,
+so with them the braces are not needed, but they do no harm.
+
+\subsection{Finding entries}
+
+Nobody types these entries by hand.
+Copy them, but check them:
+
+\begin{itemize}
+    \item \textbf{Google Scholar}: the quotation mark icon under a result, then \textit{BibTeX} at the bottom.
+    \item \textbf{arXiv}: \textit{Export BibTeX Citation} in the right-hand column of the abstract page.
+        If the paper has since been published, cite the published version instead.
+    \item \textbf{Publisher or library catalogue}: \textit{Export citation}, with a Bib\hologo{TeX} option.
+    \item \textbf{From a DOI}: \myhref{https://www.doi2bib.org}{doi2bib.org}.
+        The \gls{doi} is the identifier starting with \texttt{10.} printed on almost every paper.
+    \item \textbf{A reference manager}: Zotero (with the Better BibTeX plug-in) or JabRef
+        keep the \texttt{.bib} file up to date for you,
+        and add entries from a DOI, an ISBN or an arXiv ID.
+        Worth it as soon as you write a thesis.
+\end{itemize}
+
+Exported entries are often incomplete or oddly capitalised,
+organisations come without the double braces,
+and the reference list only shows what is in the entry.
+
+\section{\texttt{biblatex} and \texttt{biber}}\label{sec:biber}
+
+The package \texttt{biblatex} reads the \texttt{.bib} file and formats the citations and the reference list:
+
+\slidecodetitled{04-biblatex-preamble.tex}{Preamble}
+\slidecodetitled{04-cite.tex}{Document}
+\sliderender{04-cite.pdf}
+
+\begin{itemize}
+    \item \code|\addbibresource| takes the file name \emph{with} \texttt{.bib}.
+    \item \code|\cite{key}| cites an entry (more commands in \autoref{sec:cite-commands}).
+    \item \code|\printbibliography| sets the reference list, with its own heading.
+        Only cited entries appear in it.
+        \code|\nocite{*}| adds all entries of the file, \code|\nocite{key}| a single one without citing it.
+    \item \code|\printbibliography[heading=bibintoc]| also adds it to the table of contents.
+\end{itemize}
+
+\subsection{Two parts that work together}
+
+The names sound like two competing tools, but they are two halves of one setup:
+
+\begin{description}
+    \item[\texttt{biblatex}] a \hologo{LaTeX} package: formats the citations and the list.
+    \item[\texttt{biber}] a program: reads the \texttt{.bib} file and sorts the entries.
+\end{description}
+
+\texttt{biber} runs between two \hologo{LaTeX} runs:
+\hologo{LaTeX} writes down which keys were cited,
+\texttt{biber} looks them up in the \texttt{.bib} file and sorts them,
+and the next \hologo{LaTeX} run sets the result.
+Overleaf and \texttt{latexmk} notice when this is needed and run \texttt{biber} for you.
+By hand, the sequence is \texttt{pdflatex}, \texttt{biber}, \texttt{pdflatex}, \texttt{pdflatex} (\autoref{sec:compiling}).
+\code|backend=biber| is the default; it is written out so it is clear which program runs.
+
+\texttt{biblatex} with \texttt{babel} warns that it would like the package \texttt{csquotes} too;
+load it, and the warning disappears (\autoref{sec:more-packages}).
+
+\subsection{Older setups}
+
+Older tutorials and templates use a different setup:
+the package \texttt{natbib}, or \code|\bibliographystyle{plain}| and \code|\bibliography{references}|,
+together with the program \texttt{bibtex} instead of \texttt{biber}.
+It still works, but it has fewer styles and options, and trouble with umlauts and accents.
+\texttt{biblatex} can also use the old program (\code|backend=bibtex|), with the same limits.
+For a new document, use \texttt{biblatex} with \texttt{biber};
+if your department's template uses the older setup, stay with it.
+
+\section{Citation commands}\label{sec:cite-commands}
+
+\autoref{tab:cite-commands} lists the citation commands of \texttt{biblatex}.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Citation commands of \texttt{biblatex}.}
+    \label{tab:cite-commands}
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Command} & \textbf{Use} \\
+        \midrule
+        \code|\textcite{key}|          & as part of the sentence: \enquote{Halliday et al.\ [1] show} \\
+        \code|\parencite{key}|         & in brackets, as an aside \\
+        \code|\parencite[p.~12]{key}|  & with a page (or chapter, figure, \ldots) \\
+        \code|\parencite{key1,key2}|   & several sources at once \\
+        \code|\cite{key}|              & depends on the style \\
+        \code|\footcite{key}|          & as a footnote \\
+        \code|\citeauthor{key}|        & only the authors \\
+        \code|\citeyear{key}|          & only the year \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\code|\textcite| is for when the authors are the subject of the sentence,
+\code|\parencite| for a citation at the end of a claim.
+The square brackets are the optional argument from \autoref{sec:commands};
+the tilde keeps \enquote{p.} and the number together.
+With the style \texttt{numeric}, \code|\cite| and \code|\parencite| look the same;
+with \texttt{authoryear}, \code|\cite| has no brackets.
+\code|\textcite| and \code|\parencite| work as intended in every style, so prefer them.
+
+\slidecode{04-citecmds.tex}
+\sliderender{04-citecmds.pdf}
+
+Four authors are shortened to \enquote{et al.} automatically,
+and several sources share one pair of brackets, sorted: \enquote{[1, 2]}, not \enquote{[1] [2]}.
+
+\code|\citeauthor| and \code|\citeyear| print a part of the citation, e.g.\ in \texttt{authoryear}:
+
+\owncode{ch07-citemore.tex}
+\ownrender{ch07-citemore.pdf}
+
+\code|\footcite| puts the citation into a footnote,
+which is how the citation styles of law and the humanities work (e.g.\ \texttt{style=verbose}).
+
+\section{Citation styles}\label{sec:cite-styles}
+
+The style is one word in the preamble.
+The same document with \texttt{style=numeric}:
+
+\slidecodetitled{04-biblatex-preamble.tex}{Preamble}
+\slidecodetitled{04-styles.tex}{Document}
+\sliderender{04-styles-numeric.pdf}
+
+And with \texttt{style=authoryear}:
+
+\slidecodetitled{04-styles-authoryear-preamble.tex}{Preamble}
+\sliderender{04-styles-authoryear.pdf}
+
+Every citation and the whole list change, and nothing in the document does.
+With \texttt{authoryear}, the difference between \code|\textcite| and \code|\parencite| becomes visible:
+the year moves into the brackets.
+
+\texttt{style=alphabetic} uses short labels made from the names and the year:
+
+\owncodetitled{ch07-styles-alphabetic-preamble.tex}{Preamble}
+\ownrender{ch07-styles-alphabetic.pdf}
+
+Many more styles exist as separate packages, e.g.\
+\texttt{ieee} (package \texttt{biblatex-ieee}), common in engineering:
+
+\owncodetitled{ch07-styles-ieee-preamble.tex}{Preamble}
+\ownrender{ch07-styles-ieee.pdf}
+
+\texttt{apa} (package \texttt{biblatex-apa}) is common in psychology and the social sciences,
+and many journals and departments have their own.
+Ask your supervisor which style to use;
+it is one word to change.

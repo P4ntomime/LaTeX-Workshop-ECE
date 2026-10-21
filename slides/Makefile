@@ -4,8 +4,10 @@
 #
 # minted needs -shell-escape; latexmkrc passes it to pdflatex for you.
 
-# Where the student template lives, relative to this directory.
-TEMPLATE ?= ../workshop-template
+# The student template's source (master.tex), relative to this directory,
+# and the template generated from it. `make renders' regenerates it first.
+TEMPLATE_SRC ?= ../template
+TEMPLATE ?= $(TEMPLATE_SRC)/build/workshop-template
 
 # Listings that are only a piece of a document. Each one is wrapped in an
 # article by renders/snippet.tex and compiled to renders/<name>.pdf.
@@ -51,6 +53,8 @@ slides.pdf: slides.tex preamble.tex beamerthemeown.sty beamercolorthemeown.sty \
 renders: snippets
 	latexmk -pdf -outdir=renders/build $(addprefix listings/,$(addsuffix .tex,$(DOCUMENTS)))
 	for d in $(DOCUMENTS); do cp renders/build/$$d.pdf renders/ || exit 1; done
+	# Generate the student template from its source.
+	$(MAKE) -C $(TEMPLATE_SRC)
 	# The checkpoints expect figures/ and references.bib next to them.
 	rm -rf renders/build/template
 	mkdir -p renders/build/template

@@ -1,0 +1,27 @@
+\chapter{The Workshop Document}\label{app:workshop-document}
+
+This is the finished lab report from the workshop, \texttt{checkpoint-04.tex} from the template,
+with everything from Chapters~\ref{chap:skeleton} to~\ref{chap:references} in one document.
+It uses the bibliography file \texttt{references.bib} and the figure \texttt{figures/cooling-curves.pdf}
+that come with the template.
+
+\section{The output}
+
+% Every page of the compiled report, one per page of the handout,
+% as wide as the code boxes.
+% \pdfximage reads the number of pages, so the loop follows the render.
+\pdfximage{\slidesdir/renders/checkpoint-04.pdf}
+\edef\workshoppages{\the\pdflastximagepages}
+\foreach \p in {1,...,\workshoppages} {%
+    \render[page=\p, width=\dimexpr\linewidth+2\exoverhang\relax]{\slidesdir/renders/checkpoint-04.pdf}%
+}
+
+\section{The source}
+
+\IfFileExists{\templatedir/checkpoints/checkpoint-04.tex}{%
+    \codefilelong{\templatedir/checkpoints/checkpoint-04.tex}%
+}{%
+    % The template is generated (make in template/) and not committed.
+    % Once it has been generated, its source appears here by itself.
+    {\color{black!60}The source is \texttt{checkpoints/checkpoint-04.tex} in the template's \texttt{.zip} file.\par}%
+}

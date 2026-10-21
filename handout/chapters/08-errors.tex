@@ -1,0 +1,292 @@
+\chapter{Errors and Warnings}\label{chap:errors}
+
+Every \hologo{LaTeX} user meets error messages, every day.
+They look cryptic at first, but most of them come from a handful of causes,
+and the message usually names the place.
+This chapter shows how to read them and lists the common ones.
+
+\section{Reading the log}\label{sec:log}
+
+Everything \hologo{LaTeX} reports goes into the log file, \texttt{report.log} next to \texttt{report.tex}.
+Overleaf lists the errors and warnings under \textbf{Logs and output files}, next to the Recompile button,
+with a link to the line;
+the full log is at the bottom of that list (\textbf{Raw logs}).
+Editors such as TeXstudio and VS Code show them in a panel of their own.
+
+An error starts with an exclamation mark:
+
+\begin{codeblock}[style=shell]
+! Undefined control sequence.
+l.12 \sectoin
+             {Introduction}
+\end{codeblock}
+
+\begin{itemize}
+    \item The first line says what went wrong.
+    \item \texttt{l.12} is the line number in the source file.
+    \item The line is split where \hologo{LaTeX} noticed the problem:
+        the last thing on the upper line, here \code|\sectoin|, is what it could not handle.
+\end{itemize}
+
+A few habits make errors much less painful:
+
+\begin{itemize}
+    \item \textbf{Fix the first error first.}
+        One mistake often causes a series of follow-up errors that disappear with it.
+    \item \textbf{Look a little before the line.}
+        The line number says where \hologo{LaTeX} noticed the problem, which can be after the mistake,
+        e.g.\ the end of the paragraph for a missing closing brace.
+    \item \textbf{Compile often.}
+        If it worked five minutes ago, the mistake is in what you changed since.
+    \item \textbf{Narrow it down.}
+        If you cannot find the cause, comment out half of the suspicious part with \code|%| and compile again,
+        then half of the half, until the error is gone.
+\end{itemize}
+
+With several files (\autoref{sec:input}), the log names the file that was being read
+(in parentheses: \texttt{(./sections/theory.tex}),
+and Overleaf links to the right file.
+
+\section{Common errors}\label{sec:common-errors}
+
+An error stops the compilation.
+In a terminal, \hologo{LaTeX} waits at a question mark;
+type \texttt{x} and press Enter (\autoref{sec:compiling}).
+Overleaf usually still shows a PDF, but everything after the error may be wrong in it.
+The messages below are the ones you will meet most often, exactly as \hologo{LaTeX} writes them.
+
+\subsection*{Undefined control sequence}
+
+\begin{codeblock}[style=shell]
+! Undefined control sequence.
+l.4 \sectoin
+            {Introduction}
+\end{codeblock}
+
+A command that \hologo{LaTeX} does not know.
+Either its name is misspelled, as here,
+or it comes from a package that is not loaded,
+e.g.\ \code|\toprule| without \texttt{booktabs} or \code|\includegraphics| without \texttt{graphicx}.
+To find out which package a command needs, search for the command on the web or in the package lists of \autoref{chap:packages-chapter}.
+
+\subsection*{Missing \$ inserted}
+
+\begin{codeblock}[style=shell]
+! Missing $ inserted.
+<inserted text>
+                $
+l.4 The raw data is in cooling_
+\end{codeblock}
+
+Something that only works in math mode was used outside of it:
+\code|_| or \code|^| in the text (here in a file name, \autoref{sec:math-mode}),
+or a math command such as \code|\alpha| without dollar signs.
+The fix is either math mode, \code|$\alpha$|, or the escaped character, \code|\_|.
+The same message appears for an empty line inside display math, which is not allowed.
+
+\subsection*{\textbackslash begin\{...\} ended by \textbackslash end\{...\}}
+
+\begin{codeblock}[style=shell]
+! LaTeX Error: \begin{itemize} on input line 8 ended by \end{itemized}.
+\end{codeblock}
+
+An environment was closed with a different name, here a typo in the \code|\end|.
+If the second name is \code|\end{document}|,
+the environment was never closed at all:
+\hologo{LaTeX} reached the end of the document with the \code|\begin| still open.
+The line number of the \code|\begin| is in the message.
+
+\subsection*{File ended while scanning use of \ldots}
+
+\begin{codeblock}[style=shell]
+! File ended while scanning use of \textit.
+\end{codeblock}
+
+A missing closing brace: the argument of \code|\textit| never ends.
+Related messages are \texttt{Paragraph ended before \textbackslash textit was complete},
+\texttt{Missing \} inserted} and \texttt{Extra \}, or forgotten \$},
+all of them about braces (or dollar signs) that do not come in pairs.
+A good editor highlights the matching brace when the cursor is on one.
+
+\subsection*{File not found}
+
+\begin{codeblock}[style=shell]
+! LaTeX Error: File `boktabs.sty' not found.
+\end{codeblock}
+
+A package that does not exist (a typo, as here) or is not installed.
+\hologo{TeX} Live and Overleaf have nearly all packages;
+\hologo{MiKTeX} installs a missing one, if it is allowed to (\autoref{sec:miktex}).
+For an image the message is a little different:
+
+\begin{codeblock}[style=shell]
+! Package pdftex.def Error: File `figures/cooling-curve.pdf' not found
+\end{codeblock}
+
+Check the folder, the spelling, the extension, and upper and lower case
+(which matter on Linux, macOS and Overleaf, even when Windows does not care).
+
+\subsection*{Extra alignment tab}
+
+\begin{codeblock}[style=shell]
+! Extra alignment tab has been changed to \cr.
+\end{codeblock}
+
+A row of a table has more cells (more \code|&|) than the column types in the argument of \texttt{tabular} allow.
+The same happens in \texttt{align} with too many \code|&| in one line.
+
+\subsection*{Double subscript}
+
+\begin{codeblock}[style=shell]
+! Double subscript.
+l.4 $T_0_
+         1$
+\end{codeblock}
+
+Two subscripts on one symbol, \code|T_0_1|.
+Write the subscript as one group, \code|T_{0,1}|, or nest it, \code|T_{0_1}|.
+
+\subsection*{Unicode character not set up}
+
+\begin{codeblock}[style=shell]
+! LaTeX Error: Unicode character (*$\leq$*) (U+2264)
+               not set up for use with LaTeX.
+\end{codeblock}
+
+A character that \hologo{pdfLaTeX} has no letter for, usually a symbol pasted from another program or a PDF.
+Use the command for it instead, here \code|$\leq$| (\autoref{sec:symbols}).
+
+\subsection*{Missing \textbackslash end\{document\}}
+
+\begin{codeblock}[style=shell]
+! Emergency stop.
+<*> report.tex
+*** (job aborted, no legal \end found)
+\end{codeblock}
+
+The file ended without \code|\end{document}|.
+It also happens when an \code|\end{document}| is commented out, or hidden inside an unclosed brace.
+
+\subsection{Text pasted from elsewhere}\label{sec:pasted}
+
+Text copied from a word processor, a website or a PDF brings typographic characters with it:
+curly quotation marks (\texttt{“...”}), long dashes (\texttt{–} and \texttt{—}),
+a minus sign that is not a hyphen, non-breaking spaces you cannot see.
+In normal text, \hologo{LaTeX} handles quotation marks and dashes,
+but in other places they cause trouble that is hard to see:
+
+\begin{itemize}
+    \item In code you copied, e.g.\ a command from a website:
+        an en dash in place of a hyphen makes an option, a label or a file name a different one,
+        e.g.\ \texttt{cooling–curves.pdf} is not \texttt{cooling-curves.pdf}, and the file is \enquote{not found}.
+    \item In math mode, a pasted minus sign stops the compilation with
+        \texttt{Unicode character $-$ (U+2212) not set up for use with LaTeX}.
+        Type the minus as a hyphen, \code|$a - b$|.
+    \item A straight \code|"| typed for quotation marks gives a closing mark at both ends (\autoref{sec:special-chars}).
+\end{itemize}
+
+When an error points at a line that looks perfectly fine, retype the suspicious characters by hand.
+
+\section{Common warnings}\label{sec:common-warnings}
+
+A warning does not stop the compilation; the PDF is complete.
+But a warning often means that something in it is wrong,
+so read them, at least before you hand a document in.
+
+\subsection{Undefined references}\label{sec:undefined-refs}
+
+A reference to a label that does not exist prints \texttt{??},
+here because of a typo in the label:
+
+\slidecode{04-ref-typo.tex}
+\sliderender{04-ref-typo.pdf}
+\codefile[style=shell]{\slidesdir/listings/04-ref-warning.txt}
+
+A citation of a key that is not in the \texttt{.bib} file prints the key in bold:
+
+\slidecode{04-cite-typo.tex}
+\sliderender{04-cite-typo.pdf}
+\codefile[style=shell]{\slidesdir/listings/04-cite-warning.txt}
+
+Both warnings say \texttt{undefined} and name what is missing.
+Take the name out of the warning and search for it, in the document and in the \texttt{.bib} file.
+At the end, the log also says
+\texttt{There were undefined references} or \texttt{Please (re)run Biber on the file}.
+
+The other cause is that the document was not compiled often enough:
+references need two runs, citations a run of \texttt{biber} in between (\autoref{sec:compiling}).
+Overleaf and \texttt{latexmk} take care of that;
+if the warning remains after they are done, it is a typo.
+
+\subsection{Rerun to get cross-references right}
+
+\begin{codeblock}[style=shell]
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+\end{codeblock}
+
+Some numbers changed since the last run; compile once more.
+\texttt{latexmk} and Overleaf do that by themselves.
+
+\subsection{Label multiply defined}
+
+\begin{codeblock}[style=shell]
+LaTeX Warning: Label `fig:cooling' multiply defined.
+\end{codeblock}
+
+The same label is used twice, typically after copying a figure or a table.
+References to it point at one of the two; give each a name of its own.
+
+\subsection{Overfull and underfull boxes}
+
+\begin{codeblock}[style=shell]
+Overfull \hbox (12.74pt too wide) in paragraph at lines 32--34
+\end{codeblock}
+
+A line that \hologo{LaTeX} could not break well enough sticks out into the right margin, here by \qty{12.74}{pt}.
+The usual causes are long words it cannot hyphenate:
+file names, commands in typewriter font, URLs, or a word in a language \texttt{babel} does not know.
+Rephrase the sentence, move the long word,
+or tell \hologo{LaTeX} where it may hyphenate a word, \code|ther\-mo\-me\-ter|.
+Overflows of less than a point are invisible and can be ignored.
+The class option \texttt{draft} marks overfull lines with a black bar, so they are easy to find.
+
+\begin{codeblock}[style=shell]
+Underfull \hbox (badness 10000) in paragraph at lines 12--14
+\end{codeblock}
+
+A line with too much space in it.
+The most common cause is \code|\\| at the end of a paragraph or twice in a row (\autoref{sec:spaces}).
+
+\subsection{Other warnings}
+
+\begin{description}
+    \item[\texttt{Float too large for page}]
+        A figure or table is taller than the page.
+        Make it smaller, e.g.\ with \code|height=0.8\textheight|.
+    \item[\texttt{Font shape ... undefined, using ... instead}]
+        A font combination that does not exist, e.g.\ bold typewriter in some fonts.
+        Usually harmless; check that the text looks as intended.
+    \item[\texttt{Empty bibliography}]
+        \texttt{biber} has not run yet, or nothing was cited.
+\end{description}
+
+\section{Getting help}\label{sec:help}
+
+\begin{itemize}
+    \item \textbf{Search the exact message}, without your own file and command names.
+        Almost every beginner's error has been asked and answered on
+        \myhref{https://tex.stackexchange.com}{tex.stackexchange.com}.
+    \item \textbf{Read the manual of the package.}
+        \code|texdoc <package>| opens it on your own installation,
+        \texttt{ctan.org/pkg/<package>} on the web (\autoref{sec:packages}).
+    \item \textbf{Make a minimal example.}
+        Copy the document and delete everything that is not needed to produce the error:
+        other chapters, packages, text.
+        Often the cause becomes obvious on the way.
+        If not, the minimal example (on TeX StackExchange called a \gls{mwe}) is what to post when you ask for help.
+    \item \textbf{Ask someone}, with the error message and the minimal example.
+    \item \textbf{AI chat tools} can explain an error message and suggest code, and are often right.
+        But they also invent commands and package options that do not exist,
+        and mix up old and new ways of doing things (\code|$$...$$|, \texttt{natbib}).
+        Check what they suggest against the manual, and compile it before you trust it.
+\end{itemize}
