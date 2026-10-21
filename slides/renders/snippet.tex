@@ -1,0 +1,74 @@
+% =====================================================================
+%  Driver for the snippet renders
+% =====================================================================
+%  Some listings are only a piece of a document (a sentence, an equation).
+%  This file wraps one of them in an article and compiles it, so the slide
+%  can show the output next to the code.
+%  Which listing it wraps is decided by the job name:
+%
+%      latexmk -pdf -outdir=renders/build -jobname=01-styling renders/snippet.tex
+%
+%  compiles listings/01-styling.tex into renders/build/01-styling.pdf.
+%  `make renders' does this for every name in SNIPPETS (see Makefile).
+%  Run it from the slides directory: the paths below are relative to it.
+%
+%  standalone with class=article gives exactly the article's layout
+%  (a4paper, 11pt: 360pt text width, 17pt paragraph indent),
+%  and crops the PDF to the content, so no trim values are needed.
+%  standalone also turns table and figure into non-floating boxes,
+%  so floats work inside the snippet column (block 4).
+%
+%  Two optional extras:
+%    - If listings/<name>-preamble.tex exists, it is added to the preamble.
+%      This is for examples that change the look of the body, e.g. 02-emph.
+%    - renders/snippet-parskip.tex wraps this file with parskip loaded.
+%      Students add parskip in block 2 (Paragraph Spacing slide), so every
+%      snippet shown after that slide uses it (SNIPPETS_PARSKIP in the
+%      Makefile), and every snippet before it does not (SNIPPETS).
+%
+%  Keep the packages below in sync with the preamble of workshop.tex,
+%  so the renders look like what the students see.
+% =====================================================================
+\documentclass[class=article, a4paper, 11pt, border=8pt]{standalone}
+
+\usepackage{amsmath}
+\ifdefined\snippetparskip
+    \usepackage{parskip}
+\fi
+
+\InputIfFileExists{listings/\jobname-preamble.tex}{}{}
+
+% Graphics (block 4): the listings say figures/<file>, as in the template.
+% `make renders' copies the template's figures to renders/figures/,
+% so they are looked up under renders/.
+% This only takes effect when a preamble hook has loaded graphicx.
+\AtBeginDocument{\ifdefined\graphicspath\graphicspath{{renders/}}\fi}
+
+% The snippet environment: one text-width column, like a crop of a page.
+% It starts like text right after a \section heading: the first paragraph
+% is not indented, every following one is.
+% A minipage resets \parindent and \parskip, so both are set back to what
+% the document would use.
+% The outer \hbox is always exactly \textwidth wide: a minipage holding only
+% an unnumbered display (\[...\]) is only as wide as the formula, and the
+% render would be cropped narrower and scaled up on the slide.
+\newlength{\docparindent}
+\setlength{\docparindent}{\parindent}
+\newskip\docparskip
+\docparskip=\parskip
+\newenvironment{snippet}{%
+    \hbox to \textwidth\bgroup
+    \begin{minipage}{\textwidth}%
+    \setlength{\parindent}{\docparindent}%
+    \setlength{\parskip}{\docparskip}%
+    \noindent\ignorespaces
+}{%
+    \end{minipage}%
+    \hss\egroup
+}
+
+\begin{document}
+\begin{snippet}
+    \input{listings/\jobname.tex}
+\end{snippet}
+\end{document}

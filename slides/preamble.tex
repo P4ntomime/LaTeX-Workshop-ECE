@@ -1,0 +1,446 @@
+% =====================================================================
+%  Preamble for slides.tex
+% =====================================================================
+%  Sections in this file:
+%    1. Fonts and general packages
+%    2. Colours and code boxes (minted)
+%    3. Annotating code
+%    4. Small helpers used by the slides
+% =====================================================================
+
+% ---------------------------------------------------------------------
+%  1. Fonts and general packages
+% ---------------------------------------------------------------------
+\usepackage[T1]{fontenc}            % font encoding: T1
+\usepackage{notomath}               % Noto Serif for text and maths
+\usepackage{amsmath}
+\usepackage{inconsolata}            % inconsolata font for code
+
+\usepackage{tikz}
+\usetikzlibrary{%
+    calc,
+    positioning,
+    fit,
+    arrows,
+    arrows.meta,
+    tikzmark,                       % \tikzmark, used to annotate code (section 3)
+    external,
+}
+\tikzset{>=stealth}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[edges]{forest}          % directory tree on the Larger Documents slide
+
+\usepackage{hologo}                 % \hologo{MiKTeX}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}               % include graphics
+\usepackage[export]{adjustbox}      % adds the `frame' key to \includegraphics
+\usepackage{booktabs}               % thick and thin lines in tables
+\usepackage{array}
+\usepackage{qrcode}                 % QR code generation (also clickable)
+\hypersetup{hidelinks}              % beamer already loads hyperref
+
+% ---------------------------------------------------------------------
+%  2. Colours and code boxes (minted)
+% ---------------------------------------------------------------------
+%  Code is highlighted by minted, which hands the code to Pygments (Python).
+%  That is why the deck must be compiled with -shell-escape; latexmkrc does
+%  this for you, and Overleaf does it by default.
+%
+%  Compared to listings, minted knows every LaTeX command out of the box,
+%  so there is no keyword list to maintain.
+%  The price: colours come from a named Pygments style, not from \definecolor.
+%  To try another style, change `style=` below.
+%  `pygmentize -L styles` lists the available ones.
+\usepackage{minted}
+\setminted{%
+    style=xcode,            % purple commands, green comments
+    tabsize=4,
+    autogobble,             % strip the indentation the code has in the .tex source
+    breaklines,             % wrap long lines instead of running off the box
+    numbersep=4mm,          % gap between line numbers and code (see codebox below)
+}
+% Line numbers: small and grey, like 2025.
+\renewcommand{\theFancyVerbLine}{\ttfamily\scriptsize\color{numbercolour}\arabic{FancyVerbLine}}
+\definecolor{numbercolour}{HTML}{808080}
+
+% Inline code, coloured like the code boxes: \code|\section{Results}|
+% Like all verbatim, it only works in frames marked [fragile],
+% and not inside the argument of another command (\only{...}, \note{...}).
+\newmintinline[code]{latex}{}
+
+% We use every beamercolor here once, so the colour names below are available.
+\usebeamercolor{palette primary}
+\usebeamercolor{palette quaternary}
+\usebeamercolor{block title}
+\usebeamercolor{block body}
+\usebeamercolor{block title example}
+\usebeamercolor{block body example}
+\usebeamercolor{block title alerted}
+\usebeamercolor{block body alerted}
+
+\tcbuselibrary{minted}              % tcolorbox's bridge to minted
+\tcbuselibrary{raster}              % grids of boxes (the poll slide)
+
+% The four code boxes from 2025, now with minted underneath.
+% Their first optional argument is passed to minted, e.g.
+%   firstline=3, lastline=7      show only lines 3 to 7
+%   highlightlines={5,9}         put a coloured background behind lines 5 and 9
+%   escapeinside=||              allow LaTeX between |...|, see section 3
+% The second optional argument is passed to tcolorbox (width, height, ...).
+\tcbset{%
+    % The base of every box in this deck that is not a beamer block.
+    % Older versions of beamer's tcolorbox theme (up to 2023) applied their
+    % settings to every tcolorbox; newer ones (2026) only to beamer's own blocks.
+    % So these boxes set everything they rely on themselves, and look the same
+    % with either version:
+    deckbox/.style={%
+        enhanced,                   % needed for `overlay' (the line-number stripe)
+        frame hidden,
+        boxrule=0mm,
+        arc=1.3mm,
+        left=0.05cm, right=0.05cm,  % the padding of beamer's blocks
+        top=0.8mm, bottom=0mm,
+        toptitle=0.2mm,
+        width=\linewidth,           % exactly as wide as the line, no wider
+        enlarge left by=0mm,
+        enlarge right by=0mm,
+    },
+    % The light purple background of all code, also usable on its own:
+    %   \begin{tcolorbox}[codebg] ... \end{tcolorbox}
+    codebg/.style={%
+        deckbox,
+        colback={block body example.bg},
+    },
+    codebox/.style={%
+        codebg,
+        listing engine=minted,
+        minted language=latex,
+        listing only,
+        fonttitle=\normalfont,
+        % Spacing, measured from the left edge of the box:
+        %   the code starts at 6.5mm (left) + 1mm (tcolorbox's boxsep) = 7.5mm,
+        %   the line numbers end numbersep=4mm (in \setminted) before that, at 3.5mm,
+        %   and the stripe behind them is 4.5mm wide, so 1mm is left on its right.
+        left=6.5mm,
+        overlay={%
+            \begin{tcbclipinterior}%
+                \fill[block title example.bg!20!block body example.bg] (frame.south west)%
+                    rectangle ([xshift=4.5mm]frame.north west);%
+            \end{tcbclipinterior}%
+        },
+        % room between a code box and whatever comes after it
+        after skip=2.5mm,
+    },
+}
+% Colour behind lines chosen with highlightlines={...}
+\colorlet{highlightcolor}{block title example.bg!30!block body example.bg}
+\setminted{highlightcolor=highlightcolor}
+
+% Code written directly in the frame (frame needs [fragile]), with a title:
+%   \begin{exlisting}[<minted options>]{<title>} ... \end{exlisting}
+\newtcblisting{exlisting}[2][]{%
+    codebox,
+    colbacktitle={block title example.bg},
+    coltitle={block title example.fg},
+    title={\blockstrut#2},
+    minted options={linenos, fontsize=\small, #1},
+}
+
+% Same, without a title.
+\newtcblisting{exlistingnotitle}[1][]{%
+    codebox,
+    minted options={linenos, fontsize=\small, #1},
+}
+
+% Code read from a file, with a title (default title: Example):
+%   \tcbexinputlst[<minted options>][<tcolorbox options>]{<file>}[<title>]
+% Reading from a file also works inside \only<...>{...}, so these two are
+% what the slides use whenever the code changes between overlays.
+\NewTCBInputListing{\tcbexinputlst}{O{} O{} m O{Example}}{%
+    codebox,
+    listing file={#3},
+    colbacktitle={block title example.bg},
+    coltitle={block title example.fg},
+    title={\blockstrut#4},
+    minted options={linenos, fontsize=\small, #1},
+    #2
+}
+
+% Code read from a file, without a title:
+%   \tcbinputlst[<minted options>][<tcolorbox options>]{<file>}
+\NewTCBInputListing{\tcbinputlst}{O{} O{} m}{%
+    codebox,
+    listing file={#3},
+    minted options={linenos, fontsize=\small, #1},
+    #2
+}
+
+% ---------------------------------------------------------------------
+%  3. Annotating code
+% ---------------------------------------------------------------------
+%  The idea: put a \tikzmark BETWEEN two tokens of the code, never around
+%  them, so minted still highlights the code normally.
+%  Turn on escapeinside=|| for that listing, then write e.g.
+%
+%      |\tikzmark{a}|\documentclass|\tikzmark{b}|{article}|\tikzmark{c}|
+%
+%  Each mark is a point on the baseline of the code.
+%  \annotatebelow and \annotateabove then draw a bracket between two marks
+%  and hang a label off it.
+%  Like everything with `remember picture', the drawing needs a second
+%  compile run to land in the right place (latexmk does that).
+%
+%  Use them inside \begin{tikzpicture}[remember picture, overlay].
+
+% How far the bracket sits below the baseline (clear of descenders such as
+% p, g, { and [), and above it (clear of capitals and \).
+\newlength{\annodepth}\setlength{\annodepth}{1.6mm}
+\newlength{\annoheight}\setlength{\annoheight}{5.2mm}
+\newlength{\annoarm}\setlength{\annoarm}{1.2mm}     % length of the bracket's arms
+\tikzset{annotation/.style={thick, structure.fg}}
+
+% \annotatebelow[<label shift>]{<from mark>}{<to mark>}{<drop>}{<label>}
+%   <drop>        how far below the bracket the label hangs
+%   <label shift> moves the label sideways (e.g. -1cm), the line bends to follow
+\newcommand{\annotatebelow}[5][0pt]{%
+    \coordinate (anno-l) at ([xshift=1.5pt, yshift=-\annodepth]pic cs:#2);
+    \coordinate (anno-r) at ([xshift=-1.5pt, yshift=-\annodepth]pic cs:#3);
+    \coordinate (anno-m) at ($(anno-l)!.5!(anno-r) + (0,-\annoarm)$);
+    \draw[annotation] (anno-l) -- ++(0,-\annoarm) -| (anno-r);
+    \node[annotation, below, align=center, font=\normalsize] (anno-label)
+        at ($(anno-m) + (#1,-#4)$) {#5};
+    \draw[annotation] (anno-m) |- ($(anno-m)!.5!(anno-label.north)$) -| (anno-label.north);
+}
+
+% \annotateabove[<label shift>]{<from mark>}{<to mark>}{<rise>}{<label>}
+%   The same, with the bracket above the code and the label above that.
+\newcommand{\annotateabove}[5][0pt]{%
+    \coordinate (anno-l) at ([xshift=1.5pt, yshift=\annoheight]pic cs:#2);
+    \coordinate (anno-r) at ([xshift=-1.5pt, yshift=\annoheight]pic cs:#3);
+    \coordinate (anno-m) at ($(anno-l)!.5!(anno-r) + (0,\annoarm)$);
+    \draw[annotation] (anno-l) -- ++(0,\annoarm) -| (anno-r);
+    \node[annotation, above, align=center, font=\normalsize] (anno-label)
+        at ($(anno-m) + (#1,#4)$) {#5};
+    \draw[annotation] (anno-m) |- ($(anno-m)!.5!(anno-label.south)$) -| (anno-label.south);
+}
+
+% ---------------------------------------------------------------------
+%  4. Small helpers used by the slides
+% ---------------------------------------------------------------------
+
+% \blockframe{<number>}{<title>}{<one line>}: the slide that opens a block.
+\newcommand{\blockframe}[3]{%
+    \begin{frame}
+        \centering
+        {\Large\color{structure.fg} Block #1\par}
+        \medskip
+        {\Huge #2\par}
+        \bigskip
+        {\large\color{black!60} #3\par}
+    \end{frame}
+}
+
+% ---------------------------------------------------------------------
+%  The roadmap: the "Schedule" timeline
+% ---------------------------------------------------------------------
+%  One line from left to right is the whole session.
+%  The solid stretches are the four blocks, the dashed ones the breaks.
+%  The short upright mark inside each block is where the hands-on part starts.
+%
+%  Usage, as the content of a frame:
+%      \begin{roadmap}{<state>}
+%          \roadmapresults
+%      \end{roadmap}
+%  <state>  0       intro: each block's name and results appear on its own click
+%           1 to 4  that block in focus, the ones before it done
+%           5       closing: everything done, the results appear one block per click
+%  Leave out \roadmapresults to draw only the line and the block names.
+
+% Names and results of the four blocks: edit them here, once.
+% \\ breaks a long name into two lines; the results are list items.
+\newcommand{\roadmapname}[1]{%
+    \ifcase#1\or
+        Skeleton\or
+        Text\or
+        Math\or
+        Illustrations\\\& References\fi
+}
+\newcommand{\roadmapitems}[1]{%
+    \ifcase#1\or
+        \item Title
+        \item Sections
+        \item Table of contents\or
+        \item Paragraphs
+        \item Line breaks
+        \item Lists
+        \item Preamble\or
+        \item Math mode
+        \item Sub- and superscripts
+        \item Numbered equations
+        \item Alignment\or
+        \item Tables
+        \item Figures
+        \item Cross-references
+        \item Citations\fi
+}
+
+% Lengths along the line, in units of \roadmapunit (roughly minutes).
+% A block is 26 units long, its hands-on part starts at unit 19,
+% and a break is 6 units (shorter than to scale, it only needs to be visible).
+\newlength{\roadmapunit}\setlength{\roadmapunit}{0.112cm}
+\colorlet{roadmap-upcoming}{black!25}
+
+\makeatletter
+% Where block #1 starts, starts its hands-on part, ends, and has its middle.
+\newcommand{\roadmap@positions}[1]{%
+    \pgfmathsetmacro{\roadmap@start}{(#1-1)*32}%
+    \pgfmathsetmacro{\roadmap@handson}{\roadmap@start+19}%
+    \pgfmathsetmacro{\roadmap@end}{\roadmap@start+26}%
+    \pgfmathsetmacro{\roadmap@mid}{\roadmap@start+13}%
+}
+
+% How block #1 is drawn in the current state: done, focus or upcoming.
+\newcommand{\roadmap@setkind}[1]{%
+    \def\roadmap@kind{upcoming}%
+    \ifnum#1<\roadmap@state\relax \def\roadmap@kind{done}\fi
+    \ifnum#1=\roadmap@state\relax \def\roadmap@kind{focus}\fi
+    \ifnum\roadmap@state=0 \def\roadmap@kind{done}\fi
+}
+
+% From which overlay on the name of block #1 is shown (\roadmap@from).
+% Only the intro reveals the names, one block per click after the bare line.
+\newcommand{\roadmap@setfrom}[1]{%
+    \def\roadmap@from{1}%
+    \ifnum\roadmap@state=0 \pgfmathtruncatemacro{\roadmap@from}{#1+1}\fi
+}
+
+\NewEnviron{roadmap}[1]{%
+    \def\roadmap@state{#1}%
+    \hyphenpenalty=10000 % no hyphenated words in names and results
+    \begin{center}
+    \begin{tikzpicture}[x=\roadmapunit]
+        % The same size in every state, so the line never moves between slides.
+        \path[use as bounding box] (0,-2.8) rectangle (122,1.4);
+        % the breaks
+        \foreach \i in {1,2,3} {
+            \draw[roadmap-upcoming, line width=1.2pt, dash pattern=on 2pt off 2pt]
+                (\i*32-6+1,0) -- (\i*32-1,0);
+        }
+        % the blocks
+        \foreach \i in {1,2,3,4} {
+            \roadmap@positions{\i}
+            \roadmap@setkind{\i}
+            \roadmap@setfrom{\i}
+            \csname roadmap@draw@\roadmap@kind\endcsname{\i}
+        }
+        \BODY
+    \end{tikzpicture}
+    \end{center}
+}
+
+% A block that is done (and every block on the intro): theme colour.
+\newcommand{\roadmap@draw@done}[1]{%
+    \draw[structure.fg, line width=2pt] (\roadmap@start,0) -- (\roadmap@end,0);
+    \draw[structure.fg, line width=1pt] (\roadmap@handson,-1.5mm) -- (\roadmap@handson,1.5mm);
+    \only<\roadmap@from->{%
+        \node[above, align=center] at (\roadmap@mid,.25) {\roadmapname{#1}};
+    }
+}
+% The block in focus: a thicker line and a big coloured name.
+\newcommand{\roadmap@draw@focus}[1]{%
+    \draw[structure.fg, line width=4pt] (\roadmap@start,0) -- (\roadmap@end,0);
+    \draw[structure.fg, line width=1.2pt] (\roadmap@handson,-2.2mm) -- (\roadmap@handson,2.2mm);
+    \node[above, align=center, font=\Large\bfseries, text=structure.fg]
+        at (\roadmap@mid,.3) {\roadmapname{#1}};
+}
+% A block still to come: grey.
+\newcommand{\roadmap@draw@upcoming}[1]{%
+    \draw[roadmap-upcoming, line width=2pt] (\roadmap@start,0) -- (\roadmap@end,0);
+    \draw[roadmap-upcoming, line width=1pt] (\roadmap@handson,-1.5mm) -- (\roadmap@handson,1.5mm);
+    \node[above, align=center, font=\small, text=black!45] at (\roadmap@mid,.25) {\roadmapname{#1}};
+}
+
+% The results, as a list under each block, starting where the block starts.
+% In focus: only that block's list, at normal size.
+% Intro and closing: every block's list, small, appearing one block per click.
+\newcommand{\roadmapresults}{%
+    \ifnum\roadmap@state=0 \roadmap@alllists{2}\fi
+    \ifnum\roadmap@state=5 \roadmap@alllists{1}\fi
+    \ifnum\roadmap@state>0 \ifnum\roadmap@state<5
+        \roadmap@positions{\roadmap@state}
+        \node[below right, inner xsep=0pt] at (\roadmap@start,-.35) {%
+            \roadmap@list{4.2cm}{\roadmap@state}};
+    \fi\fi
+}
+% Every block's list; block 1 appears on overlay #1, the next one click later, ...
+\newcommand{\roadmap@alllists}[1]{%
+    \foreach \i in {1,2,3,4} {
+        \roadmap@positions{\i}
+        \pgfmathtruncatemacro{\roadmap@from}{\i+#1-1}
+        \only<\roadmap@from->{%
+            \node[below right, inner xsep=0pt] at (\roadmap@start,-.35) {%
+                \small\roadmap@list{3.4cm}{\i}};
+        }
+    }
+}
+% \roadmap@list{<width>}{<block>}: the block's items as a list.
+% Not an itemize: that would indent the bullets, and here the bullets
+% have to sit exactly at the start of the block.
+\newcommand{\roadmap@list}[2]{%
+    \begin{minipage}[t]{#1}
+        \raggedright
+        \def\item{%
+            \par\noindent\hangindent=1.1em\hangafter=1
+            \makebox[1.1em][l]{\usebeamercolor[fg]{itemize item}\usebeamertemplate{itemize item}}%
+        }%
+        \roadmapitems{#2}\par
+    \end{minipage}%
+}
+\makeatother
+
+% \handson{<block>}{<TODOs>}{<minutes>}{<checkpoint>}{<what to do>}
+%   The practice slide at the end of every block.
+%   Use it as the whole content of a frame.
+\newcommand{\handson}[5]{%
+    {\fontsize{40}{40}\selectfont\bfseries #3 min}%
+    \hspace{1.5em}%
+    {\Large\color{black!60} Block #1: \texttt{TODO} #2}
+
+    \bigskip
+    {\large #5\par}
+
+    \vfill
+    \begin{alertblock}{Stuck?}
+        Copy \texttt{checkpoints/#4} over \texttt{workshop.tex} and continue from there.
+    \end{alertblock}
+}
+
+% A thin grey frame, for boxes based on deckbox (which hides the frame):
+%   \begin{tcolorbox}[deckbox, thinframe] ... \end{tcolorbox}
+\tcbset{%
+    thinframe/.style={%
+        colframe=black!25,
+        boxrule=.6pt,
+        frame style={fill=black!25},
+    },
+}
+
+% \repodisplay: \repourl as it is shown on the Thank You slide,
+% without "https://" and without a trailing slash, so it fits on one line.
+% \repourl itself is set in slides.tex, so this runs at \begin{document}.
+\usepackage{xstring}
+\AtBeginDocument{%
+    \StrBehind{\repourl}{://}[\repodisplay]%
+    \IfEndWith{\repodisplay}{/}{\StrGobbleRight{\repodisplay}{1}[\repodisplay]}{}%
+}
+
+% \outputrender[<includegraphics options>]{<file>}: a pre-compiled output,
+% framed like the crops on the Sections slide.
+% Every example output on the slides is compiled separately (see renders/),
+% so text and maths look exactly like the students' own PDF.
+% Snippet renders all have the same width (the article's text width),
+% so scaling them to the line width gives the same text size on every slide.
+\newcommand{\outputrender}[2][]{%
+    \includegraphics[width=\dimexpr\linewidth-0.8pt\relax, frame, #1]{#2}%
+}

@@ -1,0 +1,293 @@
+\chapter{Tables and Figures}\label{chap:tables-figures}
+
+This chapter covers the first half of the fourth block:
+tables, how to draw their lines, floats and captions, and images.
+Tables come first, because figures work the same way and are then nearly free.
+
+\section{Tables}\label{sec:tables}
+
+A table is a \texttt{tabular} environment.
+Its argument has one letter per column, \code|&| moves to the next column, and \code|\\| ends a row:
+
+\slidecode{04-warmup.tex}
+\sliderender{04-warmup.pdf}
+
+Both characters are old friends:
+\code|&| is the column separator from the reserved characters (\autoref{sec:reserved}),
+and \code|\\| is one of the places where a forced line break belongs (\autoref{sec:spaces}).
+With a header row and four columns:
+
+\slidecode{04-tabular.tex}
+\sliderender{04-tabular.pdf}
+
+The table has no caption and no number yet, and it is set right where it stands, like a big letter in the line.
+\autoref{sec:floats} puts it into a float.
+
+\subsection{Column types}\label{sec:column-types}
+
+\autoref{tab:column-types} lists the column types.
+The last two come from the package \texttt{array}, which many other packages load anyway.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Column types of \texttt{tabular}.}
+    \label{tab:column-types}
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Type} & \textbf{Column} \\
+        \midrule
+        \code|l|, \code|c|, \code|r| & left-aligned, centred, right-aligned \\
+        \code|p{3cm}|                & fixed width, text wraps, top-aligned \\
+        \code+|+                     & a vertical line between two columns \\
+        \code|@{...}|                & replaces the space between two columns, e.g.\ \code|@{}| for none \\
+        \code|m{3cm}|, \code|b{3cm}| & like \code|p|, but vertically centred or bottom-aligned (\texttt{array}) \\
+        \code|>{...}|                & code before every cell of the column (\texttt{array}) \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Text in an \code|l|, \code|c| or \code|r| column never wraps,
+so a long text runs off the page.
+For such a column, give it a width with \code|p|:
+
+\owncode{ch06-pcolumn.tex}
+\ownrender{ch06-pcolumn.pdf}
+
+A \code|p| column is justified like a paragraph, which in a narrow column leaves wide gaps between the words.
+\code|>{\raggedright\arraybackslash}p{5cm}| sets it ragged right instead
+(\code|\arraybackslash| keeps \code|\\| working at the end of the row).
+To make a table exactly as wide as the text, use \texttt{tabularx} (\autoref{sec:tabularx}).
+
+Numbers in a column are easiest to compare right-aligned,
+or aligned at the decimal point with the \code|S| column of \texttt{siunitx} (\autoref{sec:siunitx}).
+
+\subsection{Cells over several columns}
+
+\code|\multicolumn{2}{c}{...}| joins two cells of a row into one, centred.
+Together with a partial rule (\autoref{sec:table-lines}), it groups the columns under a common heading:
+
+\owncode{ch06-multicolumn.tex}
+\ownrender{ch06-multicolumn.pdf}
+
+\section{Table lines}\label{sec:table-lines}
+
+Lines are drawn with \code+|+ in the column types for vertical ones, and \code|\hline| for horizontal ones:
+
+\slidecode{04-grid.tex}
+\sliderender{04-grid.pdf}
+
+The package \texttt{booktabs} offers a better way.
+It adds three rules of different weight, \code|\toprule|, \code|\midrule| and \code|\bottomrule|:
+
+\slidecodetitled{04-booktabs-preamble.tex}{Preamble}
+\slidecodetitled{04-booktabs.tex}{Document}
+
+Side by side, the grid on the left, \texttt{booktabs} on the right:
+
+\sliderender{04-lines.pdf}
+
+The \texttt{booktabs} table is how tables are set in books and journals.
+Its manual \parencite{fear2020} gives two rules:
+never use vertical lines, and never use double lines.
+White space separates the columns well enough,
+and the extra lines only make the table harder to scan.
+Horizontal lines are used sparingly too: one above, one below the header, one at the end.
+For more structure, there are
+\code|\cmidrule(lr){2-3}|, a thinner rule under columns 2 to 3 (shortened at the left and right end),
+and \code|\addlinespace|, a little extra space between groups of rows.
+
+Without \code|\usepackage{booktabs}|, the three rules give the error \texttt{Undefined control sequence}:
+they are not part of \hologo{LaTeX} itself.
+
+\section{Floats}\label{sec:floats}
+
+A large table or figure does not fit just anywhere:
+in the middle of a paragraph it would leave a gap at the bottom of the page,
+or be split across two pages.
+So it goes into a \emph{float}, an environment that \hologo{LaTeX} may move to a better place:
+
+\slidecode{04-table-float.tex}
+
+\texttt{table} is the float, \texttt{tabular} the grid of cells inside it;
+the two names are easy to mix up.
+The float for images is \texttt{figure} (\autoref{sec:images}).
+
+\subsection{Placement}
+
+The optional argument lists where the float may go:
+
+\begin{description}
+    \item[\texttt{h}] here, at the place in the text where it is written
+    \item[\texttt{t}] at the top of a page
+    \item[\texttt{b}] at the bottom of a page
+    \item[\texttt{p}] on a page of its own, with only floats on it
+\end{description}
+
+\code|[htbp]| allows all four.
+Without an argument, the standard classes use \code|[tbp]|.
+
+\hologo{LaTeX} tries the places of the list for the current page,
+and if none of them fits, the float waits for the next page.
+Roughly, a place fits when the float, together with the other floats already there, stays within some limits:
+floats may take at most \qty{70}{\percent} of a page at the top and \qty{30}{\percent} at the bottom,
+at least \qty{20}{\percent} of a page must remain text,
+and a page of floats only (\texttt{p}) must be at least half full.
+Floats of the same kind also keep their order:
+a table that has to wait holds back every later table.
+At \code|\clearpage|, and at the end of the document, all waiting floats are set.
+
+So a table that moves to the next page is not a bug.
+It is what floats are for,
+and the reason they get a number: the text says \enquote{Table~1}, not \enquote{the table below}.
+Fighting float placement takes a lot of time and rarely helps.
+Write the text, and look at the placement once at the end.
+If something is still badly placed:
+
+\begin{itemize}
+    \item Check that the argument allows enough places.
+        \code|[h]| alone is a common reason for floats that pile up at the end of a chapter:
+        if \texttt{h} does not fit, the float has hardly anywhere else to go.
+        \hologo{LaTeX} notices this and changes \code|[h]| to \code|[ht]| by itself,
+        with the warning \texttt{`h' float specifier changed to `ht'},
+        but a float that fits neither place still waits for the next page.
+    \item \code|!| in front, e.g.\ \code|[!htbp]|, relaxes the limits above for this float.
+        It does not force anything.
+    \item \code|\FloatBarrier| from the package \texttt{placeins} sets all waiting floats before it continues,
+        without starting a new page.
+        \code|\usepackage[section]{placeins}| puts one at every \code|\section|,
+        so no float drifts into the next section.
+    \item \code|[H]| from the package \texttt{float} forces the float to stay exactly where it is,
+        so it is no longer a float at all.
+        Use it only as a last resort:
+        a float that does not fit leaves the rest of the page empty,
+        and a document full of \code|[H]| is full of half-empty pages.
+\end{itemize}
+
+\subsection{Inside a float}
+
+A float holds its content, a caption and a label, usually in this order (for figures, the caption comes below):
+
+\begin{description}
+    \item[\texttt{\textbackslash centering}] centres the content.
+        It is the right command inside a float;
+        the environment \texttt{center} adds extra space above and below, on top of the float's own.
+    \item[\texttt{\textbackslash caption}] sets the caption, and with it the number.
+        Without a caption there is no number, and nothing to refer to.
+    \item[\texttt{\textbackslash label}] gives the float a name to refer to it (\autoref{sec:labels}).
+        It must come \emph{after} \code|\caption|.
+\end{description}
+
+The order of caption and label matters because \code|\label| attaches to the last number that was set.
+Before \code|\caption|, that is the number of the current section,
+so a reference to the table shows the section number instead.
+\hologo{LaTeX} gives no error and no warning, just a wrong number.
+
+\section{Captions}\label{sec:captions}
+
+Compiled with the rows filled in, the float from \autoref{sec:floats} looks like this:
+
+\sliderender{04-table-float-render.pdf}
+
+There is almost no gap between the caption and the table.
+The standard classes assume captions go below, and only leave space above them.
+The package \texttt{caption} fixes that, without any change in the document:
+
+\slidecodetitled{04-caption-preamble.tex}{Preamble}
+\sliderender{04-caption.pdf}
+
+Its options change the look of all captions at once.
+\texttt{labelfont=bf} sets \enquote{Table~1:} in bold,
+\texttt{font=small} makes the whole caption smaller:
+
+\slidecodetitled{04-caption-bf-preamble.tex}{Preamble}
+\sliderender{04-caption-bf.pdf}
+
+The convention is: tables have their caption above, figures below.
+A table is read from the top, so its caption is read first;
+a figure is looked at first, and the caption explains it.
+
+\subsection{Lists of figures and tables}
+
+\code|\listoffigures| and \code|\listoftables| work like \code|\tableofcontents|,
+built from the captions.
+A long caption would make a long entry;
+the optional argument of \code|\caption| gives a short version for the list:
+
+\owncode{ch06-lof.tex}
+% trim = left bottom right top, in bp: the two lists and the figure
+\ownrender[trim=110 490 110 118, clip]{ch06-lof.pdf}
+
+Like the table of contents, the lists need two compilations (\autoref{sec:compiling}).
+
+\section{Images}\label{sec:images}
+
+Images are included with the package \texttt{graphicx}:
+
+\slidecodetitled{04-graphicx.tex}{Preamble}
+
+\begin{codeblock}
+\includegraphics[width=0.8\textwidth]{figures/cooling-curves.pdf}
+\end{codeblock}
+
+The options go in the square brackets, the file in the braces.
+\code|\includegraphics| works anywhere, even in the middle of a line;
+for a figure with a caption and a number, it goes into a float (\autoref{sec:figures}).
+
+\begin{itemize}
+    \item \code|width=0.8\textwidth| scales the image to \qty{80}{\percent} of the text width.
+        Relative to the text, it survives a change of margins or paper size; \code|width=12cm| does not.
+        Other options: \code|height=5cm|, \code|scale=0.5|,
+        \code|angle=90| (rotates),
+        and \code|trim=1cm 0 1cm 0, clip| (cuts off the left and right \qty{1}{\centi\metre}).
+        With \code|width| and \code|height| together, \code|keepaspectratio| keeps the image from being distorted.
+    \item The path starts at the folder of the main \texttt{.tex} file.
+        Keep images in a folder of their own, e.g.\ \texttt{figures/},
+        use forward slashes, also on Windows,
+        and avoid spaces in file names.
+        \code|\graphicspath{{figures/}}| in the preamble would let you leave out the folder,
+        but writing it out keeps it clear where a file is.
+    \item Write the extension.
+        \hologo{LaTeX} would find the file without it,
+        but \texttt{figures/} might hold \texttt{cooling-curves.pdf} next to the \texttt{cooling-curves.tex} or \texttt{.py} that made it.
+\end{itemize}
+
+\subsection{File formats}
+
+\hologo{pdfLaTeX} reads PDF, PNG and JPG:
+
+\begin{description}
+    \item[PDF] for vector graphics: plots and diagrams.
+        They stay sharp at any zoom, and their text stays searchable.
+    \item[PNG] for screenshots and other pixel images with sharp edges.
+    \item[JPG] for photos.
+\end{description}
+
+SVG is not among them.
+\hologo{pdfLaTeX} only reads formats that it can copy into the PDF more or less as they are,
+and SVG would need a full renderer.
+Export SVG images as PDF, e.g.\ with Inkscape (\textbf{Save As}, PDF),
+or straight from the program that made them; plotting libraries can usually save PDF directly.
+The package \texttt{svg} converts SVG files during compilation,
+but only by running Inkscape, which needs \texttt{-shell-escape} and Inkscape installed.
+
+\subsection{Figures}\label{sec:figures}
+
+A figure is a float like a table, with \texttt{figure} instead of \texttt{table},
+and \code|\includegraphics| instead of \texttt{tabular}.
+The same \code|[htbp]|, \code|\centering|, \code|\caption| and \code|\label|, in the same order,
+except that the caption comes below:
+
+\slidecode{04-figure.tex}
+\sliderender{04-figure.pdf}
+
+\subsection{Several images side by side}
+
+The package \texttt{subcaption} puts several images, each with its own caption, into one figure:
+
+\owncodetitled{ch06-subfigures-preamble.tex}{Preamble}
+\owncodetitled{ch06-subfigures.tex}{Document}
+\ownrender{ch06-subfigures.pdf}
+
+Each \texttt{subfigure} gets a width; the two widths plus the \code|\hfill| between them fill the line.
+The sub-captions are labelled (a), (b),
+and a reference to \texttt{fig:second} gives \enquote{1b}.

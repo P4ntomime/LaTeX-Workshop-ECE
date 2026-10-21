@@ -1,0 +1,25 @@
+% =====================================================================
+%  From source file to PDF, for the slides and the handout.
+%  Needs: tikz, hologo
+%  Colours: `figaccent' and `figfill', the deck's colours unless
+%  defined before \input-ing this file.
+% =====================================================================
+\providecolor{figaccent}{HTML}{8C195F}
+\providecolor{figfill}{HTML}{F1F0FB}
+\begin{tikzpicture}[
+    stage/.style={
+        draw=figaccent, line width=1pt, rounded corners=1.3mm,
+        fill=figfill,
+        minimum width=3.2cm, minimum height=1.6cm, align=center,
+    },
+    flow/.style={->, line width=1.2pt, figaccent},
+]
+    \node[stage] (src) at (0,0)   {Source file\\[1mm]\texttt{report.tex}};
+    \node[stage] (tex) at (4.6,0) {\hologo{LaTeX}};
+    \node[stage] (pdf) at (9.2,0) {PDF\\[1mm]\texttt{report.pdf}};
+    \node[above, text=figaccent] at (tex.north) {compile};
+    \draw[flow] (src) -- (tex);
+    \draw[flow] (tex) -- (pdf);
+    \draw[flow] (pdf.south) to[out=-120, in=-60]
+        node[below, text=figaccent] {change the source, compile again} (src.south);
+\end{tikzpicture}

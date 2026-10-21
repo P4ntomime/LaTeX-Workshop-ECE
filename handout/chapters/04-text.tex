@@ -1,0 +1,316 @@
+\chapter{Text}\label{chap:text}
+
+This chapter covers the second block of the workshop:
+how \hologo{LaTeX} turns the lines of the source file into paragraphs,
+how to type quotation marks, dashes and other special characters,
+lists, and the preamble with its packages.
+
+\section{Spaces, line breaks and paragraphs}\label{sec:spaces}
+
+\hologo{LaTeX} does not keep the line breaks of the source file.
+It collects the words of a paragraph and breaks them into lines itself,
+so that every line is filled evenly:
+
+\slidecode{02-linebreaks.tex}
+\sliderender{02-linebreaks.pdf}
+
+Three lines in, one line out.
+The rules behind this are few:
+
+\textbf{A single line break} is a space, like the space between two words.
+Several spaces in a row count as one.
+
+\slidecode{02-newline.tex}
+\sliderender{02-newline.pdf}
+
+\textbf{An empty line} starts a new paragraph.
+In the standard classes, a new paragraph is indented,
+except for the first one after a heading.
+\autoref{sec:parskip} shows how to get a gap between paragraphs instead.
+
+\slidecode{02-paragraph.tex}
+\sliderender{02-paragraph.pdf}
+
+\textbf{A \texttt{\%} at the end of a line} comments out the line break, and with it the space.
+This is mostly useful inside the definitions of your own commands (\autoref{sec:own-commands}),
+where a stray space would end up in the output.
+
+\slidecode{02-percent.tex}
+\sliderender{02-percent.pdf}
+
+\textbf{A tilde \texttt{\textasciitilde}} is a space at which the line is never broken.
+Use it between a word and the number or name that belongs to it,
+e.g.\ \code|Section~2|, \code|Figure~3|, \code|Dr.~Watson| or \code|10~K|.
+With a normal space, the number can end up alone at the start of the next line:
+
+\slidecode{02-space.tex}
+\sliderender{02-space.pdf}
+
+With the tilde, \enquote{Section} moves down to join it:
+
+\slidecode{02-tilde.tex}
+\sliderender{02-tilde.pdf}
+
+\subsection{One sentence per line}
+
+Since a single line break is just a space, how you break the lines in the source file is up to you.
+A good habit is one sentence per line:
+
+\slidecode{02-one-sentence.tex}
+
+The PDF is the same, but the source is easier to work with.
+Version control such as Git compares files line by line,
+so it then shows the sentence that changed instead of the whole paragraph,
+and an editor's \enquote{go to line} lands on the right sentence.
+The workshop template and this handout are written this way.
+
+\subsection{Forced line breaks}
+
+\code|\\| ends a line at that point:
+
+\slidecode{02-forced-break.tex}
+
+This is almost never what you want in the text of a document.
+It ends a line, not a paragraph:
+the next line has no indent and no gap before it,
+so the text looks like a paragraph but is not one,
+and \hologo{LaTeX} cannot fill the broken line evenly any more.
+At the end of a paragraph, or twice in a row to fake a gap,
+it adds an empty line to the output and produces the warning
+\begin{codeblock}[style=shell]
+Underfull \hbox (badness 10000) in paragraph at lines 12--14
+\end{codeblock}
+The habit comes from the Enter key of a word processor; in \hologo{LaTeX}, a new paragraph is an empty line.
+
+\code|\\| does belong in a few places:
+the rows of a table (\autoref{sec:tables}), the lines of a multi-line equation (\autoref{sec:align}),
+and the title or author block, to break a long title by hand.
+
+\subsection{More space, or a new page}
+
+Space between paragraphs, or a new page, is mostly left to the document class.
+When you do need it:
+
+\begin{itemize}
+    \item \code|\smallskip|, \code|\medskip| and \code|\bigskip| add vertical space between paragraphs;
+        \code|\vspace{1cm}| adds a fixed amount.
+    \item \code|\newpage| starts a new page.
+        \code|\clearpage| does the same, but first places all figures and tables that are still waiting (\autoref{sec:floats}).
+    \item \code|\quad| and \code|\qquad| are wide horizontal spaces;
+        \code|\,| is a thin one, e.g.\ between a number and its unit, \code|250\,ml| (\autoref{sec:siunitx} has a better way for units).
+\end{itemize}
+
+\subsection{Space after a full stop}
+
+In English, \hologo{LaTeX} puts slightly more space after a full stop that ends a sentence than between words.
+It guesses: a full stop after a lower-case letter ends a sentence, a full stop after a capital letter does not.
+Where the guess is wrong, help it:
+
+\begin{itemize}
+    \item After an abbreviation in the middle of a sentence, a backslash and a space give a normal space:
+        \code|e.g.\ a mug|.
+        If the abbreviation belongs to the next word, use the tilde: \code|Dr.~Watson|.
+    \item A sentence that ends with a capital letter needs \code|\@| before the full stop:
+        \code|measured by NASA\@.|
+\end{itemize}
+
+The difference is small, but it is visible in a long text.
+With \code|\frenchspacing| in the preamble, all spaces are the same and the question disappears;
+that is the usual setting for German, and \texttt{babel} switches it on for German texts (\autoref{sec:babel}).
+
+\section{Quotes, dashes and special characters}\label{sec:special-chars}
+
+\subsection{Quotation marks}
+
+\hologo{LaTeX} makes opening and closing quotation marks from two different characters:
+the backtick \code|`| (on most keyboards next to the~1 or the Backspace key) for the opening one,
+and the apostrophe \code|'| for the closing one.
+Doubled, they give double quotation marks.
+The straight double quote \code|"| gives the wrong mark at both ends:
+a closing one with the default font encoding, as here,
+and a straight one with \code|\usepackage[T1]{fontenc}| (\autoref{sec:preamble}):
+
+\owncode{ch04-quotes.tex}
+\ownrender{ch04-quotes.pdf}
+
+The package \texttt{csquotes} does this for you with \code|\enquote|,
+and chooses the marks of the document's language
+(with \texttt{babel} set to German: \quotedblbase like this\textquotedblleft):
+
+\owncodetitled{ch04-csquotes-preamble.tex}{Preamble}
+\owncodetitled{ch04-csquotes.tex}{Document}
+\ownrender{ch04-csquotes.pdf}
+
+Typographic quotation marks pasted from another program (\texttt{“...”}) also work in the text,
+but not inside commands that expect plain characters, e.g.\ in a file name or a label.
+
+\subsection{Dashes}
+
+There are three kinds of dash, typed as one, two or three hyphens:
+
+\begin{itemize}
+    \item \code|-|: the hyphen, inside words: \enquote{well-known}.
+    \item \code|--|: the en dash, for ranges: \enquote{pages 10--20}.
+        In British typesetting, also as a dash in a sentence, with spaces around it: \enquote{a pause -- like this}.
+    \item \code|---|: the em dash, a dash in a sentence in American typesetting, without spaces.
+\end{itemize}
+
+\owncode{ch04-dashes.tex}
+\ownrender{ch04-dashes.pdf}
+
+A minus sign is none of them: it belongs in math mode, \code|$-5$| (\autoref{chap:math}).
+Dashes pasted from a word processor (\texttt{–}, \texttt{—}) work in the text, like the quotation marks,
+but they break file names, labels and options that expect a plain hyphen (\autoref{sec:common-errors}).
+
+\subsection{Other characters}
+
+Since 2018, \hologo{LaTeX} reads source files as UTF-8.
+Letters with accents and umlauts can be typed directly: \enquote{Zürich}, \enquote{café}, \enquote{Straße}.
+Together with \code|\usepackage[T1]{fontenc}| in the preamble (\autoref{sec:preamble}),
+such words are also hyphenated correctly and can be searched and copied from the PDF.
+
+A few characters have a command of their own, e.g.\
+\code|\ldots| for the ellipsis (\ldots),
+\code|\S| for the section sign (\S),
+\code|\texteuro| for the euro sign (\texteuro)
+and \code|\copyright| (\copyright).
+Characters that \hologo{LaTeX} does not know at all,
+e.g.\ a Greek letter ($\alpha$) or a \enquote{less than or equal} ($\leq$) pasted into the text,
+stop the compilation with \texttt{Unicode character ... not set up for use with LaTeX}.
+Most of them are math symbols and belong in math mode (\autoref{sec:symbols}).
+
+\section{Lists}\label{sec:lists}
+
+\hologo{LaTeX} has three kinds of lists, all with the same shape:
+\code|\begin|, one \code|\item| per entry, \code|\end|.
+
+\begin{tcbraster}[raster columns=3, raster equal height, raster column skip=6pt,
+        raster left skip=-\exoverhang, raster right skip=-\exoverhang]
+    \tcbinputlisting{codebox, grow to left by=0pt, grow to right by=0pt, title=itemize,
+        listing file={\slidesdir/listings/02-itemize.tex}, listing options={style=code, numbers=none}}
+    \tcbinputlisting{codebox, grow to left by=0pt, grow to right by=0pt, title=enumerate,
+        listing file={\slidesdir/listings/02-enumerate.tex}, listing options={style=code, numbers=none}}
+    \tcbinputlisting{codebox, grow to left by=0pt, grow to right by=0pt, title=description,
+        listing file={\slidesdir/listings/02-description.tex}, listing options={style=code, numbers=none}}
+\end{tcbraster}
+\sliderender{02-lists.pdf}
+
+\begin{description}
+    \item[\texttt{itemize}] A list with bullets, where the order does not matter.
+    \item[\texttt{enumerate}] A numbered list, where the order matters.
+    \item[\texttt{description}] Terms and their definitions.
+        The term goes in the optional argument of \code|\item|.
+\end{description}
+
+Lists can be nested, up to four levels deep.
+The labels change with the level by themselves:
+
+\owncode{ch04-nested.tex}
+\ownrender{ch04-nested.pdf}
+
+The optional argument of \code|\item| replaces the label of a single entry:
+
+\owncode{ch04-item-label.tex}
+\ownrender{ch04-item-label.pdf}
+
+To change the labels or the spacing of all lists, use the package \texttt{enumitem} (\autoref{sec:enumitem}).
+An empty line inside a list does no harm; it only starts a new paragraph within the current item.
+
+\section{The preamble}\label{sec:preamble}
+
+The preamble is the part of the source file between \code|\documentclass| and \code|\begin{document}|.
+It holds the settings for the whole document;
+nothing in it is printed.
+A typical preamble loads a few packages:
+
+\slidecode{02-preamble.tex}
+
+\begin{description}
+    \item[\texttt{fontenc}] With the option \texttt{T1}, the fonts contain letters with accents and umlauts as one character,
+        so such words are hyphenated correctly and can be searched and copied from the PDF.
+    \item[\texttt{babel}] The language of the document: hyphenation rules and words such as \enquote{Contents} or \enquote{Figure}
+        (\autoref{sec:babel}).
+    \item[\texttt{parskip}] A gap between paragraphs instead of an indent (\autoref{sec:parskip}).
+    \item[\texttt{amsmath}] Everything for math (\autoref{chap:math}).
+\end{description}
+
+Whenever you wonder \enquote{can \hologo{LaTeX} do this?}, the answer is almost always yes, with one line in the preamble.
+Over time, your preamble grows into a collection of such lines,
+and the next report starts with a copy of it.
+\autoref{sec:preamble-file} shows how to keep it in a file of its own.
+
+\section{Packages}\label{sec:packages}
+
+A package adds commands, or changes how the document looks.
+It is loaded in the preamble with \code|\usepackage|,
+which has the same shape as \code|\documentclass|:
+
+\begin{codeblock}
+\usepackage[english]{babel}
+\end{codeblock}
+
+The options go in the square brackets, the name of the package in the braces.
+Several packages without options can share one command,
+e.g.\ \code|\usepackage{booktabs, graphicx}|,
+but one package per line is easier to read and to comment.
+
+\begin{itemize}
+    \item \hologo{TeX} Live, Mac\hologo{TeX} and Overleaf come with almost all packages.
+        \hologo{MiKTeX} installs a package the first time a document loads it (\autoref{sec:miktex}).
+    \item There are almost 7\,000 packages on the \gls{ctan}.
+        Every one of them has a page at \texttt{ctan.org/pkg/<name>}, e.g.\ \myhref{https://ctan.org/pkg/booktabs}{ctan.org/pkg/booktabs},
+        with its documentation.
+        On your own installation, \code|texdoc booktabs| in a terminal opens the same documentation.
+    \item The order of the packages rarely matters.
+        The important exception is \texttt{hyperref}, which goes last (\autoref{sec:hyperref}).
+    \item A package that is not installed stops the compilation with
+        \texttt{File `name.sty' not found} (\autoref{sec:common-errors}).
+\end{itemize}
+
+\autoref{chap:packages-chapter} describes the packages most reports need.
+
+\section{Paragraph spacing}\label{sec:parskip}
+
+By default, every paragraph after the first one in a section is indented, and there is no gap between paragraphs:
+
+\slidecodetitled{02-paragraphs.tex}{Document}
+\sliderender{02-paragraphs.pdf}
+
+That is fine for a novel, but unusual for a report.
+The fix most beginners find is \code|\noindent| at the start of every paragraph:
+
+\slidecodetitled{02-noindent.tex}{Document}
+\sliderender{02-noindent.pdf}
+
+It removes the indent, but now the paragraphs run into each other,
+and every paragraph where you forget it looks broken.
+The better fix is one line in the preamble, the package \texttt{parskip}:
+
+\slidecodetitled{02-parskip.tex}{Preamble}
+\slidecodetitled{02-paragraphs.tex}{Document}
+\sliderender{02-paragraphs-parskip.pdf}
+
+No indent, a gap between paragraphs, and the document itself is back to plain paragraphs.
+To undo it, delete one line.
+\texttt{parskip} also adjusts the spacing in lists and in the table of contents,
+which setting \code|\parindent| and \code|\parskip| by hand would not.
+
+Gaps between paragraphs are common in German-speaking reports,
+so for much of your coursework \texttt{parskip} is a good choice.
+In general: if you find yourself repeating a command everywhere, look for a package or a setting that does it once.
+
+\section{Setting the look of emphasis}\label{sec:emph-preamble}
+
+\code|\emph| (\autoref{sec:emph}) marks text as emphasised and leaves the look to the document.
+To make all emphasised text bold instead of italic, redefine \code|\emph| in the preamble:
+
+\slidecodetitled{02-emph-preamble.tex}{Preamble}
+\slidecodetitled{01-emph.tex}{Document}
+\sliderender{02-emph.pdf}
+
+The document did not change, only the line in the preamble,
+and every \code|\emph| in the document follows.
+\code|\renewcommand| replaces an existing command,
+and \code|#1| stands for its argument
+(\autoref{sec:own-commands} explains both).
+Bold is only an example; what matters is that the decision lives in one place.

@@ -1,0 +1,60 @@
+% Copyright 2007 by Till Tantau
+%
+% This file may be distributed and/or modified
+%
+% 1. under the LaTeX Project Public License and/or
+% 2. under the GNU Public License.
+%
+% See the file LICENSE.md for more details.
+
+\mode<presentation>
+
+% The miniframes outer theme still provides the purple frame title bar.
+% Its headline (section names with one dot per frame underneath) is replaced below.
+\useoutertheme[subsection=false]{miniframes}
+% we use tcolorbox theme here to disable transition shading of box title
+\useinnertheme[rounded=true, shadow=false, shaded=false]{tcolorbox}
+\usecolortheme{own}
+
+\setbeamerfont{block title}{size={}}
+\setbeamertemplate{navigation symbols}{}
+
+\usefonttheme{serif}
+
+\newcommand{\blockstrut}{\rule[-.25em]{0pt}{1.15em}}
+
+\theoremstyle{definition}
+\newtheorem{defblock}[theorem]{\blockstrut Definition}
+\theoremstyle{example}
+\newtheorem{exblock}[theorem]{\blockstrut Example}
+
+% ---------------------------------------------------------------------
+%  Headline: section names, plus a thin progress bar underneath
+% ---------------------------------------------------------------------
+% 2025 used the miniframes headline, which draws one dot per frame.
+% With around 70 frames that was most of the clutter, so the dots are gone.
+% The section names stay (the current one is highlighted automatically),
+% and a progress bar shows how far through the deck we are.
+\setbeamertemplate{headline}{%
+    % The black bar with the section names, spread evenly across the slide.
+    \begin{beamercolorbox}[wd=\paperwidth, ht=2.5ex, dp=1.2ex]{section in head/foot}%
+        \insertsectionnavigationhorizontal{\paperwidth}{\hfill}{\hfill}%
+    \end{beamercolorbox}%
+    % The progress bar: a full-width grey rule with a coloured rule on top of it.
+    % Its length is (current frame / total frames) times the paper width.
+    % On the very first compile the total is not known yet (beamer says 1),
+    % so the bar is drawn full width until the second run.
+    \nointerlineskip%
+    \begin{beamercolorbox}[wd=\paperwidth, ht=0.5ex, dp=0pt]{progress bar}%
+        \rlap{\color{progress bar.bg}\rule{\paperwidth}{0.5ex}}%
+        \color{progress bar.fg}%
+        \ifnum\insertframenumber>\inserttotalframenumber\relax
+            \rule{\paperwidth}{0.5ex}%
+        \else
+            \rule{\dimexpr\paperwidth*\insertframenumber/\inserttotalframenumber\relax}{0.5ex}%
+        \fi
+    \end{beamercolorbox}%
+}
+
+\mode
+<all>

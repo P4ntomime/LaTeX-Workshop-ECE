@@ -1,0 +1,7 @@
+% Render only, never shown on a slide.
+% The figure, table and equation that 04-ref.tex and 04-autoref.tex refer to
+% are not part of those snippets. These lines define their labels without
+% printing anything, so the renders show real numbers instead of ??.
+\refstepcounter{figure}\label{fig:cooling}%
+\refstepcounter{table}\label{tab:vessels}%
+\refstepcounter{equation}\label{eq:cooling}%

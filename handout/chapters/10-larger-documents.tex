@@ -1,0 +1,167 @@
+\chapter{Larger Documents and Own Commands}\label{chap:larger}
+
+A lab report fits into one file.
+A thesis of fifty pages does not, or at least it should not:
+the editor stays faster and clearer with several files,
+and two people can work on different chapters without getting in each other's way.
+This chapter shows how to split a document,
+and how to write your own commands, which every larger document collects over time.
+
+\section{Own commands}\label{sec:own-commands}
+
+\code|\newcommand| defines a command of your own, in the preamble:
+
+\owncodetitled{ch10-newcommand-preamble.tex}{Preamble}
+\owncodetitled{ch10-newcommand.tex}{Document}
+\ownrender{ch10-newcommand.pdf}
+
+\begin{codeblock}[style=shell]
+\newcommand{\name}[number of arguments]{definition}
+\end{codeblock}
+
+\begin{itemize}
+    \item The name must not exist yet; otherwise the error is \texttt{Command \textbackslash name already defined}.
+        \code|\renewcommand| replaces an existing command instead, as in \autoref{sec:emph-preamble}.
+    \item In the definition, \code|#1| stands for the first argument, \code|#2| for the second, up to \code|#9|.
+    \item With a default value, the first argument becomes optional (see below):
+        \code|\vessel| prints \enquote{the mug} and \code|\vessel[flask]| \enquote{the flask}.
+    \item Like every command without an argument, \code|\Tenv| swallows the space after it in the text
+        (\autoref{sec:commands}); in math mode, that does not matter.
+\end{itemize}
+
+\begin{codeblocktitled}{Preamble}
+\newcommand{\vessel}[1][mug]{the #1}
+\end{codeblocktitled}
+
+A command for a symbol you use often, such as \code|\Tenv|, has two advantages:
+less typing, and the symbol can be changed in one place.
+The same works for environments, with \code|\newenvironment{name}{before}{after}|.
+
+\subsection{The \texttt{@} in command names}
+
+Inside packages and classes, internal commands have an \code|@| in their name, e.g.\ \code|\@title|,
+so that they cannot clash with commands in a document.
+In a document, \code|@| is not a letter, so such a name cannot be typed directly.
+To change an internal command in the preamble, put the change between \code|\makeatletter| and \code|\makeatother|:
+
+\begin{codeblocktitled}{Preamble}
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\quad}
+\makeatother
+\end{codeblocktitled}
+
+(This one puts a full stop after section numbers: \enquote{1.~Introduction}.)
+In a \texttt{.sty} file (\autoref{sec:sty}), \code|@| is a letter anyway.
+
+\subsection{Beyond \texttt{\textbackslash newcommand}}
+
+Since 2020, \hologo{LaTeX} also has \code|\NewDocumentCommand|,
+which can take several optional arguments, starred forms and more.
+The example above would be:
+
+\begin{codeblocktitled}{Preamble}
+\NewDocumentCommand{\vessel}{O{mug}}{the #1}
+\end{codeblocktitled}
+
+Underneath it is the L3 programming layer, a programming language for package authors.
+You do not need it for a report;
+if you are curious, \code|texdoc usrguide| describes the commands for documents,
+and \code|texdoc interface3| the programming layer.
+
+\section{One file per chapter}\label{sec:input}
+
+A larger document keeps one file per chapter in a folder,
+and the main file only collects them (\autoref{fig:tree}):
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}[c]{.36\linewidth}
+        \centering
+        \begin{forest}
+            for tree={%
+                folder,
+                grow'=0,
+                font=\ttfamily\small,
+                inner xsep=1pt,
+                inner ysep=1.5pt,
+                s sep=1pt,
+                edge={black!40, line width=.6pt},
+                folder indent=.5em,
+            },
+            where n children=0{}{text=figaccent},
+            [thesis/
+                [main.tex]
+                [preamble.tex]
+                [references.bib]
+                [figures/
+                    [cooling-curves.pdf]
+                ]
+                [sections/
+                    [introduction.tex]
+                    [theory.tex]
+                    [results.tex]
+                ]
+            ]
+        \end{forest}
+    \end{minipage}\hfill
+    \begin{minipage}[c]{.6\linewidth}
+        \tcbinputlisting{codebox, grow to left by=0pt, grow to right by=0pt,
+            enlarge left by=0pt, enlarge right by=0pt, width=\linewidth, title=\texttt{main.tex},
+            listing file={\slidesdir/listings/99-input.tex}, listing options={style=code, numbers=none}}
+    \end{minipage}
+    \caption{A document in several files.}
+    \label{fig:tree}
+\end{figure}
+
+\code|\input{sections/theory.tex}| pastes the file in at that point, as if it were typed there.
+A chapter file has no preamble,
+neither \code|\documentclass| nor \code|\begin{document}|;
+it starts right away with \code|\section{...}| (or \code|\chapter{...}|).
+Paths start at the folder of the main file, as for images.
+Only the main file is compiled; on Overleaf, it is the one set as \textbf{Main document} in the menu.
+
+\subsection{\texttt{\textbackslash include} and \texttt{\textbackslash includeonly}}
+
+\code|\include{sections/theory}| works like \code|\input|, with three differences:
+it always starts a new page, it cannot be nested,
+and the file name is written without \texttt{.tex}.
+In return, \code|\includeonly{sections/theory}| in the preamble compiles only that chapter,
+while page numbers and references to the other chapters stay correct.
+For a long thesis with many images, that makes compiling while you write much faster.
+For a report, \code|\input| is simpler.
+
+\section{A separate preamble}\label{sec:preamble-file}
+
+The preamble can move out of the main file the same way
+(line 2 of \texttt{main.tex} in \autoref{fig:tree}).
+\texttt{preamble.tex} contains only \code|\usepackage| lines, settings and your own commands;
+\texttt{main.tex} keeps the document class.
+Your next report then starts with a copy of \texttt{preamble.tex}:
+the \enquote{copy your last preamble} advice of \autoref{chap:resources}, made easy.
+
+\section{A package of your own}\label{sec:sty}
+
+Some templates go one step further and put the preamble into a package of their own, a \texttt{.sty} file,
+loaded like any other package:
+
+\begin{codeblock}
+\usepackage{mystyle}
+\end{codeblock}
+
+The file \texttt{mystyle.sty} sits next to the main file.
+It is a preamble with a few conventions on top:
+
+\codefiletitled{listings/ch10-mystyle.sty}{\texttt{mystyle.sty}}
+
+\begin{itemize}
+    \item \code|\NeedsTeXFormat| and \code|\ProvidesPackage| identify the file;
+        the name must match the file name, and the date and description in brackets appear in the log.
+    \item Other packages are loaded with \code|\RequirePackage| instead of \code|\usepackage|.
+    \item \code|@| is a letter inside the file, without \code|\makeatletter|.
+    \item \code|\endinput| ends the file; anything after it is ignored.
+\end{itemize}
+
+There is no real advantage over \code|\input{preamble.tex}| for a single document.
+A \texttt{.sty} file becomes useful when several documents share it, e.g.\ the template of a group or a department,
+or when it should take options, which is beyond this handout
+(\code|texdoc clsguide| describes how).

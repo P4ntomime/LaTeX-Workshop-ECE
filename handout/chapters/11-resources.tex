@@ -1,0 +1,60 @@
+\chapter{Resources}\label{chap:resources}
+
+Nobody writes \hologo{LaTeX} from memory.
+Experienced users look things up all the time, and copy their last preamble.
+These are the places to look.
+
+\section{On the web}\label{sec:web-resources}
+
+\begin{description}
+    \item[Overleaf documentation] \myhref{https://www.overleaf.com/learn}{overleaf.com/learn}.
+        Short articles on almost every topic of this handout, with examples you can open in Overleaf.
+        The best start for a question of the form \enquote{how do I \ldots?}.
+    \item[\hologo{LaTeX} Wikibook] \myhref{https://en.wikibooks.org/wiki/LaTeX}{en.wikibooks.org/wiki/LaTeX}.
+        An in-depth guide, from the first document to advanced topics.
+    \item[TeX StackExchange] \myhref{https://tex.stackexchange.com}{tex.stackexchange.com}.
+        Questions and answers on \hologo{TeX} and \hologo{LaTeX}.
+        Search for the exact error message first; almost every beginner's error has an answer there already.
+        If you ask a question, include a minimal example (\autoref{sec:help}).
+    \item[CTAN] \myhref{https://ctan.org}{ctan.org}.
+        The archive of all packages.
+        The page of a package, with its documentation, is \texttt{ctan.org/pkg/<name>}.
+    \item[Symbol lists] Detexify and the symbol lists of \autoref{sec:symbols}.
+\end{description}
+
+\section{On your own computer}\label{sec:texdoc}
+
+\hologo{TeX} Live and \hologo{MiKTeX} come with the documentation of every installed package.
+\code|texdoc <name>| in a terminal opens it, e.g.\ \code|texdoc siunitx|.
+A few documents are worth knowing by name:
+
+\begin{description}
+    \item[\texttt{texdoc lshort}] \enquote{The Not So Short Introduction to \hologo{LaTeX}},
+        a free introduction to everything in this handout and more;
+        a German version is the package \texttt{lshort-german}.
+    \item[\texttt{texdoc comprehensive}] The Comprehensive \hologo{LaTeX} Symbol List.
+    \item[\texttt{texdoc usrguide}] \enquote{\hologo{LaTeX} for authors}, from the \hologo{LaTeX} Project,
+        including the commands that were added in recent years.
+\end{description}
+
+\section{Books}\label{sec:books}
+
+\textit{The \hologo{LaTeX} Companion} \parencite{companion2023} is the reference book on \hologo{LaTeX} and its most important packages:
+two volumes, written by the people who maintain \hologo{LaTeX}.
+It is the place to look when the web gives five contradicting answers.
+\textit{\hologo{LaTeX}: A Document Preparation System} \parencite{lamport1994} is the original manual by the author of \hologo{LaTeX}.
+
+\section{People}\label{sec:people}
+
+Ask someone who has written a report in \hologo{LaTeX}:
+fellow students, the assistants of your lab courses, the team behind this workshop.
+Bring the error message and, if you can, a minimal example.
+
+\section*{Remember}
+
+\begin{center}
+    \Large Nobody writes \hologo{LaTeX} from memory.
+
+    \medskip
+    {\large\color{black!60} Look it up, and copy your last preamble.\par}
+\end{center}

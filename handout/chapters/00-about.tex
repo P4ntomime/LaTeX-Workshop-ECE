@@ -1,0 +1,78 @@
+\chapter*{About This Handout}\label{chap:about}
+\addcontentsline{toc}{chapter}{About This Handout}
+
+This handout goes with the \hologo{LaTeX} workshop.
+It contains everything the slides show,
+plus the details the slides left out on purpose.
+It is meant as a reference for later, for your next lab report and for your thesis,
+so you can also read it without having attended the workshop.
+
+\section*{How it is organised}
+
+\autoref{chap:introduction} explains what \hologo{LaTeX} is,
+and \autoref{chap:setup} how to install it or use it online.
+Chapters~\ref{chap:skeleton} to~\ref{chap:references} follow the four blocks of the workshop:
+the skeleton of a document, text, math, and then tables, figures, cross-references and citations.
+Chapters~\ref{chap:errors} to~\ref{chap:resources} go beyond the slides:
+error messages, useful packages, larger documents and where to look things up.
+The appendix holds the complete example document and a cheat sheet.
+
+\section*{The running example}
+
+Most examples come from a short lab report on Newton's law of cooling,
+\enquote{How Fast Does Your Coffee Go Cold?}.
+It compares how fast a drink cools in a mug, a glass and a vacuum flask.
+In the workshop, you write this report yourself from a template,
+step by step from an empty document to a report with equations, a table, a figure and a bibliography.
+The template, with its finished version, can be downloaded from the repository (see \enquote{\nameref{sec:about-source}} below).
+
+\section*{Code and output}
+
+Code is shown in shaded boxes like this one:
+
+\begin{codeblock}
+The underlying physics is \textit{Newton's law of cooling}.
+\end{codeblock}
+
+The small grey numbers in the margin are line numbers.
+They are not part of the code; the text uses them to point at a line.
+
+What \hologo{LaTeX} makes of the code is shown in a box with a thin frame underneath:
+
+\sliderender{01-styling.pdf}
+
+These outputs were compiled separately, as a real document
+with the class \texttt{article} (\texttt{a4paper}, \texttt{11pt})
+and the packages the workshop has introduced up to that point.
+So they look exactly like your own document, not like this handout,
+which uses a different font (Times) and loads many more packages.
+
+Most examples are only a piece of a document.
+Unless the box says otherwise,
+the code belongs between \code|\begin{document}| and \code|\end{document}|.
+Code with the title \enquote{Preamble} goes before \code|\begin{document}|
+(\autoref{sec:preamble} explains what the preamble is):
+
+\begin{codeblocktitled}{Preamble}
+\usepackage{parskip}
+\end{codeblocktitled}
+
+\section*{Conventions}
+
+\begin{itemize}
+    \item Commands, file names and anything you type literally are set in \texttt{typewriter} font.
+    \item File names are always written with their extension (\texttt{.tex}, \texttt{.bib}, \texttt{.pdf}),
+        so it is clear which file is meant.
+    \item Links to websites are \myhref{https://www.overleaf.com}{blue and underlined},
+        and the link text is usually the address itself, so it can be typed from a printed copy.
+        References inside the handout (\enquote{\autoref{chap:setup}}) are black, but just as clickable.
+\end{itemize}
+
+\section*{The source of this handout}\label{sec:about-source}
+
+This handout is written in \hologo{LaTeX} itself,
+and it uses most of what it describes:
+\texttt{booktabs} tables, \texttt{siunitx} units, \texttt{\textbackslash autoref}, \texttt{biblatex}.
+Its source, the slides and the workshop template are in the repository
+\myhref{\repourl}{\repodisplay};
+the template's \texttt{.zip} file for Overleaf is attached to its releases.

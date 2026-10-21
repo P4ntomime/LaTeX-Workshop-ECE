@@ -1,0 +1,87 @@
+% \newglossaryentry%
+%     {entry-label}
+%     {% key-value-list
+%         % ::: REQUIRED ARGUMENTS :::
+%         name = {item-name},%
+%         description = {item-description},%
+%
+%         % ::: OPTIONAL ARGUMENTS :::
+%         % Label (NOT name) of parent entry.
+%         % Useful for hierarchical glossaries.
+%         % Parent entry must be defined *before* this entry.
+%         parent = {parent-entry-label},
+%
+%         % Plural form of description. 
+%         % If omitted, `description` will be used.
+%         descriptionplural = {item-description-plural-form},
+%
+%         % How entry will appear in text on subsequent use (2nd use and onward). 
+%         % If omitted, `name` will be used.
+%         text = {text-appearance},
+%
+%         % How entry will appear in text on first use.
+%         % If omitted, `text` will be used.
+%         first = {first-text-appearance},
+%
+%         % Plural form of entry in text
+%         % If omitted, `text` will be used with `\glspluralsuffix` appended.
+%         plural = {plural-text-appearance},
+%
+%         % Plural form of first entry appearance. 
+%         % If omitted, value from `plural` is used.
+%         firstplural = {first-plural-text-appearance},
+%
+%         % Symbol associated with with entry.
+%         % Not all styles will display symbol!
+%         symbol = {item-symbol},
+%
+%         % Same as symbol, but for plural.
+%         % If omitted, value is set to `symbol` key.
+%         symbolplural = {item-symbol-plural},
+%
+%         % Text to be used by sort comparator when ordering glossary.
+%         % If omitted, `name` field will be used, unless package option 
+%         % `sort` is set to 'def' or 'use'. See `glossaries-user.pdf:130 (141)`
+%         sort = {sort-text},
+%
+%         % Label of glossary, in which this entry belongs.
+%         % If omitted, `\glsdefaulttype` is used.
+%         type = {glossary-label}
+%
+%         % For further key options, see `glossaries-user.pdf` on pages:
+%         %   - p. 133 (144)
+%         %   - p. 368 (379)
+%         %   - p. 376 (387)
+%     }
+
+% \newglossaryentry{relu}%
+% {%
+%     name = {ReLU},
+%     description = {Rectified Linear Unit activation function}
+% }
+
+\newacronym{wysiwyg}{WYSIWYG}{What You See Is What You Get}
+\newacronym{ctan}{CTAN}{Comprehensive \TeX\ Archive Network}
+\newacronym{doi}{DOI}{Digital Object Identifier}
+\newacronym{mwe}{MWE}{minimal working example}
+
+
+% For long descriptions you may use:
+% \longnewglossaryentry%
+%     {entry-label}
+%     {% key-value-list
+%         name = {item-name},  %   REQUIRED!!
+%
+%         % For possible keys, see above
+%     }
+%     {description} %             REQUIRED!!
+
+% For acronyms you may use:
+% \newacronym%
+%     [key=value] % Optional key-value-list. Appended to \newglossaryentry kv-list
+%     {acronym-label}
+%     {acronym-abbreviation}
+%     {acronym-long-form}
+
+
+

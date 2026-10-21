@@ -1,0 +1,37 @@
+\documentclass[a4paper, 11pt]{article}
+
+% Language and fonts
+\usepackage[T1]{fontenc}                % output encoding
+\usepackage{lmodern}                    % the default font, as outline font
+\usepackage[british]{babel}             % language: hyphenation, names
+\usepackage{csquotes}                   % \enquote{...}
+\usepackage{microtype}                  % finer justification
+
+% Page
+\usepackage[margin=2.5cm]{geometry}     % margins
+\usepackage{parskip}                    % gap between paragraphs
+
+% Math and units
+\usepackage{amsmath}                    % align, cases, \text, ...
+\usepackage{amssymb}                    % more symbols
+\usepackage{siunitx}                    % \qty{65}{\degreeCelsius}
+
+% Tables, figures, lists
+\usepackage{booktabs}                   % \toprule, \midrule, \bottomrule
+\usepackage{tabularx}                   % tables as wide as the text
+\usepackage{graphicx}                   % \includegraphics
+\usepackage{caption}                    % caption spacing and look
+\usepackage{subcaption}                 % figures side by side
+\usepackage{enumitem}                   % list spacing and labels
+\usepackage{xcolor}                     % colours
+
+% Bibliography
+\usepackage[backend=biber, style=numeric]{biblatex}
+\addbibresource{references.bib}
+
+% Links: hyperref last, cleveref after it
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage[capitalise, noabbrev]{cleveref}
+
+\begin{document}

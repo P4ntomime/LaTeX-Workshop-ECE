@@ -1,0 +1,10 @@
+% Render only, never shown on a slide.
+% The target of TODO 3.3 (solution in checkpoint-03.tex). In the template it
+% follows the cooling law (TODO 3.2), so its number is (2).
+\setcounter{equation}{1}
+\begin{align}
+    \frac{T - T_{\mathrm{env}}}{T_0 - T_{\mathrm{env}}}
+        &= \mathrm{e}^{-t/\tau} \notag \\
+    t &= -\tau \ln \left(
+        \frac{T - T_{\mathrm{env}}}{T_0 - T_{\mathrm{env}}} \right)
+\end{align}

@@ -1,0 +1,47 @@
+% =====================================================================
+%  Timeline of TeX, LaTeX and the engines, for the slides and the handout.
+%  Needs: tikz, hologo
+%  Above the line: TeX and the macro packages written for it.
+%  Below the line: newer programs (engines) that run them.
+%
+%  \timelineunit: width of one year. Default 0.4cm (slides);
+%  define it before \input-ing this file to change it, e.g. in the handout:
+%      \newcommand{\timelineunit}{0.36cm}
+%  Colour: `figaccent', the deck's purple unless defined before.
+% =====================================================================
+\providecommand{\timelineunit}{0.4cm}
+\providecolor{figaccent}{HTML}{8C195F}
+\begin{tikzpicture}[
+    x=\timelineunit,
+    tl year/.style={font=\scriptsize\bfseries, text=figaccent},
+    tl name/.style={font=\small, align=center},
+    tl who/.style={font=\scriptsize, text=black!60, align=center},
+]
+    % 1975 at x=0, one unit per year.
+    % \lvl: 1 or 2 above the line, -1 or -2 below; 2 sits further out,
+    % for entries that would otherwise touch their neighbour.
+    \draw[line width=1pt, figaccent, ->] (1,0) -- (35,0);
+    \foreach \y/\lbl/\person/\lvl in {
+            1978/\hologo{TeX}/Donald Knuth/1,
+            1984/\hologo{LaTeX}/Leslie Lamport/1,
+            1994/\hologo{LaTeXe}/\hologo{LaTeX}\\Project/1,
+            1996/\hologo{ConTeXt}/Hans Hagen/2,
+            1996/\hologo{pdfTeX}/H\`an Th\'{\^e} Th\`anh/-1,
+            2004/\hologo{XeTeX}/Jonathan Kew/-1,
+            2007/\hologo{LuaTeX}/\hologo{LuaTeX} team/-2} {
+        \pgfmathsetmacro{\x}{\y-1975}
+        \pgfmathsetmacro{\out}{(abs(\lvl)-1)*1.25}
+        \draw[figaccent, line width=1pt] (\x,-.15) -- (\x,.15);
+        % the year always sits under the line; same year twice is fine
+        \node[tl year] at (\x,-.4) {\y};
+        \ifnum\lvl>0
+            \draw[black!30] (\x,.15) -- (\x,.3+\out);
+            \node[tl who, anchor=south] (tl-who) at (\x,.3+\out) {\person};
+            \node[tl name, anchor=south, inner ysep=1pt] at (tl-who.north) {\lbl};
+        \else
+            \draw[black!30] (\x,-.65) -- (\x,-.8-\out);
+            \node[tl name, anchor=north, inner ysep=1pt] (tl-name) at (\x,-.8-\out) {\lbl};
+            \node[tl who, anchor=north] at (tl-name.south) {\person};
+        \fi
+    }
+\end{tikzpicture}

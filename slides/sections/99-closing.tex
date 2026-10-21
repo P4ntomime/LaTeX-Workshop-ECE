@@ -1,0 +1,306 @@
+\section{Wrap-Up}
+
+\begin{frame}
+    \frametitle{Schedule}
+    \vfill
+    \begin{roadmap}{5}
+        \roadmapresults
+    \end{roadmap}
+    \vfill
+    \note{%
+        Two hours ago, most of them had never compiled a document.
+        The whole line is done.
+        Click through the four lists slowly, one block at a time.
+        \begin{itemize}
+            \item This is the slide the advance organiser was built for:
+                four small things are now visibly one finished thing.
+                Do not talk over the last click.
+        \end{itemize}
+    }
+\end{frame}
+
+% ---------------------------------------------------------------------
+%  Packages
+% ---------------------------------------------------------------------
+
+% The promise from Words Inside Formulas (block 3).
+% Before and after in the same spot: the block 3 way, then siunitx.
+% Both listings have two lines, so the box keeps its size.
+% Only the siunitx version is rendered: the output is the same,
+% which is the point of the grey line.
+\begin{frame}[fragile]
+    \frametitle{siunitx}
+    \uncover<2->{\tcbexinputlst[fontsize=\footnotesize][width=.45\textwidth]{listings/99-siunitx-preamble.tex}[Preamble]}
+    \only<1| handout:0>{\tcbexinputlst[fontsize=\footnotesize]{listings/99-units-before.tex}[Document]}%
+    \only<2-| handout:1>{\tcbexinputlst[fontsize=\footnotesize, highlightlines={1,2}]{listings/99-siunitx.tex}[Document]}%
+    \uncover<3->{\outputrender{renders/99-siunitx.pdf}}
+    \vfill
+    \begin{uncoverenv}<3->
+        \begin{center}
+            \color{black!60}
+            Same output as in block 3, no spacing by hand
+        \end{center}
+    \end{uncoverenv}
+    \vfill
+    \begin{uncoverenv}<4->
+        \begin{center}
+            \Large Number and unit: \code|\qty{...}{...}|
+        \end{center}
+    \end{uncoverenv}
+    \vfill
+    \note{%
+        Block 3 promised this.
+        First click: the way they wrote it in block 3.
+        Remind them how much typing \texttt{\textbackslash,\^{}\{\textbackslash circ\}\textbackslash mathrm\{C\}} was.
+        \begin{itemize}
+            \item Second click: one line in the preamble, and the units are spelled out.
+                \texttt{\textbackslash per\textbackslash minute} builds ``min$^{-1}$'';
+                nobody types the exponent.
+            \item \texttt{\textbackslash qty} works in text and in math mode, line 1 and line 2.
+            \item The thin space and the upright unit are always right,
+                and a whole document can switch to \texttt{min/s} or \texttt{kg m/s} style in the preamble.
+            \item Only the number: \texttt{\textbackslash num\{1.2e-3\}}.
+                Only the unit: \texttt{\textbackslash unit\{\textbackslash metre\textbackslash per\textbackslash second\}}.
+            \item Older tutorials write \texttt{\textbackslash SI\{65\}\{\textbackslash celsius\}}.
+                That is version 2; it still works, \texttt{\textbackslash qty} is the current name.
+        \end{itemize}
+    }
+\end{frame}
+
+% One row per click, like Citation Commands in block 4.
+% Order: the whole document first (language, page), then the blocks
+% in the order of the workshop (lists, math, tables), colour last.
+\begin{frame}[fragile]
+    \frametitle{Useful Packages}
+    \vfill
+    \begin{center}
+        \large
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{@{}l@{\hspace{2em}}l@{}}
+            \toprule
+            \textbf{In the preamble} & \\
+            \midrule
+            \onslide<1->\code|\usepackage[ngerman]{babel}|        & \onslide<1->{\color{black!60}German headings, hyphenation} \\
+            \onslide<2->\code|\usepackage[margin=2.5cm]{geometry}| & \onslide<2->{\color{black!60}page margins} \\
+            \onslide<3->\code|\usepackage{enumitem}|               & \onslide<3->{\color{black!60}list spacing and labels} \\
+            \onslide<4->\code|\usepackage{amssymb}|                & \onslide<4->{\color{black!60}more math symbols} \\
+            \onslide<5->\code|\usepackage{tabularx}|               & \onslide<5->{\color{black!60}tables as wide as the text} \\
+            \onslide<6->\code|\usepackage{xcolor}|                 & \onslide<6->{\color{black!60}coloured text} \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vfill
+    \begin{uncoverenv}<7->
+        \begin{center}
+            \color{black!60}
+            All of them before \code|hyperref|
+        \end{center}
+    \end{uncoverenv}
+    \vfill
+    \note{%
+        Packages most of them will need for their first real report.
+        One sentence each; the details are in the handout.
+        \begin{itemize}
+            \item \texttt{babel}: ``Contents'' becomes ``Inhaltsverzeichnis'', ``Figure'' becomes ``Abbildung'',
+                and words are hyphenated by German rules.
+                \texttt{\textbackslash autoref} follows along.
+                For English: \texttt{english} or \texttt{british}.
+                \texttt{nswissgerman} also exists, for Swiss conventions.
+            \item \texttt{geometry}: the margins a supervisor asks for, in one option.
+                Do not shrink the margins to fit more on a page;
+                the defaults are wide on purpose, long lines are hard to read.
+            \item \texttt{enumitem}: \texttt{\textbackslash begin\{itemize\}[noitemsep]} for tight lists,
+                \texttt{\textbackslash begin\{enumerate\}[label=(\textbackslash alph*)]} for (a), (b), (c).
+                \texttt{\textbackslash setlist} in the preamble changes every list at once.
+            \item \texttt{amssymb}: \texttt{\textbackslash mathbb\{R\}}, \texttt{\textbackslash leqslant}, \texttt{\textbackslash therefore} and many more.
+                Detexify often answers with a symbol from \texttt{amssymb}; it names the package next to the command.
+            \item \texttt{tabularx}: \texttt{\textbackslash begin\{tabularx\}\{\textbackslash textwidth\}\{lX\}}.
+                The \texttt{X} column takes the rest of the width and wraps its text.
+                Works together with \texttt{booktabs}.
+            \item \texttt{xcolor}: \texttt{\textbackslash textcolor\{red\}\{...\}}.
+                Use it sparingly in a report; colour is for highlights, not for decoration.
+                Many packages (TikZ, \texttt{todonotes}) load it themselves.
+            \item All of them go before \texttt{hyperref}, which stays last, as in block 4.
+            \item For whoever asks for more: \texttt{microtype} (finer justification, load and forget)
+                is in the handout.
+        \end{itemize}
+    }
+\end{frame}
+
+% ---------------------------------------------------------------------
+%  Larger documents
+% ---------------------------------------------------------------------
+
+% The tree is drawn with forest (edges library, folder style).
+\begin{frame}
+    \frametitle{Larger Documents}
+    \vfill
+    \begin{columns}[c, onlytextwidth]
+        \begin{column}{.4\textwidth}
+            \centering
+            \begin{forest}
+                for tree={%
+                    folder,
+                    grow'=0,
+                    font=\ttfamily,
+                    inner xsep=1pt,
+                    inner ysep=1.5pt,
+                    s sep=1pt,
+                    edge={black!40, line width=.6pt},
+                    folder indent=.5em,
+                },
+                where n children=0{}{text=structure.fg},
+                [thesis/
+                    [main.tex]
+                    [preamble.tex]
+                    [references.bib]
+                    [figures/
+                        [cooling-curves.pdf]
+                    ]
+                    [sections/
+                        [introduction.tex]
+                        [theory.tex]
+                        [results.tex]
+                    ]
+                ]
+            \end{forest}
+        \end{column}
+        \begin{column}{.56\textwidth}
+            \tcbexinputlst[fontsize=\footnotesize]{listings/99-input.tex}[\texttt{main.tex}]
+        \end{column}
+    \end{columns}
+    \vfill
+    \uncover<2->{%
+        \begin{center}
+            \Large One file per chapter
+        \end{center}
+    }
+    \vfill
+    \note{%
+        Thirty seconds.
+        Not worth it for three pages, essential at thirty:
+        the editor stays usable, and two people can work without fighting.
+        They do not need this today and will need it for their thesis.
+        \begin{itemize}
+            \item \texttt{\textbackslash input} pastes the file in at that point, as if it were typed there.
+                The chapter files have no \texttt{\textbackslash documentclass} and no \texttt{\textbackslash begin\{document\}}.
+            \item The point is that they have seen it once
+                and recognise it when a supervisor's template does it.
+            \item The preamble moves out the same way.
+                \texttt{main.tex} keeps only the class, so the next report starts by copying \texttt{preamble.tex}:
+                the ``copy your last preamble'' advice in a few slides, made easy.
+            \item Some templates use a \texttt{.sty} file instead, loaded with \texttt{\textbackslash usepackage\{mystyle\}}.
+                Same idea, with a few package conventions on top; the handout has it.
+        \end{itemize}
+    }
+\end{frame}
+
+% ---------------------------------------------------------------------
+%  Resources and closing
+% ---------------------------------------------------------------------
+
+% Detexify and the symbol lists had their own slide in block 3.
+\begin{frame}
+    \frametitle{Resources}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.52\textwidth}
+            \begin{itemize}
+                \item \textbf{Overleaf docs}: beginner reference\\
+                    {\small\color{black!60}\href{https://www.overleaf.com/learn}{overleaf.com/learn}}
+                \item \textbf{\LaTeX{} Wikibook}: in-depth guide\\
+                    {\small\color{black!60}\href{https://en.wikibooks.org/wiki/LaTeX}{en.wikibooks.org/wiki/LaTeX}}
+                \item \textbf{TeX StackExchange}: errors, answered\\
+                    {\small\color{black!60}\href{https://tex.stackexchange.com}{tex.stackexchange.com}}
+                \item \textbf{CTAN}: packages and their manuals\\
+                    {\small\color{black!60}\href{https://ctan.org}{ctan.org}}
+            \end{itemize}
+        \end{column}
+        \begin{column}{.44\textwidth}
+            \begin{block}{Also in the Handout}
+                \begin{itemize}
+                    \item more math environments
+                    \item column types, float placement
+                    \item \texttt{cleveref}, \texttt{microtype}
+                    \item entry types, citation commands
+                    \item symbol lists
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+    \note{%
+        The handout is written in \LaTeX{}; its source is in the repository.
+        Hand the handout out at the \emph{start} of the session, not here.
+        It is a reference they should have in front of them all afternoon.
+        This slide is just the reminder that it exists, and why the deck left things out.
+        \begin{itemize}
+            \item Every package manual on CTAN is also on their own installation:
+                \texttt{texdoc siunitx} opens it.
+            \item On StackExchange, search the exact error message first.
+                Almost every beginner error has an answer there already.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Remember}
+    \vfill
+    \begin{center}
+        {\LARGE Nobody writes \LaTeX{} from memory\par}
+        \vspace{1cm}
+        \uncover<2->{%
+            {\Large\color{black!60}
+            Look it up, copy your last preamble\par}
+        }
+    \end{center}
+    \vfill
+    \note{%
+        The honest closing note, worth ten seconds.
+        The beginner's failure mode is believing that fluent users have memorised it all
+        and that they are uniquely slow.
+        They have not, and the student is not.
+    }
+\end{frame}
+
+% "Questions?" is the focus; the link sits in one centred row along the bottom.
+% A tabular, not a minipage: it is only as wide as its text, so the row centres.
+% \repodisplay is \repourl without https:// and the trailing slash (preamble).
+\begin{frame}
+    \frametitle{Thank You}
+    \vfill
+    \begin{center}
+        {\fontsize{40}{48}\selectfont Questions?\par}
+    \end{center}
+    \vfill
+    \begin{center}
+        \qrcode[level=L, version=0, height=2.5cm]{\repourl}%
+        \hspace{6mm}%
+        \begin{tabular}[b]{@{}l@{}}
+            \large Slides, template and handout \\[1mm]
+            {\color{black!60}\href{\repourl}{\repodisplay}}
+        \end{tabular}
+    \end{center}
+    \note{%
+        If something breaks in their next report, they can ask.
+        Stay at the front for a few minutes if you can.
+        The best questions come one-to-one after the room empties.
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Attribution and Licence}
+    \begin{center}
+        \begin{minipage}{.8\textwidth}
+            \textbf{Based on}:
+            LaTeX-Workshop slides by Naoki Pross, 
+            
+            \href{https://github.com/OST-Stud/LaTeX-Workshop}{github.com/OST-Stud/LaTeX-Workshop} CC~BY-SA~4.0
+
+            \bigskip
+            \textbf{This revision}: Laurin Heitzer, MSE EE, \the\year, CC~BY-SA~4.0
+
+            \bigskip
+            {\small\color{black!60}
+            Example document and figure: written for this workshop, synthetic data\par}
+        \end{minipage}
+    \end{center}
+\end{frame}

@@ -1,0 +1,16 @@
+# Build files (latexmk -c removes most of them)
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.glsdefs
+*.listing
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+renders/build/
+renders/build-parskip/

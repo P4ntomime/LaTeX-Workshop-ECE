@@ -1,0 +1,904 @@
+\section{Illustrations \& References}
+
+\blockframe{4}{Illustrations \& References}{Tables, figures, cross-references and citations}
+
+\begin{frame}
+    \frametitle{Schedule}
+    \vfill
+    \begin{roadmap}{4}
+        \roadmapresults
+    \end{roadmap}
+    \vfill
+    \note{%
+        The last block.
+        After this they have everything a lab report needs.
+    }
+\end{frame}
+
+% ---------------------------------------------------------------------
+%  Tables
+% ---------------------------------------------------------------------
+
+% Predict first: everything in this table is already known,
+% & from the block 1 Reserved Characters table, \\ from block 2.
+\begin{frame}[fragile]
+    \frametitle{Warm-Up}
+    \vfill
+    \tcbinputlst{listings/04-warmup.tex}
+    \uncover<2->{\outputrender{renders/04-warmup.pdf}}
+    \vfill
+    \begin{uncoverenv}<3->
+        \begin{center}
+            \color{black!60}
+            Seen before: \code|&| in block 1, \code|\\| in block 2
+        \end{center}
+    \end{uncoverenv}
+    \vfill
+    \note{%
+        \textbf{Two minutes, in pairs, laptops shut.}
+        ``What comes out?''
+        \begin{itemize}
+            \item They know both characters already:
+                \texttt{\&} is the column separator from the reserved-characters table in block 1,
+                and block 2 said \texttt{\textbackslash\textbackslash} belongs in tables and math.
+                Block 3 kept the math half of that promise, this is the table half.
+            \item The \texttt{\{lr\}} is the part nobody can know yet.
+                Ask what they think the \texttt{r} does before you click.
+                Someone will guess ``right''.
+            \item No lines, no caption, no number:
+                that is what the rest of this part adds.
+        \end{itemize}
+    }
+\end{frame}
+
+% The highlighted lines follow the bullet points.
+\begin{frame}[fragile]
+    \frametitle{Tables}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.58\textwidth}
+            \only<1,4-| handout:1>{\tcbinputlst[fontsize=\footnotesize]{listings/04-tabular.tex}}%
+            \only<2| handout:0>{\tcbinputlst[fontsize=\footnotesize, highlightlines={1}]{listings/04-tabular.tex}}%
+            \only<3| handout:0>{\tcbinputlst[fontsize=\footnotesize, highlightlines={2-5}]{listings/04-tabular.tex}}%
+        \end{column}
+        \begin{column}{.38\textwidth}
+            \begin{itemize}
+                \item<2-> \code|{lllr}|: one letter per column
+                    \begin{itemize}
+                        \item \code|l| left, \code|c| centred, \code|r| right
+                    \end{itemize}
+                \item<3-> \code|&|: next column
+                \item<3-> \code|\\|: end of row
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \medskip
+    \outputrender{renders/04-tabular.pdf}
+    \vfill
+    \begin{uncoverenv}<4->
+        \begin{center}
+            \color{black!60}
+            No caption, no number, no placement yet
+        \end{center}
+    \end{uncoverenv}
+    \vfill
+    \note{%
+        \begin{itemize}
+            \item The warm-up table, with two more columns and a header row.
+            \item A bare \texttt{tabular} is set like a big letter in the text:
+                it lands wherever it falls, mid-paragraph or split across a page break.
+            \item The first TODO has them type it unwrapped on purpose,
+                so the float on the next slide solves a problem they actually just had.
+            \item \texttt{p\{3cm\}} for columns with wrapping text is in the handout.
+                Mention it when someone's text runs off the page, not before.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Floats}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.55\textwidth}
+            \only<1| handout:0>{\tcbinputlst[fontsize=\footnotesize]{listings/04-table-float.tex}}%
+            \only<2-| handout:1>{\tcbinputlst[fontsize=\footnotesize, highlightlines={1,8}]{listings/04-table-float.tex}}%
+        \end{column}
+        \begin{column}{.41\textwidth}
+            \begin{itemize}
+                \item<2-> \code|table|: \LaTeX{} decides where it goes
+                \item<3-> \code|[htbp]|: where it may go
+                    \begin{itemize}
+                        \item \code|h| here
+                        \item \code|t| top of a page
+                        \item \code|b| bottom of a page
+                        \item \code|p| on its own page
+                    \end{itemize}
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \vfill
+    \begin{exampleblock}<4->{Placement}
+        A wish list, not a ranking.
+        Let \LaTeX{} decide.
+    \end{exampleblock}
+    \note{%
+        \begin{itemize}
+            \item The \texttt{tabular} is now inside a \texttt{table}.
+                \texttt{table} is the float, \texttt{tabular} is the grid of cells; beginners mix the two names up.
+            \item \texttt{[htbp]} is a wish list, not a ranking: the order of the letters does not matter.
+                Fighting float placement is a huge time sink; do not start.
+            \item ``My table moved to the next page'' is not a bug.
+                It is what floats are for, and the reason they get a number:
+                the text says ``Table 1'' instead of ``the table below''.
+            \item \texttt{[H]} from the \texttt{float} package: say it exists, say it is a last resort, move on.
+                Taught as normal, it gives documents full of half-empty pages.
+            \item The 2025 deck said \texttt{!} ``forces'' placement.
+                It does not, it only relaxes \LaTeX{}'s internal limits.
+                \texttt{[H]} is the one that forces.
+        \end{itemize}
+    }
+\end{frame}
+
+% One line per click. The output of this float opens the Captions slide.
+\begin{frame}[fragile]
+    \frametitle{Inside a Float}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.55\textwidth}
+            \only<1| handout:1>{\tcbinputlst[fontsize=\footnotesize]{listings/04-table-float.tex}}%
+            \only<2| handout:0>{\tcbinputlst[fontsize=\footnotesize, highlightlines={2}]{listings/04-table-float.tex}}%
+            \only<3| handout:0>{\tcbinputlst[fontsize=\footnotesize, highlightlines={3}]{listings/04-table-float.tex}}%
+            \only<4-| handout:0>{\tcbinputlst[fontsize=\footnotesize, highlightlines={4}]{listings/04-table-float.tex}}%
+        \end{column}
+        \begin{column}{.41\textwidth}
+            \begin{itemize}
+                \item<2-> \code|\centering|: centres the content
+                \item<3-> \code|\caption|: text and number
+                \item<4-> \code|\label|: a name for it, \textbf{after} \code|\caption|
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \note{%
+        \begin{itemize}
+            \item \texttt{\textbackslash centering}, not the \texttt{center} environment:
+                \texttt{center} adds extra space above and below, on top of the float's own.
+            \item The number comes from \texttt{\textbackslash caption}.
+                Without a caption there is no number, and nothing to refer to.
+            \item \texttt{\textbackslash label} attaches to the last number that was created.
+                Before \texttt{\textbackslash caption}, that is the section number,
+                so a reference to the table shows the section number instead.
+                It fails silently: no error, just a wrong number.
+                Say it twice.
+            \item What the name is for comes in a few slides, under cross-references.
+            \item The output of this float is the first click of the next slide.
+        \end{itemize}
+    }
+\end{frame}
+
+% Three states of the same float in the same spot: without the caption
+% package, with it, with an option. The Preamble box is the only code here;
+% the float itself is the one from the previous slide.
+\begin{frame}
+    \frametitle{Captions}
+    \uncover<2-| handout:1->{%
+        \only<-2| handout:1>{\tcbexinputlst[fontsize=\footnotesize]{listings/04-caption-preamble.tex}[Preamble]}%
+        \only<3-| handout:2>{\tcbexinputlst[fontsize=\footnotesize]{listings/04-caption-bf-preamble.tex}[Preamble]}%
+    }
+    \begin{overprint}
+        \onslide<1| handout:0>
+            \outputrender{renders/04-table-float-render.pdf}
+        \onslide<2| handout:1>
+            \outputrender{renders/04-caption.pdf}
+        \onslide<3-| handout:2>
+            \outputrender{renders/04-caption-bf.pdf}
+    \end{overprint}
+    \vfill
+    \uncover<4-| handout:1->{%
+        \begin{center}
+            \Large Tables: caption above.
+            Figures: caption below.
+        \end{center}
+    }
+    \vfill
+    \note{%
+        \begin{itemize}
+            \item First click: the float from the previous slide, compiled.
+                Point at the gap between caption and table: there is almost none.
+                Standard \LaTeX{} assumes captions go below, so it only leaves space above them.
+            \item Second click: one line in the preamble, and the gap is right.
+                Nothing in the document changes.
+                Same idea as \texttt{parskip} and \texttt{\textbackslash emph} in block 2.
+            \item Third click: options in the square brackets, like for any package.
+                \texttt{labelfont=bf} makes ``Table 1:'' bold;
+                \texttt{font=small} makes the whole caption smaller.
+                Not a TODO, just to show where such settings live.
+            \item The handout has more:
+                \texttt{\textbackslash caption[short]\{long\}} for a short entry in the list,
+                and \texttt{\textbackslash listoftables} and \texttt{\textbackslash listoffigures},
+                which work like the table of contents.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Table Lines}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.55\textwidth}
+            \only<1,4-| handout:1>{\tcbinputlst[fontsize=\footnotesize]{listings/04-grid.tex}}%
+            \only<2| handout:0>{\tcbinputlst[fontsize=\footnotesize, highlightlines={1}]{listings/04-grid.tex}}%
+            \only<3| handout:0>{\tcbinputlst[fontsize=\footnotesize, highlightlines={2,4,6,8}]{listings/04-grid.tex}}%
+        \end{column}
+        \begin{column}{.41\textwidth}
+            \begin{itemize}
+                \item<2-> \code-|- in the column letters: vertical line
+                \item<3-> \code|\hline|: horizontal line
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \medskip
+    \outputrender{renders/04-grid.pdf}
+    \note{%
+        Show how lines are drawn first, because someone will ask.
+        The next slide is why they should mostly not draw them.
+    }
+\end{frame}
+
+% The two tables side by side in one render (04-lines), so the
+% comparison has the same text size as every other render.
+% The document box has no title, and the render is scaled to .85 of the
+% line width: otherwise it touches the code box.
+\begin{frame}[fragile]
+    \frametitle{booktabs}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.55\textwidth}
+            \tcbinputlst[fontsize=\footnotesize]{listings/04-booktabs.tex}
+        \end{column}
+        \begin{column}{.41\textwidth}
+            \tcbexinputlst[fontsize=\footnotesize]{listings/04-booktabs-preamble.tex}[Preamble]
+            \begin{uncoverenv}<2->
+                {\color{black!60}A separate package, not built into \LaTeX{}\par}
+            \end{uncoverenv}
+            \smallskip
+            \begin{itemize}
+                \item<3-> Three rules, no vertical lines
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \medskip
+    \uncover<4->{%
+        \centering
+        \outputrender[width=.85\linewidth]{renders/04-lines.pdf}\par
+    }
+    \note{%
+        \begin{itemize}
+            \item \texttt{\textbackslash toprule}, \texttt{\textbackslash midrule} and \texttt{\textbackslash bottomrule}
+                only exist once \texttt{booktabs} is loaded.
+                Without it: \texttt{Undefined control sequence}.
+            \item Last click: point at the two tables and say nothing for three seconds.
+                The difference does the teaching.
+            \item No vertical lines, no double lines, three horizontal rules of different weight.
+                This is how tables in books and journals are set.
+            \item Why no vertical lines?
+                White space separates columns well enough, and the extra lines make the table harder to scan.
+                The \texttt{booktabs} manual explains it in more detail.
+        \end{itemize}
+    }
+\end{frame}
+
+% ---------------------------------------------------------------------
+%  Figures
+% ---------------------------------------------------------------------
+
+% Same anatomy as the Commands slide in block 1: \tikzmark's between the parts.
+\begin{frame}[fragile]
+    \frametitle{Images}
+    \tcbexinputlst[fontsize=\footnotesize][width=.45\textwidth]{listings/04-graphicx.tex}[Preamble]
+    \vspace{.7cm}
+    \begin{center}
+        \large
+        \mintinline[escapeinside=||]{latex}{\includegraphics|\tikzmark{g1}|[width=0.8\textwidth]|\tikzmark{g2}|{figures/cooling-curves.pdf}|\tikzmark{g3}|}
+    \end{center}
+    \begin{tikzpicture}[remember picture, overlay]
+        \only<2-| handout:1>{\annotateabove{g1}{g2}{2mm}{Options}}
+        \only<3-| handout:1>{\annotatebelow{g2}{g3}{2mm}{File}}
+    \end{tikzpicture}
+    \vspace{.5cm}
+    \begin{itemize}
+        \item<2-> \code|width=0.8\textwidth|: scales with the page
+        \item<3-> Path from the folder of the main \texttt{.tex} file
+        \item<4-> With the extension, so it is clear which file is meant
+    \end{itemize}
+    \vfill
+    \begin{alertblock}<5->{File Formats}
+        PDF, PNG or JPG.
+        Not SVG: export it as PDF.
+    \end{alertblock}
+    \note{%
+        \texttt{\textbackslash includegraphics} on its own already works, anywhere in the text.
+        The next slide puts it in a float, like the table.
+        \begin{itemize}
+            \item \texttt{graphicx}, with an x.
+                There is an older \texttt{graphics} package with a clumsier syntax;
+                they will never need it.
+            \item \texttt{0.8\textbackslash textwidth} survives a change of margins or paper size.
+                Fixed sizes like \texttt{width=12cm} do not.
+            \item The template keeps all images in \texttt{figures/}.
+                Forward slashes, also on Windows.
+                Avoid spaces in file names.
+            \item The extension: \LaTeX{} would find the file without it,
+                but \texttt{figures/} might hold \texttt{cooling-curves.pdf} next to the
+                \texttt{cooling-curves.tex} or \texttt{.py} that made it.
+                Written out, there is no doubt which one is meant.
+            \item \texttt{pdflatex} cannot read SVG.
+                Export vector graphics (plots, diagrams) as PDF and they stay sharp at any zoom.
+                Photos: JPG. Screenshots: PNG.
+        \end{itemize}
+    }
+\end{frame}
+
+% overprint: the code first, then the render in the same spot.
+% The render is scaled down (width=.7\linewidth), as the figure with its
+% caption does not fit the slide at full width.
+% No \vfill inside the overprint states: it makes the frame overfull.
+\begin{frame}
+    \frametitle{Figures}
+    \begin{overprint}
+        \onslide<1-3| handout:1>
+            \tcbinputlst[fontsize=\footnotesize, highlightlines={3}]{listings/04-figure.tex}
+            \begin{itemize}
+                \item<2-| handout:1> Same structure as \texttt{table}
+                \item<3-| handout:1> Caption below the figure
+            \end{itemize}
+        \onslide<4-| handout:2>
+            \begin{center}
+                \outputrender[width=.7\linewidth]{renders/04-figure.pdf}
+            \end{center}
+    \end{overprint}
+    \note{%
+        \begin{itemize}
+            \item ``Same structure as a table'' is the point.
+                They learned floats once and get figures nearly free,
+                which is why tables come before figures here.
+            \item \texttt{figure} instead of \texttt{table}, \texttt{\textbackslash includegraphics} instead of \texttt{tabular}.
+                The same \texttt{[htbp]}, \texttt{\textbackslash centering}, \texttt{\textbackslash caption} and \texttt{\textbackslash label}, in the same order.
+            \item Caption below: that is the convention for figures,
+                and what the \texttt{caption} package from before expects.
+            \item The figure is the template's own (\texttt{figures/cooling-curves.pdf}), so they can see it in their document in a minute.
+        \end{itemize}
+    }
+\end{frame}
+
+% ---------------------------------------------------------------------
+%  Cross-references
+% ---------------------------------------------------------------------
+
+\begin{frame}[fragile]
+    \frametitle{Labels}
+    \vfill
+    \tcbinputlst[fontsize=\footnotesize, highlightlines={1,3}]{listings/04-labels.tex}
+    \vfill
+    \begin{itemize}
+        \item<2-> Anything numbered, any name
+        \item<3-> Naming convention:
+            \begin{itemize}
+                \item \code|sec:| sections
+                \item \code|eq:| equations
+                \item \code|fig:| figures
+                \item \code|tab:| tables
+            \end{itemize}
+    \end{itemize}
+    \vfill
+    \begin{alertblock}<4->{\texttt{\textbackslash label}}
+        After \code|\caption|, on the same line as \code|\section|.
+    \end{alertblock}
+    \vfill
+    \note{%
+        \begin{itemize}
+            \item The equation is the cooling law from block 3.
+                Block 3 promised the way to refer to it: this is it.
+            \item Sections, equations, tables and figures:
+                all of them get their number from \LaTeX{}, so all of them can be labelled.
+            \item The prefixes are not required, \LaTeX{} ignores them.
+                They make a long list of labels readable,
+                and the editor's autocompletion groups them.
+            \item A paragraph break between \texttt{\textbackslash section} and \texttt{\textbackslash label}
+                can make \texttt{\textbackslash pageref} point at the wrong page.
+                TODO 4.3 asks for it this way.
+            \item Labels must be unique.
+                A duplicate gives the warning \texttt{Label `\ldots' multiply defined}.
+        \end{itemize}
+    }
+\end{frame}
+
+% 04-ref-render defines the three labels invisibly before it inputs 04-ref,
+% so the render shows real numbers.
+\begin{frame}[fragile]
+    \frametitle{References}
+    \vfill
+    \tcbinputlst[fontsize=\footnotesize]{listings/04-ref.tex}
+    \uncover<2->{\outputrender{renders/04-ref-render.pdf}}
+    \vfill
+    \begin{itemize}
+        \item<3-> \code|\ref|: the number
+        \item<4-> \code|\eqref|: the number in brackets, for equations
+        \item<5-> \code|~|: the word and its number stay on one line
+    \end{itemize}
+    \vfill
+    \uncover<6->{%
+        \begin{center}
+            \Large No number typed by hand
+        \end{center}
+    }
+    \vfill
+    \note{%
+        \textbf{Predict first:} what will the output say?
+        \begin{itemize}
+            \item \texttt{\textbackslash ref} only gives the number.
+                The word in front, ``Figure'', is typed by them.
+                The next slide gets rid of that too.
+            \item \texttt{\textbackslash eqref} is from \texttt{amsmath}, which the template already loads.
+                It gives ``(1)'', which is how equations are referred to.
+            \item The tilde is the non-breaking space from block 2.
+                Without it, ``Figure'' can end one line and ``1'' start the next.
+            \item Last click, the payoff of the whole block:
+                move the figure, add an equation, and every number and every reference follows.
+                Same idea as the table of contents in block 1.
+                Pause on it.
+            \item \texttt{\textbackslash pageref} gives the page instead of the number. Rarely needed.
+        \end{itemize}
+    }
+\end{frame}
+
+% 04-autoref-render defines the labels invisibly, like 04-ref-render.
+% Links have no coloured boxes in the render: \includegraphics drops them.
+\begin{frame}[fragile]
+    \frametitle{Automatic Names}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.62\textwidth}
+            \tcbexinputlst[fontsize=\footnotesize]{listings/04-autoref.tex}[Document]
+        \end{column}
+        \begin{column}{.34\textwidth}
+            \tcbexinputlst[fontsize=\footnotesize]{listings/04-autoref-preamble.tex}[Preamble]
+            {\color{black!60}Load it last\par}
+        \end{column}
+    \end{columns}
+    \medskip
+    \uncover<2->{\outputrender{renders/04-autoref-render.pdf}}
+    \vfill
+    \begin{itemize}
+        \item<3-> Writes ``Figure'' and the \code|~| itself
+        \item<4-> Every reference becomes a link
+    \end{itemize}
+    \vfill
+    \begin{uncoverenv}<5->
+        \begin{center}
+            \color{black!60}
+            No coloured boxes around links: \code|\hypersetup{hidelinks}|
+        \end{center}
+    \end{uncoverenv}
+    \note{%
+        \begin{itemize}
+            \item \texttt{hyperref} is the one package where the order matters:
+                it changes many other packages, so it goes after them.
+                Block 2 promised this.
+                (\texttt{cleveref}, if they ever use it, goes after \texttt{hyperref}.)
+            \item The name comes from what was labelled:
+                a \texttt{figure} gives ``Figure'', a \texttt{table} ``Table'', a \texttt{\textbackslash section} ``section''.
+            \item Equations come out as ``Equation 1'', without brackets.
+                For equations, \texttt{Equation\textasciitilde\textbackslash eqref\{\ldots\}} stays the better choice.
+            \item \texttt{hyperref} also makes the table of contents and citations clickable,
+                and fills in the PDF bookmarks.
+            \item In their PDF viewer, links get coloured boxes.
+                Those are only shown on screen, never printed, but most people find them ugly.
+                \texttt{\textbackslash hypersetup\{hidelinks\}} goes after \texttt{\textbackslash usepackage\{hyperref\}}.
+            \item The handout mentions \texttt{cleveref} (\texttt{\textbackslash cref}), which does the same with more control.
+        \end{itemize}
+    }
+\end{frame}
+
+% ---------------------------------------------------------------------
+%  Citations
+% ---------------------------------------------------------------------
+
+% Anatomy of a .bib entry, like Commands and Environments in block 1.
+% The code is written here (not read from listings/references.bib),
+% because the \tikzmark's need escapeinside: keep it in sync with the
+% first entry of references.bib.
+% Marks: k9 at the end of the first line (after the comma), f0 at the start
+% of the first field, f1 at the start of the last one.
+% An escape before or inside the first entry name makes Pygments' BibTeX
+% lexer treat the whole entry as a comment (no highlighting), so the marks
+% around the entry type (t1/t2) and the key (k1/k2) are placed back from k9
+% by counting characters: the code font is monospaced.
+% In "@book{halliday2018," @ is column 0, book columns 1 to 4, { column 5,
+% the key columns 6 to 17, the comma column 18; k9 sits at column 19.
+\newlength{\bibcharwd}
+\begin{frame}[fragile]
+    \frametitle{Bibliography File}
+    \vspace{.9cm}
+    \begin{center}
+        \begin{minipage}{9.6cm}
+            \begin{minted}[fontsize=\normalsize, escapeinside=||]{bibtex}
+                @book{halliday2018,|\tikzmark{k9}|
+                    |\tikzmark{f0}|author    = {Halliday, David and
+                                 Resnick, Robert and
+                                 Walker, Jearl},
+                    title     = {Fundamentals of Physics},
+                    edition   = {11},
+                    publisher = {Wiley},
+                    |\tikzmark{f1}|year      = {2018},
+                }
+            \end{minted}
+        \end{minipage}
+    \end{center}
+    \vfill
+    \uncover<5->{%
+        \begin{center}
+            \color{black!60}
+            In \texttt{references.bib}, next to the \texttt{.tex} file
+        \end{center}
+    }
+    \vfill
+    \settowidth{\bibcharwd}{\normalsize\ttfamily 0}%
+    \begin{tikzpicture}[remember picture, overlay]
+        \tikzmark{t1}{([xshift=-18\bibcharwd]pic cs:k9)}
+        \tikzmark{t2}{([xshift=-14\bibcharwd]pic cs:k9)}
+        \tikzmark{k1}{([xshift=-13\bibcharwd]pic cs:k9)}
+        \tikzmark{k2}{([xshift=-1\bibcharwd]pic cs:k9)}
+        \only<2-| handout:1>{\annotateabove[-.6cm]{t1}{t2}{2mm}{Entry type}}
+        \only<3-| handout:1>{\annotateabove[.4cm]{k1}{k2}{2mm}{Key: your choice}}
+        % Overlay 4: a bracket on the left, from the first to the last field.
+        \only<4-| handout:1>{%
+            \coordinate (top) at ([xshift=-3mm, yshift=3.6mm]pic cs:f0);
+            \coordinate (bottom) at ([xshift=-3mm, yshift=-1.4mm]pic cs:f1);
+            \draw[annotation] ([xshift=\annoarm]top) -- (top) -- (bottom) -- ([xshift=\annoarm]bottom);
+            \node[annotation, anchor=east, font=\normalsize]
+                at ($(top)!.5!(bottom) + (-2mm,0)$) {Fields};
+        }
+    \end{tikzpicture}
+    \note{%
+        Every source is written down once, in its own file next to the document.
+        \begin{itemize}
+            \item Entry type: \texttt{@book}, \texttt{@article}, \texttt{@online}, \texttt{@thesis}, \ldots{}
+                The handout has the common ones and the fields each one needs.
+            \item The key is what they type in the document.
+                It is theirs to choose; author plus year is the usual pattern.
+            \item Fields: \texttt{name = \{value\}}, separated by commas.
+                How to write the names is on the next slide.
+            \item The format is called Bib\TeX{}, after the old program.
+                It is still the format everything exports.
+        \end{itemize}
+    }
+\end{frame}
+
+% One row per click, like Text Styling in block 1. No output column:
+% how a name is printed depends on the citation style.
+% The organisation row comes back as an example after Citation Styles.
+\begin{frame}[fragile]
+    \frametitle{Author Names}
+    \begin{center}
+        \large
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{@{}l@{\hspace{3em}}l@{}}
+            \toprule
+            \textbf{In the \texttt{author} field} & \\
+            \midrule
+            \onslide<1->\code|Halliday, David|                     & \onslide<1->{\color{black!60}family, given} \\
+            \onslide<2->\code|David Halliday|                      & \onslide<2->{\color{black!60}also works} \\
+            \onslide<3->\code|Halliday, David and Resnick, Robert| & \onslide<3->{\color{black!60}several: \code|and|} \\
+            \onslide<4->\code|Halliday, David and others|          & \onslide<4->{\color{black!60}``et al.''} \\
+            \onslide<5->\code|{{World Health Organization}}|       & \onslide<5->{\color{black!60}organisation: one name} \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \note{%
+        Bib\TeX{} splits every name into parts (given, family, and a few more),
+        and the style decides how to put them back together.
+        \begin{itemize}
+            \item With a comma, everything before it is the family name: \texttt{Halliday, David}.
+                Without a comma, the last word is: \texttt{David Halliday}.
+                Both give the same result; exports use the comma form.
+            \item Names are separated by \texttt{and}, never by commas.
+                \texttt{Halliday, David, Resnick, Robert} is read as one strange name.
+                This is the mistake they will actually make when typing an entry by hand.
+            \item \texttt{and others} prints ``et al.'' for long author lists.
+            \item Prefixes like ``van'' or ``von'' are recognised because they are lower case:
+                \texttt{van Beethoven, Ludwig} keeps ``van'' with the family name.
+            \item An organisation needs the extra braces, otherwise its last word is taken as the family name.
+                An example comes after Citation Styles, where it becomes visible.
+            \item Braces also protect capitals in titles, for styles that change titles to sentence case
+                (\texttt{apa}, for example): \texttt{title = \{Cooling of \{DNA\} Samples\}}.
+                The standard \texttt{biblatex} styles leave titles as they are.
+                Handout.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Finding Entries}
+    \vfill
+    \begin{itemize}
+        \item<1-> \textbf{Google Scholar}: \textit{Cite}, then \textit{BibTeX}
+        \item<2-> \textbf{arXiv}: \textit{Export BibTeX Citation} on the abstract page
+        \item<3-> \textbf{Publisher or library catalogue}: \textit{Export citation}
+        \item<4-> \textbf{From a DOI}: \texttt{doi2bib.org}
+        \item<5-> \textbf{Reference manager}: Zotero, JabRef
+    \end{itemize}
+    \vfill
+    \uncover<6->{%
+        \begin{center}
+            \Large Copy, don't type.
+            But check them.
+        \end{center}
+    }
+    \vfill
+    \note{%
+        Half the room assumes they have to type these entries by hand.
+        Say clearly that nobody does.
+        \begin{itemize}
+            \item Google Scholar: the quotation mark icon under a result, then ``BibTeX'' at the bottom.
+            \item arXiv: the link is in the right-hand column of the abstract page, under ``Export BibTeX Citation''.
+                If the paper has since been published, cite the published version instead.
+            \item Most publisher pages and the library catalogue have an export button with a BibTeX option.
+            \item A DOI is the \texttt{10.xxxx/\ldots} identifier on almost every paper.
+                Zotero does the same with ``Add Item by Identifier'' (DOI, ISBN or arXiv ID).
+            \item Zotero (with the Better BibTeX plug-in) or JabRef keep the \texttt{.bib} file up to date for them.
+                Worth it as soon as they write a thesis.
+            \item ``Check them'': exported entries are often incomplete or oddly capitalised,
+                organisations come without the double braces,
+                and the reference list only shows what is in the entry.
+        \end{itemize}
+    }
+\end{frame}
+
+% Preamble and document side by side, the render underneath.
+\begin{frame}[fragile]
+    \frametitle{biblatex}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.5\textwidth}
+            \tcbexinputlst[fontsize=\footnotesize]{listings/04-biblatex-preamble.tex}[Preamble]
+        \end{column}
+        \begin{column}{.46\textwidth}
+            \tcbexinputlst[fontsize=\footnotesize]{listings/04-cite.tex}[Document]
+        \end{column}
+    \end{columns}
+    \uncover<2->{\outputrender{renders/04-cite.pdf}}
+    \note{%
+        \textbf{Predict first:} what does \texttt{\textbackslash cite} turn into?
+        \begin{itemize}
+            \item \texttt{\textbackslash addbibresource} takes the file name \emph{with} \texttt{.bib}.
+            \item \texttt{\textbackslash printbibliography} sets the list, with its own heading.
+                Only cited entries appear in it.
+            \item \texttt{backend=biber} is the default, written out so it is clear what runs.
+                The next slide is about what that means.
+            \item \texttt{style=numeric} is the default style; a few slides on, it changes.
+        \end{itemize}
+    }
+\end{frame}
+
+% Two parts that work together, not two alternatives.
+\begin{frame}[fragile]
+    \frametitle{biblatex and biber}
+    \begin{center}
+        \Large
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{@{}l@{\hspace{2em}}l@{\hspace{2em}}l@{}}
+            \toprule
+            \onslide<1->\code|biblatex| & \onslide<1->{\color{black!60}\LaTeX{} package} & \onslide<1->formats citations and the list \\
+            \onslide<2->\code|biber|    & \onslide<2->{\color{black!60}program}         & \onslide<2->reads and sorts the \texttt{.bib} file \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vfill
+    \uncover<3->{%
+        \begin{center}
+            \color{black!60}
+            Overleaf and \texttt{latexmk} run \texttt{biber} for you
+        \end{center}
+    }
+    \vfill
+    \note{%
+        Someone will ask, because the names sound like two competing tools.
+        They are two halves of one setup.
+        \begin{itemize}
+            \item \texttt{biber} runs between two \LaTeX{} runs:
+                \LaTeX{} writes down which keys were cited,
+                \texttt{biber} looks them up in the \texttt{.bib} file and sorts them,
+                and the next \LaTeX{} run sets the result.
+            \item Overleaf and \texttt{latexmk} notice when this is needed.
+                By hand: \texttt{pdflatex}, \texttt{biber}, \texttt{pdflatex}, \texttt{pdflatex}.
+            \item \texttt{biblatex} can also use the old \texttt{bibtex} program (\texttt{backend=bibtex}),
+                with fewer features and trouble with umlauts.
+            \item Older tutorials use a different setup altogether:
+                \texttt{natbib} or \texttt{\textbackslash bibliographystyle} with the \texttt{bibtex} program.
+                It still works, but if they find a 2008 tutorial: this is the newer way.
+        \end{itemize}
+    }
+\end{frame}
+
+% One row per click, like Text Styling in block 1. No output column:
+% what the citation looks like depends on the style. The next slide
+% shows all of them in a render.
+\begin{frame}[fragile]
+    \frametitle{Citation Commands}
+    \begin{center}
+        \Large
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{@{}l@{\hspace{3em}}l@{}}
+            \toprule
+            \textbf{Command} & \\
+            \midrule
+            \onslide<1->\code|\textcite{key}|         & \onslide<1->{\color{black!60}as part of the sentence} \\
+            \onslide<2->\code|\parencite{key}|        & \onslide<2->{\color{black!60}in brackets} \\
+            \onslide<3->\code|\parencite[p.~12]{key}| & \onslide<3->{\color{black!60}with a page} \\
+            \onslide<4->\code|\parencite{key1,key2}|  & \onslide<4->{\color{black!60}several sources} \\
+            \onslide<5->\code|\cite{key}|             & \onslide<5->{\color{black!60}depends on the style} \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \note{%
+        \begin{itemize}
+            \item \texttt{\textbackslash textcite} when the authors are the subject of the sentence.
+            \item \texttt{\textbackslash parencite} when the citation is an aside, at the end of the claim.
+            \item The square brackets are the optional argument from block 1, here for the page.
+                The \texttt{\textasciitilde} keeps ``p.'' and the number together.
+            \item With \texttt{numeric}, \texttt{\textbackslash cite} and \texttt{\textbackslash parencite} look the same: [1].
+                With \texttt{authoryear}, plain \texttt{\textbackslash cite} has no brackets.
+                Recommend \texttt{\textbackslash textcite} and \texttt{\textbackslash parencite}: they work in every style.
+            \item More (\texttt{\textbackslash footcite}, \texttt{\textbackslash citeauthor}, \texttt{\textbackslash citeyear}) in the handout.
+        \end{itemize}
+    }
+\end{frame}
+
+% The commands of the previous slide in one paragraph, style=numeric.
+% references.bib has a second entry (incropera2007) for the last line.
+\begin{frame}
+    \frametitle{Citation Commands: Example}
+    \vfill
+    \tcbinputlst[fontsize=\footnotesize]{listings/04-citecmds.tex}
+    \uncover<2->{\outputrender{renders/04-citecmds.pdf}}
+    \vfill
+    \note{%
+        \textbf{Predict first:} line by line, what will each citation look like?
+        \begin{itemize}
+            \item Line 1: \texttt{\textbackslash textcite} prints the names, so the sentence reads normally.
+                Four authors, so biblatex shortens to ``et al.'' by itself.
+            \item Line 2: only the number, in brackets.
+            \item Line 3: the page goes inside the brackets.
+            \item Line 4: both sources in one pair of brackets, sorted.
+                \texttt{[1, 2]}, not \texttt{[1] [2]}.
+            \item Next slide: the same commands look quite different with another style.
+        \end{itemize}
+    }
+\end{frame}
+
+% The same document with two styles: only line 2 of the preamble changes.
+% Both preamble listings have three lines, so the box keeps its size.
+\begin{frame}[fragile]
+    \frametitle{Citation Styles}
+    \begin{columns}[T, onlytextwidth]
+        \begin{column}{.47\textwidth}
+            \only<1| handout:1>{\tcbexinputlst[fontsize=\footnotesize]{listings/04-biblatex-preamble.tex}[Preamble]}%
+            \only<2-| handout:2>{\tcbexinputlst[fontsize=\footnotesize, highlightlines={2}]{listings/04-styles-authoryear-preamble.tex}[Preamble]}%
+        \end{column}
+        \begin{column}{.49\textwidth}
+            \tcbexinputlst[fontsize=\footnotesize]{listings/04-styles.tex}[Document]
+        \end{column}
+    \end{columns}
+    \begin{overprint}
+        \onslide<1| handout:1>
+            \outputrender{renders/04-styles-numeric.pdf}
+        \onslide<2-| handout:2>
+            \outputrender{renders/04-styles-authoryear.pdf}
+    \end{overprint}
+    \note{%
+        \begin{itemize}
+            \item One word in the preamble, and every citation and the whole list reformat.
+                This is the moment it lands for anyone who ever reformatted a reference list by hand.
+            \item With \texttt{authoryear}, the difference between \texttt{\textbackslash textcite} and \texttt{\textbackslash parencite} becomes obvious:
+                the year moves into the brackets.
+            \item Other styles: \texttt{ieee} (\texttt{biblatex-ieee}), \texttt{apa} (\texttt{biblatex-apa}),
+                and whatever their department asks for.
+                Ask the supervisor which style; it is one word to change.
+        \end{itemize}
+    }
+\end{frame}
+
+% The organisation row of Author Names, before and after in the same spot.
+% Both .bib listings have four lines, so the box keeps its size.
+% Rendered with style=authoryear, where the split name is visible.
+% The document (listings/04-org.tex) is not shown; the grey line says how
+% it cites. Next to the .bib listing, both boxes would wrap their lines.
+\begin{frame}
+    \frametitle{Organisations}
+    \only<1| handout:0>{\tcbexinputlst[fontsize=\footnotesize][minted language=bibtex]{listings/04-org-wrong.bib}[\texttt{references.bib}]}%
+    \only<2-| handout:1>{\tcbexinputlst[fontsize=\footnotesize, highlightlines={2}][minted language=bibtex]{listings/04-org-right.bib}[\texttt{references.bib}]}%
+    {\color{black!60}Cited with \texttt{\textbackslash textcite} and \texttt{style=authoryear}\par}
+    \smallskip
+    \begin{overprint}
+        \onslide<1| handout:0>
+            \outputrender{renders/04-org-wrong.pdf}
+        \onslide<2-| handout:1>
+            \outputrender{renders/04-org-right.pdf}
+    \end{overprint}
+    \note{%
+        \textbf{First click: ask what is wrong.}
+        ``Organization (2022) sets limits'' and, in the list, ``Organization, World Health''.
+        \begin{itemize}
+            \item Without the inner braces, the name is split like a person's:
+                ``World Health'' is taken as the given name, ``Organization'' as the family name.
+            \item Second click: double braces.
+                The outer pair belongs to the field, the inner pair makes the whole name one unit.
+            \item Exports from Google Scholar or a publisher often get this wrong.
+                It is the most common thing to fix after copying an entry.
+        \end{itemize}
+    }
+\end{frame}
+
+% Two typos in the same spot: a label, then a citation key.
+% Both renders and both log lines are real (compiled from the listings).
+% All listings have one line, so nothing jumps.
+\begin{frame}
+    \frametitle{Undefined References}
+    \vfill
+    \begin{overprint}
+        \onslide<1-2| handout:1>
+            \tcbinputlst[fontsize=\footnotesize]{listings/04-ref-typo.tex}
+            \uncover<2-| handout:1>{%
+                \outputrender{renders/04-ref-typo.pdf}
+                \tcbinputlst[linenos=false, fontsize=\footnotesize][minted language=text, left=2mm, overlay={}]{listings/04-ref-warning.txt}
+            }
+        \onslide<3-| handout:2>
+            \tcbinputlst[fontsize=\footnotesize]{listings/04-cite-typo.tex}
+            \uncover<4-| handout:2>{%
+                \outputrender{renders/04-cite-typo.pdf}
+                \tcbinputlst[linenos=false, fontsize=\footnotesize][minted language=text, left=2mm, overlay={}]{listings/04-cite-warning.txt}
+            }
+    \end{overprint}
+    \vfill
+    \begin{alertblock}<5-| handout:2>{Undefined References}
+        \texttt{??} or a bold key: search the log for the name.
+    \end{alertblock}
+    \vfill
+    \note{%
+        \textbf{Predict first}, twice: what does a misspelled name do?
+        \begin{itemize}
+            \item First: a label typo.
+                \LaTeX{} does not stop; it writes \texttt{??} and a warning.
+            \item Second: a citation key that is not in the \texttt{.bib} file.
+                \texttt{biblatex} prints the key in bold instead.
+            \item Both warnings say \texttt{undefined} and name the thing that is missing.
+                The reflex you are building: read the warning, take the name out of it, search for that name.
+                Not ``compile again and hope''.
+            \item Overleaf lists these under ``Logs and output files''.
+            \item TODO 4.6 has them misspell a key on purpose,
+                so they meet this in a controlled setting with the log message next to it.
+            \item The other classic cause, too few compilation passes, is handled by Overleaf and \texttt{latexmk}.
+                Mention it in one clause if someone asks.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exercise}
+    \handson{4}{4.1--4.6}{5--10}{checkpoint-04.tex}{%
+        Finish the report.
+        \begin{itemize}
+            \normalsize\color{black!60}
+            \setbeamercolor{itemize item}{fg=black!60}
+            \item Table with \texttt{booktabs}
+            \item Figure
+            \item Cross-references
+            \item Clickable references
+            \item Citation
+            \item Broken citation, then fixed (optional)
+        \end{itemize}
+    }
+    \note{%
+        \textbf{5 to 10 minutes}, and this one genuinely has more in it than that.
+        Deliberate: the table and the figure are the core, the rest is for whoever gets there.
+        \begin{itemize}
+            \item Say it: ``if you only do the table and the figure, you have got what you came for.''
+                It removes the end-of-day panic.
+            \item Walk the room looking for \texttt{\textbackslash label} before \texttt{\textbackslash caption}.
+            \item checkpoint-04 is the finished document; anyone who wants the whole thing can take it.
+        \end{itemize}
+    }
+\end{frame}

@@ -1,0 +1,119 @@
+\chapter{Cheat Sheet}\label{app:cheat-sheet}
+
+The commands of this handout, with the section that explains them.
+
+% One small table per topic.
+% \cheat{<title>} starts a topic; the rows are command & what it does.
+\newcommand{\cheat}[1]{\par\medskip{\bfseries #1\par}\nopagebreak\smallskip}
+\newenvironment{cheattable}{%
+    \par\noindent
+    \renewcommand{\arraystretch}{1.1}%
+    \begin{tabular}{@{}p{.62\linewidth}@{\hspace{.5em}}>{\raggedright\arraybackslash}p{.34\linewidth}@{}}
+}{%
+    \end{tabular}\par
+}
+
+{\small
+
+\cheat{Document (\autoref{sec:minimal})}
+\begin{cheattable}
+    \code|\documentclass[a4paper, 11pt]{article}| & first line \\
+    \code|\usepackage[options]{name}| & load a package \\
+    \code|\begin{document}| \ldots \code|\end{document}| & the content \\
+    \code|\title{}| \code|\author{}| \code|\date{}| & title data \\
+    \code|\maketitle| & print the title \\
+    \code|\tableofcontents| & table of contents \\
+\end{cheattable}
+
+\cheat{Structure (\autoref{sec:sections})}
+\begin{cheattable}
+    \code|\chapter{}| & report, book \\
+    \code|\section{}| \code|\subsection{}| & headings \\
+    \code|\section*{}| & no number \\
+    \code|\section{Theory}\label{sec:theory}| & with a label \\
+\end{cheattable}
+
+\cheat{Text (\autoref{sec:styling}, \autoref{sec:spaces})}
+\begin{cheattable}
+    \code|\textbf{}| \code|\textit{}| \code|\texttt{}| & bold, italic, typewriter \\
+    \code|\emph{}| & emphasis \\
+    empty line & new paragraph \\
+    \code|~| & non-breaking space \\
+    \code|%| & comment \\
+    \code|``...''| or \code|\enquote{...}| & quotation marks \\
+    \code|-| \code|--| \code|---| & hyphen, en dash, em dash \\
+    \code|\% \$ \& \# \_ \{ \}| & reserved characters \\
+\end{cheattable}
+
+\cheat{Lists (\autoref{sec:lists})}
+\begin{cheattable}
+    \code|\begin{itemize}| & bullets \\
+    \code|\begin{enumerate}| & numbers \\
+    \code|\begin{description}| & terms: \code|\item[term]| \\
+    \code|\item| & an entry \\
+\end{cheattable}
+
+\cheat{Math (\autoref{chap:math})}
+\begin{cheattable}
+    \code|$...$| & inline \\
+    \code|\[...\]| & display, no number \\
+    \code|\begin{equation}| & numbered \\
+    \code|\begin{align}| \code|&| \code|\\| \code|\notag| & aligned lines \\
+    \code|x_{i}| \code|x^{2}| & sub- and superscript \\
+    \code|T_{\mathrm{env}}| & upright label \\
+    \code|\frac{a}{b}| \code|\sqrt{x}| & fraction, root \\
+    \code|\alpha| \code|\Delta| & Greek \\
+    \code|\cdot| \code|\leq| \code|\approx| & operators \\
+    \code|\sin| \code|\ln| \code|\operatorname{sgn}| & function names \\
+    \code|\left( ... \right)| & growing brackets \\
+    \code|\text{if }| & words in a formula \\
+\end{cheattable}
+
+\cheat{Units (\autoref{sec:siunitx})}
+\begin{cheattable}
+    \code|\qty{65}{\degreeCelsius}| & number and unit \\
+    \code|\num{1.2e-3}| \code|\unit{\metre\per\second}| & number, unit \\
+\end{cheattable}
+
+\cheat{Tables (\autoref{sec:tables})}
+\begin{cheattable}
+    \code|\begin{tabular}{lcr}| & left, centre, right \\
+    \code|p{3cm}| & column with wrapping text \\
+    \code|&| \code|\\| & next cell, next row \\
+    \code|\toprule| \code|\midrule| \code|\bottomrule| & lines (\texttt{booktabs}) \\
+\end{cheattable}
+
+\cheat{Floats (\autoref{sec:floats}, \autoref{sec:figures})}
+\begin{cheattable}
+    \code|\begin{table}[htbp]| & table float \\
+    \code|\begin{figure}[htbp]| & figure float \\
+    \code|\centering| & centre the content \\
+    \code|\caption{}| then \code|\label{}| & caption, label \\
+    \code|\includegraphics[width=0.8\textwidth]{f.pdf}| & image (\texttt{graphicx}) \\
+\end{cheattable}
+
+\cheat{References (\autoref{chap:references})}
+\begin{cheattable}
+    \code|\ref{}| \code|\pageref{}| & number, page \\
+    \code|\eqref{}| & equation number in brackets \\
+    \code|\autoref{}| & name and number (\texttt{hyperref}) \\
+    \code|\cref{}| & name and number (\texttt{cleveref}) \\
+\end{cheattable}
+
+\cheat{Citations (\autoref{sec:biber})}
+\begin{cheattable}
+    \code|\usepackage{biblatex}| & in the preamble \\
+    \code|\addbibresource{references.bib}| & the \texttt{.bib} file \\
+    \code|\textcite{key}| & in the sentence \\
+    \code|\parencite[p.~12]{key}| & in brackets \\
+    \code|\printbibliography| & the list \\
+\end{cheattable}
+
+\cheat{Compiling (\autoref{sec:compiling})}
+\begin{cheattable}
+    \code|latexmk -pdf report.tex| & everything, as often as needed \\
+    \code|latexmk -c| & delete auxiliary files \\
+    \code|texdoc name| & package manual \\
+\end{cheattable}
+
+}

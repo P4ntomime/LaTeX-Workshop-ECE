@@ -1,0 +1,306 @@
+\chapter{Setup}\label{chap:setup}
+
+To write a \hologo{LaTeX} document, you need two things:
+a \hologo{TeX} distribution, which contains the engines, \hologo{LaTeX} itself, thousands of packages and the fonts,
+and an editor to write the source file in.
+Overleaf, an online service, offers both in the browser.
+
+\section{Where to get \hologo{LaTeX}}\label{sec:distributions}
+
+\hologo{LaTeX} is free and available from several places.
+\autoref{tab:distributions} lists the common ones.
+They all contain the same \hologo{LaTeX};
+a document that compiles with one of them compiles with the others too.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Ways to get \hologo{LaTeX}.}
+    \label{tab:distributions}
+    \begin{tabularx}{\linewidth}{@{}ll>{\raggedright\arraybackslash}X@{}}
+        \toprule
+        \textbf{Name} & \textbf{Runs on} & \textbf{Good for} \\
+        \midrule
+        Overleaf         & browser                  & Trying it out, the workshop, writing together \\
+        \hologo{MiKTeX}  & Windows, macOS, Linux    & Trying a local installation: small download, installs packages when they are first needed \\
+        \hologo{TeX} Live & Windows, Linux, macOS   & More experienced users: everything is installed at once \\
+        Mac\hologo{TeX}  & macOS                    & \hologo{TeX} Live for the Mac, with editors and tools \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+If you just want to try \hologo{LaTeX}, start with Overleaf.
+If you want to try a local installation, \hologo{MiKTeX} is the quickest start.
+If you already know you will keep using \hologo{LaTeX}, e.g.\ for your thesis,
+install \hologo{TeX} Live (Mac\hologo{TeX} on a Mac).
+
+\section{Online: Overleaf}\label{sec:overleaf}
+
+Overleaf is an online platform providing a cloud-based \hologo{LaTeX} compiler that works directly in the browser.
+In order to use it, a free account must be created.
+This is recommended if you just want to try out \hologo{LaTeX} without the hassle of installing it first,
+and it is what the workshop uses, so everyone has the same setup.
+
+\subsection{Creating an account}
+
+\begin{enumerate}
+    \item Open \myhref{https://www.overleaf.com/}{overleaf.com}.
+    \item Create an account with your email or sign up directly using a Google or ORCID account.
+    \item The website will ask you to \textit{Upgrade to get more from Overleaf}.
+        Press \textbf{Skip}.
+    \item Next a prompt requesting your name will appear.
+        Entering your details is not required.
+        Press \textbf{Continue} until you arrive at the \textit{Welcome to Overleaf} page.
+\end{enumerate}
+
+\subsection{Opening the workshop template}
+
+The template comes as a \texttt{.zip} file.
+Overleaf unpacks it for you:
+
+\begin{enumerate}
+    \item Click \textbf{New Project}, then \textbf{Upload Project}.
+    \item Drop the template's \texttt{.zip} file into the window.
+    \item Open \texttt{workshop.tex} in the file list on the left, and click \textbf{Recompile}.
+\end{enumerate}
+
+The PDF appears on the right.
+After every change, click \textbf{Recompile} again.
+Errors and warnings are listed under the button next to it,
+\textbf{Logs and output files} (\autoref{chap:errors}).
+
+\subsection{Limits of the free plan}
+
+On the free plan, a single compilation may take at most \qty{10}{\second}
+(at the time of writing, \cite{overleaf-limits}).
+A lab report stays far below that.
+A thesis with many large images can reach it;
+then compile it on your own computer,
+or switch the compile mode in the Recompile menu to \textbf{Fast [draft]} while you write,
+which leaves out the images.
+
+\section{Windows}\label{sec:windows}
+
+On Windows, there are two distributions to choose from.
+\hologo{MiKTeX} is the easier start;
+\hologo{TeX} Live is the one to choose if you already know you will use \hologo{LaTeX} a lot.
+
+\subsection{\hologo{MiKTeX}}\label{sec:miktex}
+
+\hologo{MiKTeX} is faster to install than \hologo{TeX} Live, as by default it downloads only a minimal amount of packages at install-time.
+Any further packages that are required later on will be installed automatically on-the-fly,
+the first time a document loads them.
+However, speaking from personal experience, \hologo{MiKTeX} tends to have issues later on once updates start rolling in, often requiring a fresh install to work again.
+
+\begin{enumerate}
+    \item Download the installer from \myhref{https://miktex.org/download}{miktex.org/download}.
+    \item Run the installer.
+        Install it for yourself only (\enquote{private}), as \hologo{MiKTeX} recommends.
+    \item When the installer asks about missing packages, choose \textbf{Always} (or \textbf{Ask me first}).
+        With \textbf{Never}, every document that needs a package you do not have yet fails.
+    \item After the installation, open \textbf{\hologo{MiKTeX} Console} and check for updates.
+\end{enumerate}
+
+\texttt{latexmk} (\autoref{sec:latexmk}) is a Perl script.
+\hologo{TeX} Live brings its own Perl, \hologo{MiKTeX} does not.
+To use \texttt{latexmk} with \hologo{MiKTeX}, also install
+\myhref{https://strawberryperl.com}{Strawberry Perl}.
+Without it, \texttt{latexmk} stops with a message that it cannot find \texttt{perl}.
+
+\subsection{\hologo{TeX} Live}\label{sec:texlive-windows}
+
+Contrary to \hologo{MiKTeX}, \hologo{TeX} Live installs most packages\footnote{The list of packages installed is curated and limited to ones complying with \hologo{TeX} Live's licensing rules.} found on \myhref{https://www.ctan.org/}{CTAN} right away,
+so a document never has to wait for a missing package.
+
+\begin{enumerate}
+    \item Download \myhref{https://mirror.ctan.org/systems/texlive/tlnet/install-tl-windows.exe}{\texttt{install-tl-windows.exe}} from \myhref{https://tug.org/texlive/windows.html}{tug.org/texlive/windows.html}.
+    \item Run the installer.
+    \item Keep the default settings and press \textbf{Install}.
+
+        \textit{\textbf{Note}: This will take a while to complete.
+            Depending on your computer and internet it can take several hours to finish installing.}
+\end{enumerate}
+
+\section{macOS: Mac\hologo{TeX}}\label{sec:mactex}
+
+Mac\hologo{TeX} is \hologo{TeX} Live for the Mac, packed into a normal macOS installer.
+
+\begin{enumerate}
+    \item Download \texttt{MacTeX.pkg} from \myhref{https://tug.org/mactex/}{tug.org/mactex}.
+        It is a large file (several gigabytes).
+    \item Open it and follow the installer.
+\end{enumerate}
+
+Besides \hologo{TeX} Live, Mac\hologo{TeX} installs a few programs,
+among them the editor TeXShop and TeX Live Utility, which installs updates.
+You find them in the folder \texttt{/Applications/TeX}.
+If disk space is tight, Basic\hologo{TeX} on the same page is a much smaller alternative,
+but you then have to install missing packages yourself with \texttt{tlmgr}.
+
+\section{Linux: \hologo{TeX} Live}\label{sec:linux}
+
+Linux sometimes comes with a \hologo{LaTeX} compiler already pre-installed.
+However, if it is not yet installed, it is recommended to install it using \hologo{TeX} Live.
+There are two ways to do that.
+
+\subsection{From the distribution's packages}
+
+The quickest way is the package manager of your Linux distribution.
+To get everything, install the full collection, e.g.\ on Debian and Ubuntu:
+
+\begin{codeblock}[style=shell]
+sudo apt install texlive-full
+\end{codeblock}
+
+On Fedora, the same collection is called \texttt{texlive-scheme-full}:
+
+\begin{codeblock}[style=shell]
+sudo dnf install texlive-scheme-full
+\end{codeblock}
+
+These packages often lag a year or more behind the current \hologo{TeX} Live,
+and \texttt{tlmgr}, \hologo{TeX} Live's own update tool, is not meant to be used with them.
+For a report or a thesis that is rarely a problem.
+
+\subsection{With the \hologo{TeX} Live installer}
+
+To get the current version, use the installer from \hologo{TeX} Live itself
+\parencite{texlive-quickinstall}:
+
+\begin{codeblock}[style=shell]
+cd /tmp
+curl -LO https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+zcat < install-tl-unx.tar.gz | tar xf -
+cd install-tl-2*
+sudo perl ./install-tl --no-interaction
+\end{codeblock}
+
+At the end, the installer prints the folder that contains the programs.
+Add it to the front of your \texttt{PATH},
+e.g.\ in \texttt{\textasciitilde/.bashrc} or \texttt{\textasciitilde/.zshrc}
+(the year in the path is that of your \hologo{TeX} Live):
+
+\begin{codeblock}[style=shell]
+export PATH="/usr/local/texlive/2026/bin/x86_64-linux:$PATH"
+\end{codeblock}
+
+Like on Windows, copying all the files can take an hour or more.
+Later, \code|sudo tlmgr update --self --all| brings everything up to date.
+
+\section{Editors}\label{sec:editors}
+
+A \hologo{LaTeX} source file is plain text, so any text editor works.
+An editor made for \hologo{LaTeX} adds a compile button, a PDF preview next to the source,
+and a jump from a place in the PDF to the line that produced it (SyncTeX).
+\autoref{tab:editors} lists a few common ones; all of them are free.
+
+\begin{table}[htbp]
+    \centering
+    \caption{A few editors for \hologo{LaTeX}.}
+    \label{tab:editors}
+    \begin{tabularx}{\linewidth}{@{}ll>{\raggedright\arraybackslash}X@{}}
+        \toprule
+        \textbf{Editor} & \textbf{Runs on} & \textbf{Notes} \\
+        \midrule
+        VS Code with \enquote{LaTeX Workshop} & all & A general code editor; the extension compiles with \texttt{latexmk} on every save \\
+        TeXstudio  & all     & Made for \hologo{LaTeX}, with buttons for many commands \\
+        TeXShop    & macOS   & Comes with Mac\hologo{TeX} \\
+        TeXworks   & all     & Simple; comes with \hologo{MiKTeX} and with \hologo{TeX} Live on Windows \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\section{Compiling}\label{sec:compiling}
+
+Overleaf and the editors compile at the press of a button.
+Underneath, they run a few programs, and it helps to know which,
+for the day something goes wrong.
+
+\subsection{By hand}
+
+In a terminal, in the folder of the document, \hologo{pdfLaTeX} compiles \texttt{report.tex} like this:
+
+\begin{codeblock}[style=shell]
+pdflatex report.tex
+\end{codeblock}
+
+Besides \texttt{report.pdf}, it writes a few auxiliary files with the same name
+(\autoref{tab:aux-files}).
+They can be deleted at any time; \hologo{LaTeX} writes them again on the next run.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Files written next to \texttt{report.tex}.}
+    \label{tab:aux-files}
+    \begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+        \toprule
+        \textbf{File} & \textbf{Contents} \\
+        \midrule
+        \texttt{report.log} & Everything \hologo{LaTeX} reported, including all errors and warnings \\
+        \texttt{report.aux} & Labels, numbers and citations, for the next run \\
+        \texttt{report.toc} & The table of contents, for the next run \\
+        \texttt{report.out} & PDF bookmarks (from \texttt{hyperref}) \\
+        \texttt{report.bcf}, \texttt{report.bbl} & Bibliography: what was cited, and the formatted list \\
+        \texttt{report.synctex.gz} & Positions for jumping between PDF and source \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+One run is often not enough.
+\hologo{LaTeX} reads the source from top to bottom only once.
+When it reaches the table of contents, it does not know the sections yet,
+and when it reaches a reference to a figure, the figure's number may come later.
+So each run writes down what it found in the \texttt{.aux} and \texttt{.toc} files,
+and the next run uses it.
+A document with a table of contents and references needs two runs;
+after the first, the log says
+\texttt{Rerun to get cross-references right}.
+With a bibliography, the program \texttt{biber} runs in between (\autoref{sec:biber}):
+
+\begin{codeblock}[style=shell]
+pdflatex report.tex
+biber report
+pdflatex report.tex
+pdflatex report.tex
+\end{codeblock}
+
+\subsection{With \texttt{latexmk}}\label{sec:latexmk}
+
+Counting runs by hand is tedious.
+\texttt{latexmk} does it for you:
+it runs \hologo{pdfLaTeX}, \texttt{biber} and whatever else is needed,
+as often as needed, and stops when nothing changes any more.
+It comes with \hologo{TeX} Live and \hologo{MiKTeX}
+(on Windows with \hologo{MiKTeX}, it needs Perl, see \autoref{sec:miktex}).
+
+\begin{codeblock}[style=shell]
+latexmk -pdf report.tex
+\end{codeblock}
+
+A few more options are useful:
+
+\begin{description}
+    \item[\texttt{latexmk -pdf -pvc report.tex}]
+        Keeps running, and compiles again every time you save the source file.
+    \item[\texttt{latexmk -c}]
+        Deletes the auxiliary files, but keeps the PDF.
+        \texttt{latexmk -C} deletes the PDF too.
+\end{description}
+
+Overleaf and the LaTeX Workshop extension for VS Code use \texttt{latexmk} too.
+That is why you never have to think about the number of runs there.
+
+\subsection{When the compilation stops}
+
+When \hologo{pdfLaTeX} meets an error in a terminal, it stops and waits with a question mark:
+
+\begin{codeblock}[style=shell]
+! Undefined control sequence.
+l.12 \sectoin
+             {Introduction}
+?
+\end{codeblock}
+
+Type \texttt{x} and press Enter to quit, then fix the line it names (here line~12).
+Pressing Enter alone makes \hologo{LaTeX} try to carry on,
+which sometimes works and sometimes produces a long series of follow-up errors.
+\autoref{chap:errors} explains how to read these messages.

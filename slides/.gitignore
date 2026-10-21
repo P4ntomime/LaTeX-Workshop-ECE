@@ -1,7 +1,15 @@
-node_modules
-.DS_Store
-dist
-*.local
-.vite-inspect
-.remote-assets
-components.d.ts
+# LaTeX build files
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+_minted-*/
+renders/build/
+
+!figures/cooling-curves.pdf

@@ -1,0 +1,35 @@
+% =====================================================================
+%  Anatomy of a command, for the handout.
+%  The parts of \documentclass[a4paper]{article} are separate nodes set
+%  next to each other; brackets below or above each part name it.
+%  Needs: tikz (positioning, calc), the colour `keywordcolour'.
+% =====================================================================
+\begin{tikzpicture}[
+    part/.style={inner sep=0pt, outer sep=0pt, font=\Large\ttfamily,
+        text height=1.6ex, text depth=.5ex},
+    bracket/.style={thick, black!70},
+    label/.style={font=\small, align=center, text=black!70},
+]
+    \node[part] (bs) {\bslash};
+    \node[part, right=0pt of bs, text=keywordcolour] (name) {documentclass};
+    \node[part, right=0pt of name] (opt) {[a4paper]};
+    \node[part, right=0pt of opt] (mand) {\bropen article\brclose};
+
+    % \bracketbelow{node}{label}{drop}, \bracketabove{node}{label}{rise}
+    \newcommand{\bracketbelow}[3]{%
+        \draw[bracket] ([xshift=1pt, yshift=-1.5mm]#1.south west) -- ++(0,-1.2mm)
+            -| ([xshift=-1pt, yshift=-1.5mm]#1.south east);
+        \draw[bracket] ([yshift=-2.7mm]#1.south) -- ++(0,-#3)
+            node[label, below] {#2};
+    }
+    \newcommand{\bracketabove}[3]{%
+        \draw[bracket] ([xshift=1pt, yshift=1.5mm]#1.north west) -- ++(0,1.2mm)
+            -| ([xshift=-1pt, yshift=1.5mm]#1.north east);
+        \draw[bracket] ([yshift=2.7mm]#1.north) -- ++(0,#3)
+            node[label, above] {#2};
+    }
+    \bracketbelow{bs}{Command\\delimiter}{4mm}
+    \bracketbelow{name}{Command\\name}{4mm}
+    \bracketabove{opt}{Optional argument}{3mm}
+    \bracketbelow{mand}{Mandatory\\argument}{4mm}
+\end{tikzpicture}
