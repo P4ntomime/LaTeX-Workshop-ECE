@@ -9,7 +9,10 @@
 % slide on the left, notes on the right.
 % Comment out the next two lines for a plain PDF without notes.
 \usepackage{pgfpages}
-\setbeameroption{show notes on second screen}
+% slides-handout.tex defines \slideshandout: no notes there.
+\ifdefined\slideshandout\else
+    \setbeameroption{show notes on second screen}
+\fi
 
 \title{\LaTeX{} Workshop}
 \subtitle{An introductory course to \LaTeX}

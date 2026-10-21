@@ -1,4 +1,5 @@
 # Build the slides:               make
+# Build the handout version:      make handout
 # Rebuild the compiled examples:  make renders
 # Remove build files:             make clean
 #
@@ -38,9 +39,19 @@ DOCUMENTS = 00-class-article 00-class-scrartcl 01-sections 01-toc
 # as in the template. biber finds that file through BIBINPUTS.
 SNIPPET_ENV = BIBINPUTS=listings:
 
-slides.pdf: slides.tex preamble.tex beamerthemeown.sty beamercolorthemeown.sty \
-            $(wildcard sections/*.tex) $(wildcard listings/*)
+# Everything both versions of the deck are built from.
+SLIDES_DEPS = slides.tex preamble.tex beamerthemeown.sty beamercolorthemeown.sty \
+              $(wildcard sections/*.tex) $(wildcard listings/*)
+
+# The presentation: overlays and speaker notes.
+slides.pdf: $(SLIDES_DEPS)
 	latexmk slides.tex
+
+# The handout version (one page per frame, no notes), as in the release.
+handout: slides-handout.pdf
+
+slides-handout.pdf: slides-handout.tex $(SLIDES_DEPS)
+	latexmk slides-handout.tex
 
 # renders/ holds the PDFs the slides include:
 #   00-class-*.pdf                compiled from listings/, the class comparison (intro)
@@ -98,6 +109,7 @@ snippets:
 
 clean:
 	latexmk -C slides.tex
-	rm -rf _minted-slides renders/build renders/build-parskip
+	latexmk -C slides-handout.tex
+	rm -rf _minted-slides _minted-slides-handout renders/build renders/build-parskip
 
-.PHONY: renders snippets clean
+.PHONY: handout renders snippets clean

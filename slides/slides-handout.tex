@@ -1,0 +1,9 @@
+% The slides as a handout: every frame once, in its final state, without notes.
+% This is the version the release ships as slides.pdf.
+% Build: make handout (or: latexmk slides-handout.tex)
+%
+% \slideshandout tells slides.tex to leave the notes off;
+% the handout option makes beamer collapse the overlays.
+\def\slideshandout{}
+\PassOptionsToClass{handout}{beamer}
+\input{slides.tex}
