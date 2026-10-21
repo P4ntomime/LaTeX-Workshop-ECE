@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LaTeX Workshop</title>
+    <meta name="description" content="Slides, handout and template of the LaTeX workshop for bachelor students.">
+    <style>
+        /* Latin Modern, the LaTeX default font. The Pages workflow copies
+           the files into fonts/; without them the page falls back to a
+           serif from the system. */
+        @font-face {
+            font-family: "LM Roman";
+            src: local("Latin Modern Roman 10 Regular"), local("LMRoman10-Regular"),
+                 url("fonts/lmroman10-regular.otf") format("opentype");
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "LM Roman";
+            src: local("Latin Modern Roman 10 Italic"), local("LMRoman10-Italic"),
+                 url("fonts/lmroman10-italic.otf") format("opentype");
+            font-weight: 400;
+            font-style: italic;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "LM Roman";
+            src: local("Latin Modern Roman 10 Bold"), local("LMRoman10-Bold"),
+                 url("fonts/lmroman10-bold.otf") format("opentype");
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "LM Mono";
+            src: local("Latin Modern Mono 10 Regular"), local("LMMono10-Regular"),
+                 url("fonts/lmmono10-regular.otf") format("opentype");
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --paper: #ffffff;
+            --ink: #1a1a1a;
+            --muted: #5c5c5c;
+            --rule: #1a1a1a;
+            --hover: #f6eef3;
+            /* The slides' theme colour (mythemecolor). */
+            --accent: #8c195f;
+            --on-accent: #ffffff;
+            --serif: "LM Roman", "Latin Modern Roman", "CMU Serif", "Noto Serif", Georgia, serif;
+            --mono: "LM Mono", "Latin Modern Mono", "CMU Typewriter Text", ui-monospace, monospace;
+            color-scheme: light dark;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --paper: #1c1a1d;
+                --ink: #ebe7ea;
+                --muted: #a8a1a6;
+                --rule: #ebe7ea;
+                --hover: #2c2329;
+                --accent: #e08ac0;
+                --on-accent: #1c1a1d;
+            }
+        }
+        :root[data-theme="dark"] {
+            --paper: #1c1a1d;
+            --ink: #ebe7ea;
+            --muted: #a8a1a6;
+            --rule: #ebe7ea;
+            --hover: #2c2329;
+            --accent: #e08ac0;
+            --on-accent: #1c1a1d;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: var(--serif);
+            font-size: 1.1875rem;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        main {
+            max-width: 40rem;
+            margin: 0 auto;
+            padding: 4.5rem 1rem 3rem;
+        }
+
+        /* Title block, set like \maketitle. */
+        .title {
+            text-align: center;
+            margin-bottom: 2.75rem;
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(2.6rem, 9vw, 3.8rem);
+            font-weight: 400;
+            line-height: 1.1;
+        }
+        .subtitle {
+            margin: .9rem 0 0;
+            font-size: 1.15rem;
+        }
+        .date {
+            margin: .5rem 0 0;
+            color: var(--muted);
+        }
+
+        /* The TeX logo, as \LaTeX sets it: raised small A, lowered E. */
+        .latex { white-space: nowrap; }
+        .latex .a {
+            font-size: .72em;
+            vertical-align: .27em;
+            margin-left: -.36em;
+            margin-right: -.15em;
+        }
+        .latex .e {
+            vertical-align: -.22em;
+            margin-left: -.1667em;
+            margin-right: -.125em;
+        }
+
+        /* Abstract: narrower and slightly smaller, like the abstract environment. */
+        .abstract {
+            max-width: 32rem;
+            margin: 0 auto 3rem;
+            font-size: 1.0625rem;
+            line-height: 1.55;
+            text-align: justify;
+            hyphens: auto;
+        }
+        .abstract p { margin: 0; }
+
+        /* Downloads, set like a booktabs table. */
+        .files {
+            width: 100%;
+            border-collapse: collapse;
+            border-top: 2px solid var(--rule);
+            border-bottom: 2px solid var(--rule);
+        }
+        .files th {
+            text-align: left;
+            font-weight: 700;
+            padding: .45rem .75rem;
+            border-bottom: 1px solid var(--rule);
+        }
+        .files th.size, .files td.size {
+            text-align: right;
+            white-space: nowrap;
+        }
+        .files td {
+            padding: .7rem .75rem;
+            vertical-align: baseline;
+            font-size: 1.0625rem;
+        }
+        .files tbody tr { position: relative; }
+        .files tbody tr:hover,
+        .files tbody tr:focus-within { background: var(--hover); }
+        .files th:first-child, .files td:first-child { padding-left: .5rem; }
+        .files th:last-child, .files td:last-child { padding-right: .5rem; }
+
+        .files a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        /* The whole row is the link. */
+        .files a::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+        }
+        .files a:focus-visible { outline: none; }
+        .files tbody tr:focus-within {
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
+        }
+        .filename {
+            display: block;
+            font-family: var(--mono);
+            font-size: .8em;
+            font-weight: 400;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+        .desc { color: var(--ink); }
+        td.size { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+        .caption {
+            margin: .7rem 0 0;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .caption b { font-weight: 700; }
+
+        .all {
+            display: flex;
+            justify-content: center;
+            margin-top: 2.25rem;
+        }
+        .all a {
+            display: inline-block;
+            padding: .6rem 1.4rem .55rem;
+            background: var(--accent);
+            color: var(--on-accent);
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .all a:hover { filter: brightness(1.12); }
+        .all a:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+        .all .filename {
+            display: inline;
+            color: inherit;
+            opacity: .85;
+            margin-left: .35em;
+        }
+
+        /* Footnote-style footer: a short rule, then small text. */
+        footer {
+            max-width: 40rem;
+            margin: 0 auto;
+            padding: 0 1rem 3rem;
+            font-size: .9rem;
+            color: var(--muted);
+        }
+        footer hr {
+            width: 33%;
+            margin: 0 0 .6rem;
+            border: 0;
+            border-top: 1px solid var(--muted);
+        }
+        footer p { margin: 0 0 .3rem; }
+        footer a { color: inherit; }
+
+        @media (max-width: 34rem) {
+            main { padding-top: 3rem; }
+            .abstract { text-align: left; }
+            /* One file per block of lines instead of a three-column row. */
+            .files thead { display: none; }
+            .files tbody tr {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                padding: .7rem .5rem;
+            }
+            .files tbody tr + tr { border-top: 1px solid var(--muted); }
+            .files td { padding: 0; }
+            .files td:first-child { padding-left: 0; }
+            .files td:last-child { padding-right: 0; }
+            .files td.desc {
+                grid-column: 1 / -1;
+                grid-row: 2;
+                margin-top: .3rem;
+                font-size: 1rem;
+            }
+            .files td.size { grid-row: 1; grid-column: 2; }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header class="title">
+            <h1>
+                <span class="latex" aria-label="LaTeX"><span aria-hidden="true">L<span class="a">A</span>T<span class="e">E</span>X</span></span>
+                Workshop
+            </h1>
+            <p class="subtitle">A hands-on introduction for bachelor students of any discipline</p>
+            <p class="date">{{DATE}}</p>
+        </header>
+
+        <section class="abstract">
+            <p>
+                In four blocks you write a short lab report from an empty file:
+                document structure, text, math, then tables, figures, cross-references and citations.
+                Each block ends with an exercise in the workshop template.
+            </p>
+        </section>
+
+        <section aria-labelledby="downloads">
+            <h2 id="downloads" hidden>Downloads</h2>
+            <table class="files">
+                <thead>
+                    <tr>
+                        <th scope="col">File</th>
+                        <th scope="col">Contents</th>
+                        <th scope="col" class="size">Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="{{REPO_URL}}/releases/latest/download/slides.pdf" download>Slides</a>
+                            <span class="filename">slides.pdf</span>
+                        </td>
+                        <td class="desc">The workshop slides, one page per slide.</td>
+                        <td class="size">{{SIZE:slides.pdf}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="{{REPO_URL}}/releases/latest/download/handout.pdf" download>Handout</a>
+                            <span class="filename">handout.pdf</span>
+                        </td>
+                        <td class="desc">Everything from the slides with more detail, to read and look things up.</td>
+                        <td class="size">{{SIZE:handout.pdf}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="{{REPO_URL}}/releases/latest/download/workshop-template.zip" download>Template</a>
+                            <span class="filename">workshop-template.zip</span>
+                        </td>
+                        <td class="desc">For the exercises. On Overleaf: New Project, Upload Project, then select the zip.</td>
+                        <td class="size">{{SIZE:workshop-template.zip}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="caption"><b>Table 1</b>&emsp;Workshop files, {{VERSION}}.</p>
+
+            <div class="all">
+                <a href="{{REPO_URL}}/releases/latest/download/latex-workshop.zip" download>
+                    Download all<span class="filename">latex-workshop.zip</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <hr>
+        <p>Sources on <a href="{{REPO_URL}}">GitHub</a>. Older versions are on the <a href="{{REPO_URL}}/releases">releases page</a>.</p>
+        <p>Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>, based on the <a href="https://github.com/OST-Stud/LaTeX-Workshop">LaTeX-Workshop</a> slides by Naoki Pross.</p>
+    </footer>
+</body>
+</html>

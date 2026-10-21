@@ -1,0 +1,81 @@
+# Publishes the overview page in site/ on GitHub Pages.
+#
+# Runs when
+#   - site/ (or this file) changes on main,
+#   - "Build and release" finished successfully for a v* tag, so the page
+#     shows the new version, date and file sizes,
+#   - started by hand (Actions tab, "Run workflow").
+#
+# One-time setup: Settings, Pages, Source: "GitHub Actions".
+#
+# Try the page locally (from the repository root):
+#   gh release view --json tagName,publishedAt,assets > release.json
+#   python3 site/build.py release.json _site
+#   then open _site/index.html
+
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/pages.yml'
+  workflow_run:
+    workflows: [Build and release]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Never cancel a deployment halfway; a newer one waits instead.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # After "Build and release", only for a successful tag run
+    # (for a tag push, head_branch is the tag name).
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       startsWith(github.event.workflow_run.head_branch, 'v'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Latin Modern, so the page uses the same font as a LaTeX document.
+      - name: Install fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends fonts-lmodern
+
+      # Version, date and file sizes of the latest release ("{}" if none yet).
+      - name: Read latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view --json tagName,publishedAt,assets > release.json \
+              || echo '{}' > release.json
+
+      - name: Build site
+        run: python3 site/build.py release.json _site /usr/share/texmf/fonts/opentype/public/lm
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

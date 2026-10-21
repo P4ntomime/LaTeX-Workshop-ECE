@@ -77,6 +77,8 @@ jobs:
           cp template/build/workshop-template.zip dist/
           cp slides/slides-handout.pdf dist/slides.pdf
           cp handout/handout.pdf dist/
+          # All three in one zip, for "Download all" on the Pages site.
+          (cd dist && zip -q latex-workshop.zip workshop-template.zip slides.pdf handout.pdf)
           ls -l dist
 
       - uses: actions/upload-artifact@v7
@@ -124,6 +126,7 @@ jobs:
           | `workshop-template.zip` | The template for the hands-on part. On Overleaf: New Project, Upload Project, select the zip. |
           | `slides.pdf` | The workshop slides. |
           | `handout.pdf` | The handout: everything from the slides, plus more. |
+          | `latex-workshop.zip` | All three files in one zip. |
 
           Download `workshop-template.zip`, not the "Source code" archives below.
           EOF
