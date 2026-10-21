@@ -2,7 +2,7 @@
 
 A two-hour hands-on introduction to LaTeX, built with Beamer and the
 `own` theme from the 2025 deck. The deck follows the four-block
-structure (Skeleton, Text, Maths, Illustrations & References); each block ends with a
+structure (Skeleton, Text, Math, Illustrations & References); each block ends with a
 hands-on slide pointing at the matching TODOs and checkpoint in the
 student template.
 

@@ -75,12 +75,11 @@ It ends a line, not a paragraph:
 the next line has no indent and no gap before it,
 so the text looks like a paragraph but is not one,
 and \hologo{LaTeX} cannot fill the broken line evenly any more.
-At the end of a paragraph, or twice in a row to fake an empty line,
-it produces the warning
+At the end of a paragraph, or twice in a row to fake a gap,
+it adds an empty line to the output and produces the warning
 \begin{codeblock}[style=shell]
 Underfull \hbox (badness 10000) in paragraph at lines 12--14
 \end{codeblock}
-and a paragraph whose last line is stretched across the full width.
 The habit comes from the Enter key of a word processor; in \hologo{LaTeX}, a new paragraph is an empty line.
 
 \code|\\| does belong in a few places:
@@ -127,7 +126,9 @@ that is the usual setting for German, and \texttt{babel} switches it on for Germ
 the backtick \code|`| (on most keyboards next to the~1 or the Backspace key) for the opening one,
 and the apostrophe \code|'| for the closing one.
 Doubled, they give double quotation marks.
-The straight double quote \code|"| gives the closing mark at both ends:
+The straight double quote \code|"| gives the wrong mark at both ends:
+a closing one with the default font encoding, as here,
+and a straight one with \code|\usepackage[T1]{fontenc}| (\autoref{sec:preamble}):
 
 \owncode{ch04-quotes.tex}
 \ownrender{ch04-quotes.pdf}
@@ -174,7 +175,7 @@ A few characters have a command of their own, e.g.\
 \code|\texteuro| for the euro sign (\texteuro)
 and \code|\copyright| (\copyright).
 Characters that \hologo{LaTeX} does not know at all,
-e.g.\ an arrow ($\rightarrow$) or a \enquote{less than or equal} ($\leq$) pasted into the text,
+e.g.\ a Greek letter ($\alpha$) or a \enquote{less than or equal} ($\leq$) pasted into the text,
 stop the compilation with \texttt{Unicode character ... not set up for use with LaTeX}.
 Most of them are math symbols and belong in math mode (\autoref{sec:symbols}).
 
@@ -256,7 +257,7 @@ but one package per line is easier to read and to comment.
 \begin{itemize}
     \item \hologo{TeX} Live, Mac\hologo{TeX} and Overleaf come with almost all packages.
         \hologo{MiKTeX} installs a package the first time a document loads it (\autoref{sec:miktex}).
-    \item There are about 6\,000 packages on \gls{ctan}.
+    \item There are almost 7\,000 packages on the \gls{ctan}.
         Every one of them has a page at \texttt{ctan.org/pkg/<name>}, e.g.\ \myhref{https://ctan.org/pkg/booktabs}{ctan.org/pkg/booktabs},
         with its documentation.
         On your own installation, \code|texdoc booktabs| in a terminal opens the same documentation.
@@ -294,8 +295,8 @@ To undo it, delete one line.
 \texttt{parskip} also adjusts the spacing in lists and in the table of contents,
 which setting \code|\parindent| and \code|\parskip| by hand would not.
 
-Gaps between paragraphs are the usual convention in German-language documents,
-so for much of your coursework \texttt{parskip} is simply the right choice.
+Gaps between paragraphs are common in German-speaking reports,
+so for much of your coursework \texttt{parskip} is a good choice.
 In general: if you find yourself repeating a command everywhere, look for a package or a setting that does it once.
 
 \section{Setting the look of emphasis}\label{sec:emph-preamble}

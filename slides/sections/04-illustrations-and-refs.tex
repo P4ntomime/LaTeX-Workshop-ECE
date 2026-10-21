@@ -116,14 +116,14 @@
     \end{columns}
     \vfill
     \begin{exampleblock}<4->{Placement}
-        A wish list, tried in order.
+        A wish list, not a ranking.
         Let \LaTeX{} decide.
     \end{exampleblock}
     \note{%
         \begin{itemize}
             \item The \texttt{tabular} is now inside a \texttt{table}.
                 \texttt{table} is the float, \texttt{tabular} is the grid of cells; beginners mix the two names up.
-            \item \texttt{[htbp]} is a wish list, tried in order.
+            \item \texttt{[htbp]} is a wish list, not a ranking: the order of the letters does not matter.
                 Fighting float placement is a huge time sink; do not start.
             \item ``My table moved to the next page'' is not a bug.
                 It is what floats are for, and the reason they get a number:
@@ -400,7 +400,7 @@
                 and the editor's autocompletion groups them.
             \item A paragraph break between \texttt{\textbackslash section} and \texttt{\textbackslash label}
                 can make \texttt{\textbackslash pageref} point at the wrong page.
-                Their template has done it this way since block 1.
+                TODO 4.3 asks for it this way.
             \item Labels must be unique.
                 A duplicate gives the warning \texttt{Label `\ldots' multiply defined}.
         \end{itemize}

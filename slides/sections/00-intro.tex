@@ -5,11 +5,9 @@
     \note{%
         \textbf{Before you start}
         \begin{itemize}
-            \item Have \texttt{checkpoint-04.pdf} open in another window.
             \item Check that everyone got the template link.
-                Anyone without it pairs up with a neighbour.
-            \item Say the one thing that matters most: nobody has to keep up.
-                Every block ends with a checkpoint file that puts them back on the rails.
+            \item Nobody has to keep up.
+                Every block ends with a checkpoint file that puts them back on track.
         \end{itemize}
     }
 \end{frame}
@@ -17,27 +15,26 @@
 \begin{frame}
     \frametitle{In two hours, you will have (hopefully) written this}
     \begin{center}
-        \includegraphics[page=1, height=.7\textheight, frame]{renders/checkpoint-04.pdf}
+        \includegraphics[page=1, height=.5\textheight, frame]{renders/checkpoint-04.pdf}
         \hfill
-        \includegraphics[page=2, height=.7\textheight, frame]{renders/checkpoint-04.pdf}
+        \includegraphics[page=2, height=.5\textheight, frame]{renders/checkpoint-04.pdf}
         \hfill
-        \includegraphics[page=3, height=.7\textheight, frame]{renders/checkpoint-04.pdf}
+        \includegraphics[page=3, height=.5\textheight, frame]{renders/checkpoint-04.pdf}
+        \hfill
+        \includegraphics[page=4, height=.5\textheight, frame]{renders/checkpoint-04.pdf}
 
         \medskip
         {\small\color{black!60} Title, table of contents, equations, a table, a figure, a bibliography.}
     \end{center}
     \note{%
         \begin{itemize}
-            \item 10 seconds, not 2 minutes.
-                Show it, say ``this is the destination'', move on.
-            \item The point is to make the next two hours feel finite:
-                everything they are about to see is a piece of \emph{this}.
+            \item Short document containing basic LaTeX stuff.
         \end{itemize}
     }
 \end{frame}
 
 \begin{frame}
-    \frametitle{Who is in the room?}
+    \frametitle{Who is in the Room?}
     \vfill
     \begin{tcbraster}[%
         raster columns=2,
@@ -67,20 +64,13 @@
         Hands up, 30 seconds.
         Last year roughly 95\,\% were in groups 1 and 2, so the deck is built for them.
         \begin{itemize}
-            \item It tells \emph{you} whether to slow down on block 1 or speed through it.
-            \item It tells \emph{them} that almost nobody knows this yet.
-                That is worth a lot at 4\,pm.
-            \item Many hands for 4: give them the ``if you finish early'' tasks
-                and ask them to help their neighbours.
+            \item Say that student should tell me if I need to slow down.
         \end{itemize}
     }
 \end{frame}
 
-% ---------------------------------------------------------------------
-%  Hook
-% ---------------------------------------------------------------------
 \begin{frame}
-    \frametitle{Sound familiar?}
+    \frametitle{Sound Familiar?}
     \vfill
     \large
     \begin{itemize}
@@ -96,20 +86,16 @@
             \item None of this is Word's fault alone.
                 Word has styles, but it also lets you format text directly,
                 so a consistent result depends on your discipline.
-            \item No solution yet, only the problem.
         \end{itemize}
     }
 \end{frame}
 
-% ---------------------------------------------------------------------
-%  Comparison
-% ---------------------------------------------------------------------
 % + and - in front of the items, coloured like the rest of the deck.
 \newcommand{\pro}{\textcolor{structure.fg}{\textbf{+}}}
 \newcommand{\con}{\textcolor{structure.fg}{\textbf{--}}}
 
 \begin{frame}
-    \frametitle{Two ways to write a document}
+    \frametitle{Two Ways to Write a Document}
     \begin{columns}[T, onlytextwidth]
         \begin{column}{.47\textwidth}
             \begin{block}{WYSIWYG}
@@ -144,15 +130,14 @@
             \item Be fair to Word.
                 It has styles, automatic captions and an equation editor.
                 The difference: Word \emph{lets} you format directly, \LaTeX{} makes you describe the structure.
-            \item More points (Git, maths, collaboration) are in the handout.
-                Do not read them out here.
+            \item More points (Git, math, collaboration) are in the handout.
         \end{itemize}
     }
 \end{frame}
 
 
 \begin{frame}
-    \frametitle{When it is worth the trouble}
+    \frametitle{When it is Worth the Trouble}
     \begin{center}
         \input{../handout/figures/effort-plot.tex}
     \end{center}
@@ -170,20 +155,13 @@
     \end{columns}
     \note{%
         \begin{itemize}
-            \item Being honest about the left-hand side buys you credibility for the right-hand side.
-                Tell them \LaTeX{} is always better and they will (correctly) stop believing you.
-            \item The flat \LaTeX{} curve is the real claim:
-                the effort barely grows with the document.
-            \item The curves cross about where their coursework starts.
+            \item Take this plot with a grain of salt.
         \end{itemize}
     }
 \end{frame}
 
-% ---------------------------------------------------------------------
-%  How LaTeX works
-% ---------------------------------------------------------------------
 \begin{frame}
-    \frametitle{How \LaTeX{} works}
+    \frametitle{How \LaTeX{} Works}
     \vfill
     \begin{center}
         \begin{tikzpicture}[
@@ -214,7 +192,7 @@
                 You change the source and compile again.
             \item The program that compiles is called the engine,
                 e.g.\ \hologo{pdfLaTeX} or \hologo{LuaLaTeX}.
-                One name is enough for today.
+                There are more, but out of scope for now.
         \end{itemize}
     }
 \end{frame}
@@ -223,7 +201,7 @@
 % compiled as they are; the viewport shows the same region of the page
 % for both (in bp from the bottom-left corner of the A4 page).
 \begin{frame}
-    \frametitle{Same text, one word changed}
+    \frametitle{Same Text, One Word Changed}
     \only<1| handout:1>{\tcbinputlst[fontsize=\footnotesize]{listings/00-class-article.tex}}%
     \only<2| handout:2>{\tcbinputlst[fontsize=\footnotesize, highlightlines={1}]{listings/00-class-scrartcl.tex}}%
     \begin{tcolorbox}[deckbox, thinframe, colback=white, left=0mm, right=0mm, top=0mm, bottom=0mm]
@@ -246,7 +224,7 @@
 % ---------------------------------------------------------------------
 % The timeline is shared with the handout: figures/tex-timeline.tex
 \begin{frame}
-    \frametitle{Not a new idea}
+    \frametitle{Not a New Idea}
     \vfill
     \begin{center}
         \input{../handout/figures/tex-timeline.tex}
@@ -267,7 +245,7 @@
 
 
 \begin{frame}[fragile]
-    \frametitle{Getting started}
+    \frametitle{Getting Started}
     \begin{columns}[t, onlytextwidth]
         \begin{column}{.45\textwidth}
             {\Large\bfseries Today: Overleaf\par}
@@ -316,7 +294,7 @@
 
 % The roadmap, revealed one block per click (state 0, see preamble.tex).
 \begin{frame}
-    \frametitle{Where we are going}
+    \frametitle{Schedule}
     \vfill
     \begin{roadmap}{0}
         \roadmapresults     % comment out to reveal the block names only

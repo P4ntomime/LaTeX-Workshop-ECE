@@ -101,7 +101,14 @@ latexmk -pdf workshop.tex
 `latexmk` runs LaTeX as many times as the document needs, and runs
 `biber` for the bibliography, so you never have to count compilation
 passes yourself. Overleaf and the VS Code extension do the same thing
-for you. To clean up the auxiliary files afterwards:
+for you.
+
+`latexmk` is a Perl script. Linux and macOS come with Perl, and TeX Live
+for Windows brings its own. MiKTeX does not: on Windows with MiKTeX, install
+[Strawberry Perl](https://strawberryperl.com) first, otherwise `latexmk`
+stops with a message that it cannot find `perl`.
+
+To clean up the auxiliary files afterwards:
 
 ```sh
 latexmk -c

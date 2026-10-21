@@ -26,7 +26,7 @@ The table has no caption and no number yet, and it is set right where it stands,
 \subsection{Column types}\label{sec:column-types}
 
 \autoref{tab:column-types} lists the column types.
-The last three come from the package \texttt{array}, which many other packages load anyway.
+The last two come from the package \texttt{array}, which many other packages load anyway.
 
 \begin{table}[htbp]
     \centering
@@ -146,7 +146,10 @@ If something is still badly placed:
 \begin{itemize}
     \item Check that the argument allows enough places.
         \code|[h]| alone is a common reason for floats that pile up at the end of a chapter:
-        if \texttt{h} does not fit, there is nowhere else to go.
+        if \texttt{h} does not fit, the float has hardly anywhere else to go.
+        \hologo{LaTeX} notices this and changes \code|[h]| to \code|[ht]| by itself,
+        with the warning \texttt{`h' float specifier changed to `ht'},
+        but a float that fits neither place still waits for the next page.
     \item \code|!| in front, e.g.\ \code|[!htbp]|, relaxes the limits above for this float.
         It does not force anything.
     \item \code|\FloatBarrier| from the package \texttt{placeins} sets all waiting floats before it continues,

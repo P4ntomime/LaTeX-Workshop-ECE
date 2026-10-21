@@ -11,3 +11,5 @@
 *.vrb
 _minted-*/
 renders/build/
+
+!figures/cooling-curves.pdf

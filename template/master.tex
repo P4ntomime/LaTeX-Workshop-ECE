@@ -151,7 +151,8 @@ referred to throughout by the short labels \texttt{mug}, \texttt{glass} and \tex
 <<<
 @0
 % TODO 2.1: Second paragraph
-%   Make the text below a second paragraph.
+%   Uncomment the text below, or write your own.
+%   Then make it a second paragraph.
 % The question is worth asking \emph{precisely} because the model is so thin.
 % It has exactly one free parameter per vessel,
 % so a single afternoon is enough to test it properly.
@@ -166,7 +167,9 @@ so a single afternoon is enough to test it properly.
 % TODO 2.3: Lists (itemize)
 <<<
 @0
-%   Make the three lines after "This report sets out to:" an itemize list.
+%   Uncomment the text below, or write your own.
+%   Then make the three lines after "This report sets out to:" an
+%   itemize list.
 % This report sets out to:
 % state the cooling model and what its one parameter means,
 % compare the cooling curves of the three vessels, and
@@ -193,7 +196,8 @@ This report sets out to:
 % TODO 2.5: Lists (description)
 <<<
 @0
-%   Make the three symbols below a description list,
+%   Uncomment the text below, or write your own.
+%   Then make the three symbols a description list,
 %   with each symbol in the square brackets: \item[T0] ...
 @2
 >>>
@@ -234,7 +238,8 @@ The model is described by three quantities:
 % TODO 3.2: Numbered equation
 <<<
 @0
-%   Write the cooling law as a numbered equation, after "so that":
+%   Uncomment the text below, or write your own.
+%   Then write the cooling law as a numbered equation, after "so that":
 %       T(t) = T_env + (T_0 - T_env) e^(-t/tau)
 %   End it with a full stop.
 @3
@@ -263,9 +268,11 @@ so that
 <<<
 @0
 %   Load amsmath first (TODO 3.3 in the preamble).
-%   After the sentence below, write the derivation from the slide
-%   "Exercise: Derivation" with align.
-%   Then uncomment the sentence after the derivation.
+%   Uncomment the text below, or write your own.
+%   After it, write the derivation from the slide "Exercise: Derivation"
+%   with align.
+%   Then uncomment the sentence after the derivation as well,
+%   "Equations (1) and (2) are all the theory ...".
 % Rearranging for the time gives the waiting time until the drink has reached a chosen temperature $T$,
 @3
 Rearranging for the time gives the waiting time until the drink has reached a chosen temperature $T$,
@@ -297,10 +304,13 @@ the second says when to pick the cup up.
 % TODO 3.4: Cases
 <<<
 @0
-%   After "This report uses", write the verdict as cases in display math:
+%   Uncomment the text below, or write your own.
+%   Then, after "This report uses", write the verdict as cases in
+%   display math:
 %       verdict(T) = too hot    if T > 65 degrees C
 %                    drinkable  if 50 degrees C <= T <= 65 degrees C
 %                    too cold   if T < 50 degrees C
+%   verdict is a function name: \operatorname{verdict}.
 %   End it with a full stop.
 % What counts as pleasant is of course a matter of taste.
 % This report uses
@@ -363,7 +373,8 @@ and the temperature is taken every 30 seconds for one hour.
 % TODO 2.4: Lists (enumerate)
 <<<
 @0
-%   Make the four steps after "The procedure is as follows:" an
+%   Uncomment the text below, or write your own.
+%   Then make the four steps after "The procedure is as follows:" an
 %   enumerate list.
 % The procedure is as follows:
 % Heat 300 ml of water to 85 degrees Celsius.
@@ -448,8 +459,8 @@ The procedure is as follows:
 %   2. Label equations (1) and (2):
 %      \begin{equation}\label{eq:cooling} and \label{eq:waiting}
 %   3. Replace the typed numbers with Table~\ref{tab:vessels},
-%      Figure~\ref{fig:cooling}, Section~\ref{sec:theory} and
-%      Equation~\eqref{eq:cooling}.
+%      Figure~\ref{fig:cooling}, Section~\ref{sec:theory},
+%      Equation~\eqref{eq:cooling} and Equation~\eqref{eq:waiting}.
 %   Search for "TODO 4.3" to find all of them.
 @4
 >>>
@@ -457,8 +468,10 @@ The procedure is as follows:
 <<<
 @0
 %   1. Load hyperref (TODO 4.4 in the preamble).
-%   2. Replace Table~\ref, Figure~\ref and Section~\ref with \autoref,
-%      e.g. \autoref{fig:cooling}. Keep Equation~\eqref for equations.
+%   2. Replace Table~\ref and Figure~\ref with \autoref,
+%      e.g. \autoref{fig:cooling}.
+%      Keep Section~\ref and Equation~\eqref: \autoref would write
+%      "section 2" in lower case, and equation numbers without brackets.
 %   Search for "TODO 4.4" to find all of them.
 @4
 >>>
@@ -470,7 +483,7 @@ The procedure is as follows:
 % Feeding those time constants into Equation (2) gives the drinkable window of Section 2 directly.
 % The \texttt{mug} enters it about 9 minutes after pouring and leaves it after 19,
 % which is the ten-minute window most people will recognise.
-% The \texttt{glass} gives only seven minutes.
+% The \texttt{glass} gives only about seven minutes.
 % The \texttt{flask} is still too hot to drink almost two hours later,
 % which is either its great virtue or its great flaw,
 % depending on what you wanted from it.
@@ -478,10 +491,10 @@ The procedure is as follows:
 \autoref{fig:cooling} shows the measured temperatures together with the model of Equation~\eqref{eq:cooling}.
 All three vessels follow the exponential closely; what separates them is only the time constant listed in \autoref{tab:vessels}.
 
-Feeding those time constants into Equation~\eqref{eq:waiting} gives the drinkable window of \autoref{sec:theory} directly.
+Feeding those time constants into Equation~\eqref{eq:waiting} gives the drinkable window of Section~\ref{sec:theory} directly.
 The \texttt{mug} enters it about 9 minutes after pouring and leaves it after 19,
 which is the ten-minute window most people will recognise.
-The \texttt{glass} gives only seven minutes.
+The \texttt{glass} gives only about seven minutes.
 The \texttt{flask} is still too hot to drink almost two hours later,
 which is either its great virtue or its great flaw,
 depending on what you wanted from it.
@@ -517,10 +530,10 @@ and that insulation does not so much keep the drink pleasant as postpone the mom
 %   (a) The logistic map:
 %       x_{t+1} = k x_t (1 - x_t)
 %   (b) Shannon entropy:
-%       H = - sum from i = 0 to N of p(x_i) log p(x_i)
+%       H = - sum from i = 1 to N of p(x_i) log p(x_i)
 %   (c) Hard mode, the inverse Laplace transform:
-%       L^-1{F} = lim as T -> infinity of 1/(2 pi i) times the integral
-%       from gamma - iT to gamma + iT of e^(st) F(s) ds
+%       f(t) = L^-1{F}(t) = lim as T -> infinity of 1/(2 pi i) times
+%       the integral from gamma - iT to gamma + iT of e^(st) F(s) ds
 
 % TODO 4.5: Citation
 <<<
