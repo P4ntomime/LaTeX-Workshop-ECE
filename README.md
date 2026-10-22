@@ -9,20 +9,21 @@ bibliography: every ingredient of a term paper or a thesis.
 No previous LaTeX knowledge is needed, and nobody has to keep up: every
 block ends with a checkpoint file that puts everyone back on track.
 
+<div align="center">
+  <a href="https://p4ntomime.github.io/LaTeX-Workshop-ECE/">
+    <img src="site/readme-button.svg" alt="LaTeX Workshop" width="540">
+  </a>
+</div>
+
 ## For participants
 
-Everything you need is attached to the
-[latest release](https://github.com/P4ntomime/LaTeX-Workshop-ECE/releases/latest):
+The [workshop page](https://p4ntomime.github.io/LaTeX-Workshop-ECE/) has
+everything you need, in the latest version: the slides, the handout and
+`workshop-template.zip`, the template you work in during the workshop.
+Older versions are on the [releases page](https://github.com/P4ntomime/LaTeX-Workshop-ECE/releases).
 
-| File                     | What it is                                              |
-|--------------------------|---------------------------------------------------------|
-| `workshop-template.zip`  | The template you work in during the workshop            |
-| `slides.pdf`             | The slides                                              |
-| `handout.pdf`            | The handout: everything on the slides, plus the details |
-
-Download `workshop-template.zip` from the release, not the "Source code"
-zip. The [template's README](template/README.md) explains how to open it
-in Overleaf (recommended for the workshop) or on your own computer.
+The [template's README](template/README.md) explains how to open it in
+Overleaf (recommended for the workshop) or on your own computer.
 
 Before the session, make a free account at <https://overleaf.com>.
 
@@ -52,6 +53,8 @@ useful packages, larger documents and where to look things up.
 ├── slides/      Beamer slides with presenter notes
 ├── template/    Source of the student template (workshop.tex and checkpoints)
 ├── handout/     The handout, a LaTeX report
+├── site/        The workshop page (GitHub Pages) and the README button
+├── .github/     Workflows: build and release, publish the page
 └── LICENSE.txt  CC BY-SA 4.0
 ```
 
@@ -65,6 +68,9 @@ useful packages, larger documents and where to look things up.
 - `handout/`: the handout, one file per chapter in `chapters/`. It reuses
   the slides' listings and renders, and shows the finished template in
   its appendix.
+- `site/`: `index.html` is the workshop page; `build.py` fills in the
+  version, date and file sizes of the latest release. `icons.py` draws
+  `readme-button.svg` and the favicon from the Latin Modern fonts.
 
 ## Building
 
@@ -79,6 +85,7 @@ The three parts depend on each other, so build them in this order:
 make -C template test     # generate the template and compile every state
 make -C slides renders    # re-compile the example outputs (only after changing them)
 make -C slides            # slides.pdf (minted needs -shell-escape; latexmkrc sets it)
+make -C slides handout    # slides-handout.pdf: one page per slide, no notes
 make -C handout           # handout.pdf (reads ../slides and ../template/build)
 ```
 
@@ -89,6 +96,21 @@ warning, so a template that passes compiles cleanly for the students.
 To change the template, edit `template/master.tex` and run
 `make -C template test`; the checkpoints are regenerated from it and
 cannot drift apart.
+
+## Releases
+
+Every push to `main` builds everything on GitHub Actions; the files are
+attached to the run. To publish a new version, push a tag starting
+with `v`:
+
+```sh
+git tag -a v2026.2 -m "Workshop 2026"
+git push origin v2026.2
+```
+
+The workflow then creates a release with `workshop-template.zip`,
+`slides.pdf` (the handout version of the slides), `handout.pdf` and
+`latex-workshop.zip` (all three), and updates the workshop page.
 
 ## Licence and attribution
 
