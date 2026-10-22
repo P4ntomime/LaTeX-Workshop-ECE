@@ -33,6 +33,12 @@ FONTS = [
     "lmroman10-bold.otf",
     "lmmono10-regular.otf",
 ]
+# Files from site/ that are published as they are (made by icons.py).
+ASSETS = [
+    "favicon.svg",
+    "favicon-32.png",
+    "apple-touch-icon.png",
+]
 
 
 def human_size(n):
@@ -80,6 +86,8 @@ def main():
         shutil.rmtree(out)
     out.mkdir(parents=True)
     (out / "index.html").write_text(html, encoding="utf-8")
+    for name in ASSETS:
+        shutil.copy(HERE / name, out / name)
 
     if len(sys.argv) == 4:
         (out / "fonts").mkdir()
