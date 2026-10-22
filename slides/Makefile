@@ -37,7 +37,11 @@ DOCUMENTS = 00-class-article 00-class-scrartcl 01-sections 01-toc
 
 # The citation snippets (block 4) say \addbibresource{references.bib},
 # as in the template. biber finds that file through BIBINPUTS.
-SNIPPET_ENV = BIBINPUTS=listings:
+ifeq ($(OS),Windows_NT)
+	SNIPPET_ENV = BIBINPUTS='listings;'
+else
+	SNIPPET_ENV = BIBINPUTS=listings:
+endif
 
 # Everything both versions of the deck are built from.
 SLIDES_DEPS = slides.tex preamble.tex beamerthemeown.sty beamercolorthemeown.sty \
